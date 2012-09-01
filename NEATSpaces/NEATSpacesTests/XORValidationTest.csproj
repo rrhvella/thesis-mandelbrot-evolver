@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9A081F3C-3C49-4195-9132-B6F5E97B8935}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{859D2D75-3A70-48DA-97F0-0C987BA19FF9}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NEATSpacesLibrary</RootNamespace>
-    <AssemblyName>NEATSpacesLibrary</AssemblyName>
+    <RootNamespace>XORValidationTest</RootNamespace>
+    <AssemblyName>XORValidationTest</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,22 +30,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="QuickGraph">
-      <HintPath>..\NEATSpaces\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.dll</HintPath>
-    </Reference>
-    <Reference Include="QuickGraph.Data">
-      <HintPath>..\NEATSpaces\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="QuickGraph.Graphviz">
-      <HintPath>..\NEATSpaces\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Graphviz.dll</HintPath>
-    </Reference>
-    <Reference Include="QuickGraph.Serialization">
-      <HintPath>..\NEATSpaces\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Serialization.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,19 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GeneticAlgorithms\GA.cs" />
-    <Compile Include="CPPNNEAT\CPPNNEATGene.cs" />
-    <Compile Include="CPPNNEAT\CPPNNEATGenome.cs" />
-    <Compile Include="GeneticAlgorithms\Genome.cs" />
-    <Compile Include="CPPNNEAT\CPPNNetwork.cs" />
-    <Compile Include="CPPNNEAT\CPPNNetworkNode.cs" />
-    <Compile Include="NEATSpaces\Map.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GeneticAlgorithms\SpeciatedGA.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\..\NEATSpacesLibrary\NEATSpacesLibrary.csproj">
+      <Project>{9A081F3C-3C49-4195-9132-B6F5E97B8935}</Project>
+      <Name>NEATSpacesLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
