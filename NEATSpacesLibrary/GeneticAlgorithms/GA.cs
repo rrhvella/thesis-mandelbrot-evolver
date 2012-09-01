@@ -7,6 +7,13 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 {
     public class GA<T> 
     {
+        private int p;
+
+        public GA(int p)
+        {
+            // TODO: Complete member initialization
+            this.p = p;
+        }
         public T Best
         {
             get
@@ -19,5 +26,9 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         {
             throw new NotImplementedException();
         }
+
+        public double CrossoverRate { get; set; }
+
+        public double MutationRate { get; set; }
     }
 }

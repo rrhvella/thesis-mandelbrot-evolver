@@ -47,7 +47,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NEATSpacesLibrary\NEATSpacesLibrary.csproj">
+    <ProjectReference Include="..\NEATSpacesLibrary\NEATSpacesLibrary.csproj">
       <Project>{9A081F3C-3C49-4195-9132-B6F5E97B8935}</Project>
       <Name>NEATSpacesLibrary</Name>
     </ProjectReference>

@@ -8,7 +8,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 {
     public abstract class Genome<GType, PType>
     {
-        public float Score
+        public double Score
         {
             get
             {
@@ -29,14 +29,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             get 
             {
                 return default(GType);
-            }
-        }
-
-        public IEnumerable<GType> Genes
-        {
-            get
-            {
-                return null;
             }
         }
 

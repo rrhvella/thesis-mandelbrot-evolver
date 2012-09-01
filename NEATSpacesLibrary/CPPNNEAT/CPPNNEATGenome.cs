@@ -19,5 +19,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             return Phenotype.GetActivation(input);
         }
+
+        public IEnumerable<CPPNNEATGene> Genes
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }
