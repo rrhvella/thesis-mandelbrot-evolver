@@ -69,11 +69,11 @@ namespace NEATSpacesLibrary.NEATSpaces
 
     public class Map
     {
-        public const Color WALL_COLOUR = Color.Black;
-        public const Color TILE_COLOUR = Color.White;
-        public const Color START_COLOUR = Color.Green;
-        public const Color END_COLOUR = Color.Red;
-        public const Color CHECKPOINT_COLOUR = Color.Yellow;
+        public static readonly Color WALL_COLOUR = Color.Black;
+        public static readonly Color TILE_COLOUR = Color.White;
+        public static readonly Color START_COLOUR = Color.Green;
+        public static readonly Color END_COLOUR = Color.Red;
+        public static readonly Color CHECKPOINT_COLOUR = Color.Yellow;
 
         private bool[,] collisionMap;
         private DelegateVertexAndEdgeListGraph<MapNode, SEquatableEdge<MapNode>> graph;

@@ -32,7 +32,7 @@ namespace GAValidationTest
 
             public void Initialise()
             {
-                genome = new Map(MAP_SIZE, MAP_SIZE);
+                genome = new Map(MAP_SIZE, MAP_SIZE, START_NODE, END_NODE, CHECKPOINTS, MANDATORY_CHECKPOINT_LEVEL);
                 var random = new Random();
 
                 foreach (var x in Enumerable.Range(0, MAP_SIZE))
@@ -49,8 +49,7 @@ namespace GAValidationTest
 
             protected override double GetScore()
             {
-                return Phenotype.DistanceFromStartToEnd(START_NODE, END_NODE, 
-                                CHECKPOINTS, MANDATORY_CHECKPOINT_LEVEL);
+                return Phenotype.DistanceFromStartToEnd;
             }
         }
 

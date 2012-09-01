@@ -11,49 +11,97 @@ namespace NEATSpacesTests.NEATSpaces
     class MapNodeTests
     {
 
-        [TestCase(0, new MapNode(), Result=false)]
-        [TestCase(new MapNode(1, 1), new MapNode(), Result=false)]
-        [TestCase(new MapNode(), new MapNode(), Result=true)]
+        public static IEnumerable<TestCaseData> EqualsTestCases 
+        {
+            get 
+            {
+                yield return new TestCaseData(0, new MapNode()).Returns(false);
+                yield return new TestCaseData(new MapNode(1, 1), new MapNode()).Returns(false);
+                yield return new TestCaseData(new MapNode(), new MapNode()).Returns(true);
+            }
+        }
+
+        [TestCaseSource(typeof(MapNodeTests), "EqualsTestCases")]
         public bool TestEquals(object obj, MapNode node)
         {
             return node.Equals(obj);
         }
 
-        [TestCase(new MapNode(), new MapNode(), Result=new MapNode())]
-        [TestCase(new MapNode(1, 1), new MapNode(-1, -1), Result=new MapNode(2, 2))]
-        [TestCase(new MapNode(-1, 0), new MapNode(1, 0), Result=new MapNode(-2, 0))]
-        [TestCase(new MapNode(0, 1), new MapNode(0, 2), Result=new MapNode(0, -1))]
+        public static IEnumerable<TestCaseData> MinusTestCases 
+        {
+            get 
+            {
+                yield return new TestCaseData(new MapNode(), new MapNode()).Returns(new MapNode());
+                yield return new TestCaseData(new MapNode(1, 1), new MapNode(-1, -1)).Returns(new MapNode(2, 2));
+                yield return new TestCaseData(new MapNode(-1, 0), new MapNode(1, 0)).Returns(new MapNode(-2, 0));
+                yield return new TestCaseData(new MapNode(0, 1), new MapNode(0, 2)).Returns(new MapNode(0, -1));
+            }
+        }
+
+        [TestCaseSource(typeof(MapNodeTests), "MinusTestCases")]
         public MapNode TestMinus(MapNode node1, MapNode node2)
         {
             return node1 - node2;
         }
 
-        [TestCase(new MapNode(1, 1), new MapNode(), Result=false)]
-        [TestCase(new MapNode(), new MapNode(), Result=true)]
+        public static IEnumerable<TestCaseData> EqualsOperatorTestCases
+        {
+            get 
+            {
+                yield return new TestCaseData(new MapNode(1, 1), new MapNode()).Returns(false);
+                yield return new TestCaseData(new MapNode(), new MapNode()).Returns(true);
+            }
+        }
+
+        [TestCaseSource(typeof(MapNodeTests), "EqualsOperatorTestCases")]
         public bool TestEqualsOperator(MapNode node1, MapNode node2)
         {
             return node1 == node2;
         }
 
-        [TestCase(new MapNode(1, 1), new MapNode(), Result=true)]
-        [TestCase(new MapNode(), new MapNode(), Result=false)]
+        public static IEnumerable<TestCaseData> NotEqualsOperatorTestCases 
+        {
+            get 
+            {
+                yield return new TestCaseData(new MapNode(1, 1), new MapNode()).Returns(true);
+                yield return new TestCaseData(new MapNode(), new MapNode()).Returns(false);
+            }
+        }
+
+        [TestCaseSource(typeof(MapNodeTests), "NotEqualsOperatorTestCases")]
         public bool TestNotEqualsOperator(MapNode node1, MapNode node2)
         {
             return node1 != node2;
         }
 
-        [TestCase(new MapNode(2, 2), Result="2,2".GetHashCode())]
-        [TestCase(new MapNode(), Result="0,0".GetHashCode())]
-        [TestCase(new MapNode(int.MaxValue, int.MaxValue), Result=(int.MaxValue + "," + int.MaxValue).GetHashCode())]
-        [TestCase(new MapNode(2, 2), Result=(new MapNode(2, 2)).GetHashCode())]
+        public static IEnumerable<TestCaseData> GetHashCodeTestCases 
+        {
+            get 
+            {
+                yield return new TestCaseData(new MapNode(2, 2)).Returns("2,2".GetHashCode());
+                yield return new TestCaseData(new MapNode()).Returns("0,0".GetHashCode());
+                yield return new TestCaseData(new MapNode(int.MaxValue, int.MaxValue)).Returns((int.MaxValue + "," + int.MaxValue).GetHashCode());
+                yield return new TestCaseData(new MapNode(2, 2)).Returns((new MapNode(2, 2)).GetHashCode());
+            }
+        }
+
+        [TestCaseSource(typeof(MapNodeTests), "GetHashCodeTestCases")]
         public int TestGetHashCode(MapNode node)
         {
             return node.GetHashCode();
         }
 
-        [TestCase(new MapNode(2, 2), Result="2,2")]
-        [TestCase(new MapNode(), Result="0,0")]
-        [TestCase(new MapNode(int.MaxValue, int.MaxValue), Result=(int.MaxValue + "," + int.MaxValue))]
+        public static IEnumerable<TestCaseData> ToStringTestCases
+        {
+            get
+            {
+                yield return new TestCaseData(new MapNode(2, 2)).Returns("2,2");
+                yield return new TestCaseData(new MapNode()).Returns("0,0");
+                yield return new TestCaseData(new MapNode(int.MaxValue, int.MaxValue)).Returns((int.MaxValue + "," + int.MaxValue));
+            }
+        }
+
+        [TestCaseSource(typeof(MapNodeTests), "ToStringTestCases")]
         public string TestToString(MapNode node)
         {
             return node.ToString();
@@ -84,7 +132,7 @@ namespace NEATSpacesTests.NEATSpaces
             }
         }
 
-        public static MapTestData() 
+        static MapTestData() 
         {
             Instance = new MapTestData();
         }
@@ -119,43 +167,70 @@ namespace NEATSpacesTests.NEATSpaces
 
     public class MapTests
     {
+        public static IEnumerable<TestCaseData> IndexerTestCases
+        {
+            get
+            {
+                yield return new TestCaseData(MapTestData.Instance.TestMap1, 0, 1).Returns(true);
+                yield return new TestCaseData(MapTestData.Instance.TestMap2, 1, 1).Returns(false);
+            }
+        }
 
-        [TestCase(MapTestData.Instance.TestMap1, 0, 1, Result=true)]
-        [TestCase(MapTestData.Instance.TestMap2, 1, 1, Result=false)]
+        [TestCaseSource(typeof(MapTests), "IndexerTestCases")]
         public bool TestIndexer(Map map, int x, int y)
         {
             return map[x, y];
         }
 
-        [TestCase(MapTestData.Instance.TestMap1, Result=5)]
-        [TestCase(MapTestData.Instance.TestMap2, Result=0)]
-        [TestCase(MapTestData.Instance.TestMap3, Result=0)]
+        public static IEnumerable<TestCaseData> DistanceFromStartToEndTestCases
+        {
+            get
+            {
+                yield return new TestCaseData(MapTestData.Instance.TestMap1).Returns(5);
+                yield return new TestCaseData(MapTestData.Instance.TestMap2).Returns(0);
+                yield return new TestCaseData(MapTestData.Instance.TestMap3).Returns(0);
+            }
+        }
+
+        [TestCaseSource(typeof(MapTests), "DistanceFromStartToEndTestCases")]
         public double TestDistanceFromStartToEnd(Map map)
         {
             return map.DistanceFromStartToEnd;
         }
 
-        [TestCase(MapTestData.Instance.TestMap1, new MapNode(), new MapNode(), Result=0)]
-        [TestCase(MapTestData.Instance.TestMap1, new MapNode(), new MapNode(1, 0), Result=1)]
-        [TestCase(MapTestData.Instance.TestMap1, new MapNode(), new MapNode(0, 1), Result=null)]
-        [TestCase(MapTestData.Instance.TestMap1, new MapNode(), new MapNode(-2, -2), Result=null)]
-        [TestCase(MapTestData.Instance.TestMap1, new MapNode(), new MapNode(2, 2), Result=5)]
-        [TestCase(MapTestData.Instance.TestMap2, new MapNode(), new MapNode(2, 2), Result=5)]
-        [TestCase(MapTestData.Instance.TestMap3, new MapNode(), new MapNode(2, 2), Result=null)]
+        public static IEnumerable<TestCaseData> DistanceBetweenTestCases {
+            get
+            {
+                yield return new TestCaseData(MapTestData.Instance.TestMap1, new MapNode(), new MapNode()).Returns(0);
+                yield return new TestCaseData(MapTestData.Instance.TestMap1, new MapNode(), new MapNode(1, 0)).Returns(1);
+                yield return new TestCaseData(MapTestData.Instance.TestMap1, new MapNode(), new MapNode(0, 1)).Returns(null);
+                yield return new TestCaseData(MapTestData.Instance.TestMap1, new MapNode(), new MapNode(-2, -2)).Returns(null);
+                yield return new TestCaseData(MapTestData.Instance.TestMap1, new MapNode(), new MapNode(2, 2)).Returns(5);
+                yield return new TestCaseData(MapTestData.Instance.TestMap2, new MapNode(), new MapNode(2, 2)).Returns(5);
+                yield return new TestCaseData(MapTestData.Instance.TestMap3, new MapNode(), new MapNode(2, 2)).Returns(null);
+            }
+        }
+
+        [TestCaseSource(typeof(MapTests), "DistanceBetweenTestCases")]
         public double TestDistanceBetween(Map map, MapNode from, MapNode to)
         {
             return map.DistanceFromStartToEnd;
         }
 
-        [TestCase(MapTestData.Instance.TestMap1, 0, 0, Result=Map.START_COLOUR)]
-        [TestCase(MapTestData.Instance.TestMap1, 1, 0, Result=Map.TILE_COLOUR)]
-        [TestCase(MapTestData.Instance.TestMap1, 2, 0, Result=Map.TILE_COLOUR)]
-        [TestCase(MapTestData.Instance.TestMap1, 0, 1, Result=Map.WALL_COLOUR)]
-        [TestCase(MapTestData.Instance.TestMap1, 1, 1, Result=Map.TILE_COLOUR)]
-        [TestCase(MapTestData.Instance.TestMap1, 2, 1, Result=Map.WALL_COLOUR)]
-        [TestCase(MapTestData.Instance.TestMap1, 0, 2, Result=Map.CHECKPOINT_COLOUR)]
-        [TestCase(MapTestData.Instance.TestMap1, 1, 2, Result=Map.TILE_COLOUR)]
-        [TestCase(MapTestData.Instance.TestMap1, 2, 2, Result=Map.END_COLOUR)]
+        public static IEnumerable<TestCaseData> ImageTestCases {
+        get {
+        yield return new TestCaseData(MapTestData.Instance.TestMap1, 0, 0).Returns(Map.START_COLOUR);
+        yield return new TestCaseData(MapTestData.Instance.TestMap1, 1, 0).Returns(Map.TILE_COLOUR);
+        yield return new TestCaseData(MapTestData.Instance.TestMap1, 2, 0).Returns(Map.TILE_COLOUR);
+        yield return new TestCaseData(MapTestData.Instance.TestMap1, 0, 1).Returns(Map.WALL_COLOUR);
+        yield return new TestCaseData(MapTestData.Instance.TestMap1, 1, 1).Returns(Map.TILE_COLOUR);
+        yield return new TestCaseData(MapTestData.Instance.TestMap1, 2, 1).Returns(Map.WALL_COLOUR);
+        yield return new TestCaseData(MapTestData.Instance.TestMap1, 0, 2).Returns(Map.CHECKPOINT_COLOUR);
+        yield return new TestCaseData(MapTestData.Instance.TestMap1, 1, 2).Returns(Map.TILE_COLOUR);
+        yield return new TestCaseData(MapTestData.Instance.TestMap1, 2, 2).Returns(Map.END_COLOUR);
+    }}
+
+        [TestCaseSource(typeof(MapTests), "ImageTestCases")]
         public Color TestImage(Map map, int x, int y)
         {
             return map.Image.GetPixel(x, y);
