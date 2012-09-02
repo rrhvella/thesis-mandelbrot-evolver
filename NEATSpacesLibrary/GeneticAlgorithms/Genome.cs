@@ -6,32 +6,38 @@ using System.Collections;
 
 namespace NEATSpacesLibrary.GeneticAlgorithms
 {
-    public abstract class Genome<GType, PType>
+    public abstract class Genome<GType, PType> 
     {
-        public double Score
+        public virtual double Score
         {
-            get
-            {
-                return 0;
-            }
+            get;
+            private set;
         }
 
-        public PType Phenotype
+        public PType Phenome
         {
-            get
-            {
-                return default(PType);
-            }
+            get;
+            private set;
         }
 
-        public GType this[int i] 
+        public GType GeneticCode
         {
-            get 
-            {
-                return default(GType);
-            }
+            get;
+            protected set;
         }
 
         protected abstract double GetScore();
+        protected abstract PType GetPhenome();
+        
+        public abstract void Initialise();
+        public abstract Genome<GType, PType>[] Crossover(Genome<GType, PType> partner);
+        
+        public abstract void Mutate(double mutationProbability);
+
+        public void Update()
+        {
+            Phenome = GetPhenome();
+            Score = GetScore();
+        }
     }
 }

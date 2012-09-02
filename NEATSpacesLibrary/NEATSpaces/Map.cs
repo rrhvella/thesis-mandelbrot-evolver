@@ -9,7 +9,7 @@ using System.Drawing.Imaging;
 
 namespace NEATSpacesLibrary.NEATSpaces
 {
-    public struct MapNode
+    public struct MapNode : IComparable
     {
         public int X;
         public int Y;
@@ -65,15 +65,27 @@ namespace NEATSpacesLibrary.NEATSpaces
                 return Math.Abs(X) + Math.Abs(Y);
             }
         }
+
+        public int CompareTo(object obj)
+        {
+            if (this.Equals(obj))
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        }
     }
 
     public class Map
     {
-        public static readonly Color WALL_COLOUR = Color.Black;
-        public static readonly Color TILE_COLOUR = Color.White;
-        public static readonly Color START_COLOUR = Color.Green;
-        public static readonly Color END_COLOUR = Color.Red;
-        public static readonly Color CHECKPOINT_COLOUR = Color.Yellow;
+        public static readonly Color WALL_COLOUR = Color.FromArgb(255, 0, 0, 0);
+        public static readonly Color TILE_COLOUR = Color.FromArgb(255, 255, 255, 255);
+        public static readonly Color START_COLOUR = Color.FromArgb(255, 255, 0, 0);
+        public static readonly Color END_COLOUR = Color.FromArgb(255, 0, 0, 255);
+        public static readonly Color CHECKPOINT_COLOUR = Color.FromArgb(255, 0, 255, 0);
 
         private bool[,] collisionMap;
         private DelegateVertexAndEdgeListGraph<MapNode, SEquatableEdge<MapNode>> graph;
@@ -150,6 +162,18 @@ namespace NEATSpacesLibrary.NEATSpaces
             }
         }
 
+        public bool this[int i]
+        {
+            get
+            {
+                return collisionMap[i % width, i / width];
+            }
+            set
+            {
+                collisionMap[i % width, i / width] = value;
+            }
+        }
+
         public double DistanceFromStartToEnd 
         {
             get 
@@ -181,7 +205,7 @@ namespace NEATSpacesLibrary.NEATSpaces
                 new Func<SEquatableEdge<MapNode>,double>(
                     delegate(SEquatableEdge<MapNode> edge) 
                     {
-                        return (edge.Source - edge.Target).Magnitude;
+                        return (edge.Target - edge.Source).Magnitude;
                     }
                 ), new Func<MapNode,double>(
                     delegate(MapNode currentNode) {
@@ -199,7 +223,8 @@ namespace NEATSpacesLibrary.NEATSpaces
 
             algorithm.Compute(from);
 
-            return (algorithm.Distances.ContainsKey(to)) ? (double?)algorithm.Distances[to] : null;
+            return (algorithm.Distances.ContainsKey(to) && algorithm.Distances[to] < double.MaxValue) ? 
+                        (double?)algorithm.Distances[to] : null;
         }
 
         public Bitmap Image
@@ -212,7 +237,7 @@ namespace NEATSpacesLibrary.NEATSpaces
                 {
                     foreach(var y in Enumerable.Range(0, height)) 
                     {
-                        result.SetPixel(x, y, (collisionMap[x, y]) ? TILE_COLOUR : WALL_COLOUR);
+                        result.SetPixel(x, y, (collisionMap[x, y]) ? WALL_COLOUR : TILE_COLOUR);
                     }
                 }
 
@@ -225,6 +250,14 @@ namespace NEATSpacesLibrary.NEATSpaces
                 }
 
                 return result;
+            }
+        }
+
+        public int Length
+        {
+            get
+            {
+                return collisionMap.Length;
             }
         }
     }
