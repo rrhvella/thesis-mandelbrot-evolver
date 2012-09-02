@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NEATSpacesLibrary.NEATSpaces;
 using NEATSpacesLibrary.GeneticAlgorithms;
+using System.Drawing.Imaging;
 
 namespace GAValidationTest
 {
@@ -15,7 +17,7 @@ namespace GAValidationTest
         private const double MUTATION_RATE = 0.01;
         private const double CROSSOVER_RATE = 0.05;
 
-        public class MapGenome: Genome<bool, Map> 
+        public class MapGenome: Genome<Map, Map>
         {
             private const double FILL = 0.05;
             private const int MANDATORY_CHECKPOINT_LEVEL = 3;
@@ -27,35 +29,80 @@ namespace GAValidationTest
             private double FILL_PARAMETER = 0.05;
 
             private const int MAP_SIZE = 30;
+            private Random random;
 
-            private Map genome;
-
-            public void Initialise()
+            public MapGenome()
             {
-                genome = new Map(MAP_SIZE, MAP_SIZE, START_NODE, END_NODE, CHECKPOINTS, MANDATORY_CHECKPOINT_LEVEL);
+                this.GeneticCode = new Map(MAP_SIZE, MAP_SIZE, START_NODE, END_NODE, CHECKPOINTS, MANDATORY_CHECKPOINT_LEVEL);
+                this.random = new Random();
+            }
+
+            public override void Initialise()
+            {
                 var random = new Random();
 
                 foreach (var x in Enumerable.Range(0, MAP_SIZE))
                 {
                     foreach (var y in Enumerable.Range(0, MAP_SIZE))
                     {
-                        if (random.NextDouble() < FILL_PARAMETER)
+                        if (random.NextDouble() <= FILL_PARAMETER)
                         {
-                            genome[x, y] = true;
+                            GeneticCode[x, y] = true;
                         }
                     }
                 }
             }
 
+            protected override Map GetPhenome()
+            {
+                return GeneticCode;
+            }
+
             protected override double GetScore()
             {
-                return Phenotype.DistanceFromStartToEnd;
+                return Phenome.DistanceFromStartToEnd;
+            }
+
+            public override Genome<Map, Map>[] Crossover(Genome<Map, Map> partner)
+            {
+                var children = new MapGenome[] { new MapGenome(), new MapGenome() };
+
+                //Select a position for one point crossover.
+                var crossoverPosition = random.Next(GeneticCode.Length);
+
+                foreach(var i in Enumerable.Range(0, GeneticCode.Length))
+                {
+                    if (i < crossoverPosition)
+                    {
+                        children[0].GeneticCode[i] = GeneticCode[i];
+                        children[1].GeneticCode[i] = partner.GeneticCode[i];
+                    }
+                    else
+                    {
+                        children[1].GeneticCode[i] = GeneticCode[i];
+                        children[0].GeneticCode[i] = partner.GeneticCode[i];
+                    }
+                }
+
+                return children;
+            }
+
+            public override void Mutate(double mutationProbability)
+            {
+                foreach(var i in Enumerable.Range(0, GeneticCode.Length))
+                {
+                    if(random.NextDouble() <= mutationProbability) 
+                    {
+                        GeneticCode[i] = !GeneticCode[i];
+                    }
+                }
             }
         }
 
         public static void Main(string[] args)
         {
-            var testGA = new GA<MapGenome>(POPULATION_SIZE);
+            Console.WriteLine(String.Format("Initialising the population..."));
+            var testGA = new SteadyStateGA<MapGenome, Map, Map>(POPULATION_SIZE);
 
             testGA.MutationRate = MUTATION_RATE;
             testGA.CrossoverRate = CROSSOVER_RATE;
@@ -64,6 +111,9 @@ namespace GAValidationTest
 
             foreach (var i in Enumerable.Range(0, NUMBER_OF_GENERATIONS))
             {
+                Console.Clear();
+                Console.WriteLine(String.Format("{0} out of {1} generations completed.", i, NUMBER_OF_GENERATIONS));
+
                 var averageFitness = 0.0;
 
                 foreach (var j in Enumerable.Range(0, MATING_EVENTS_PER_GENERATION))
@@ -76,6 +126,19 @@ namespace GAValidationTest
 
                 data.Add(averageFitness);
             }
+            
+            testGA.Best.Phenome.Image.Save("output.png", ImageFormat.Png);
+
+            FileStream file = new FileStream("output.txt", FileMode.Create);
+            StreamWriter writer = new StreamWriter(file);
+
+            foreach (var i in Enumerable.Range(0, data.Count))
+            {
+                writer.WriteLine(String.Format("{0},{1}", i, data[i]));
+            }
+
+            writer.Close();
+            file.Close();
         }
     }
 }
