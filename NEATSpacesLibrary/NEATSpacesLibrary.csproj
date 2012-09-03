@@ -55,7 +55,7 @@
   <ItemGroup>
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="GeneticAlgorithms\BaseSteadyStateGA.cs" />
-    <Compile Include="CPPNNEAT\CPPNNEATGene.cs" />
+    <Compile Include="CPPNNEAT\CPPNNEATGeneCollection.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGenome.cs" />
     <Compile Include="GeneticAlgorithms\ISpeciatedGA.cs" />
     <Compile Include="GeneticAlgorithms\SpeciatedGenome.cs" />

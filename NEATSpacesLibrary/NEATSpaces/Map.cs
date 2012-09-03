@@ -185,7 +185,7 @@ namespace NEATSpacesLibrary.NEATSpaces
                     return 0;
                 }
 
-                var membersOfE = (from checkpoint in checkpoints
+                var membersOfE = (from checkpoint in checkpoints.AsParallel()
                                   where DistanceBetween(start, checkpoint) != null &&
                                       DistanceBetween(checkpoint, end) != null
                                   select checkpoint).Count();

@@ -70,8 +70,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         protected override GASelectionResult<GenomeType> PerformSelection()
         {
             var tournament = Population.Where(elem => elem.Species.CanBreed)
-                                .ToList()
-                                .RandomTake(DEFAULT_TOURNAMENT_SIZE)
+                                .ToList().RandomTake(DEFAULT_TOURNAMENT_SIZE)
                                 .OrderByDescending(elem => elem.Score)
                                 .ToArray();
 
@@ -79,7 +78,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             if ((new Random()).NextDouble() > InterSpeciesMatingRate)
             {
-                partner = (GenomeType)tournament[0].Species.Members.RandomTake(DEFAULT_TOURNAMENT_SIZE)
+                partner = (GenomeType)tournament[0].Species.Members
+                                    .ToList().RandomTake(DEFAULT_TOURNAMENT_SIZE)
                                     .OrderByDescending(elem => elem.Score)
                                     .First();
             }

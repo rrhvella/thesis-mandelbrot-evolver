@@ -129,7 +129,7 @@ namespace GAValidationTest
             
             testGA.Best.Phenome.Image.Save("output.png", ImageFormat.Png);
 
-            FileStream file = new FileStream("output.txt", FileMode.Create);
+            FileStream file = new FileStream("output.csv", FileMode.Create);
             StreamWriter writer = new StreamWriter(file);
 
             foreach (var i in Enumerable.Range(0, data.Count))

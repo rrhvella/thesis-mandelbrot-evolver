@@ -13,13 +13,21 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public bool CanBreed { get; set; }
 
         public int TotalIterations {get; set;}
-        public List<SpeciatedGenome<GType, PType>> Members { get; private set; }
+        private List<SpeciatedGenome<GType, PType>> members;
+
+        public IEnumerable<SpeciatedGenome<GType, PType>> Members
+        {
+            get
+            {
+                return members.AsEnumerable();
+            }
+        }
 
         public Species(ISpeciatedGA parent, SpeciatedGenome<GType, PType> representative)
         {
             this.parent = parent;
             this.representative = representative;
-            this.Members = new List<SpeciatedGenome<GType, PType>>();
+            this.members = new List<SpeciatedGenome<GType, PType>>();
         }
 
         public bool BelongsTo(SpeciatedGenome<GType, PType> genome)
@@ -29,17 +37,17 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         public void Add(SpeciatedGenome<GType, PType> genome)
         {
-            Members.Add(genome);
+            members.Add(genome);
             representative = genome;
         }
 
         public void Remove(SpeciatedGenome<GType, PType> genome)
         {
-            Members.Remove(genome);
+            members.Remove(genome);
 
-            if (genome == representative && Members.Count > 0)
+            if (genome == representative && members.Count > 0)
             {
-                representative = Members[0]; 
+                representative = members[0]; 
             }
         }
 
@@ -47,7 +55,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         {
             get
             {
-                return Members.Count;
+                return members.Count;
             }
         }
     }
