@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -127,7 +127,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 var selection = PerformSelection();
                 var children = selection.Parent.Crossover(selection.Partner);
 
-                if (children == null)
+                if (children != null)
                 {
                     Enumerable.Range(0, selection.IndividualsToReplace.Length).AsParallel().ForAll(new Action<int>(
                         delegate(int i)
