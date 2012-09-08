@@ -11,7 +11,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public virtual double Score
         {
             get;
-            private set;
+            set;
         }
 
         public IGA Parent
@@ -32,7 +32,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             protected set;
         }
 
-        protected abstract double GetScore();
         protected abstract PType GetPhenome();
         
         public abstract void Initialise();
@@ -43,7 +42,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public void Update()
         {
             Phenome = GetPhenome();
-            Score = GetScore();
         }
     }
 }

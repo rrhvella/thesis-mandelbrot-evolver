@@ -19,7 +19,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         {
             get
             {
-                return members.AsEnumerable();
+                return members;
             }
         }
 

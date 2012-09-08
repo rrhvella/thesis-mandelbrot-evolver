@@ -7,9 +7,10 @@ using NEATSpacesLibrary.Extensions;
 namespace NEATSpacesLibrary.GeneticAlgorithms
 {
     public class SteadyStateGA<GenomeType, GType, PType> : 
-            BaseSteadyStateGA<GenomeType, GType, PType> where GenomeType : Genome<GType, PType>, new()
+            BaseSteadyStateGA<GenomeType, GType, PType> 
+            where GenomeType : Genome<GType, PType>, new()
     {
-        public SteadyStateGA(int populationSize): base(populationSize)
+        public SteadyStateGA(int populationSize, Func<GenomeType, double> scoreFunction): base(populationSize, scoreFunction)
         {
         }
 
@@ -20,7 +21,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                                         .ToArray();
 
             return new GASelectionResult<GenomeType>(tournament[0], tournament[1], 
-                    tournament[DEFAULT_TOURNAMENT_SIZE - 2], tournament[DEFAULT_TOURNAMENT_SIZE - 1]);
+                        tournament[DEFAULT_TOURNAMENT_SIZE - 2], 
+                        tournament[DEFAULT_TOURNAMENT_SIZE - 1]);
         }
     }
 }

@@ -16,8 +16,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public int NoInnovationThreshold { get; set; }
         private List<Species<GType, PType>> populationSpecies;
 
-        public BaseSpeciatedSteadyStateGA(int populationSize)
-            : base(populationSize)
+        public BaseSpeciatedSteadyStateGA(int populationSize, Func<GenomeType, double> scoreFunction)
+            : base(populationSize, scoreFunction)
         {
             GenomeAdded += new EventHandler<GenomeEventArgs<GenomeType>>(SpeciatedSteadyStateGA_GenomeAddedEventHandler);
             GenomeRemoved += new EventHandler<GenomeEventArgs<GenomeType>>(SpeciatedSteadyStateGA_GenomeRemovedEventHandler);

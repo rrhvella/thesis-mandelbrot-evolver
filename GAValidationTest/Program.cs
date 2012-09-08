@@ -58,11 +58,6 @@ namespace GAValidationTest
                 return GeneCollection;
             }
 
-            protected override double GetScore()
-            {
-                return Phenome.DistanceFromStartToEnd;
-            }
-
             public override Genome<Map, Map>[] Crossover(Genome<Map, Map> partner)
             {
                 if (Parent.CrossoverRate > random.NextDouble())
@@ -107,7 +102,7 @@ namespace GAValidationTest
         public static void Main(string[] args)
         {
             Console.WriteLine(String.Format("Initialising the population..."));
-            var testGA = new SteadyStateGA<MapGenome, Map, Map>(POPULATION_SIZE);
+            var testGA = new SteadyStateGA<MapGenome, Map, Map>(POPULATION_SIZE, genome => genome.Phenome.DistanceFromStartToEnd);
 
             testGA.MutationRate = MUTATION_RATE;
             testGA.CrossoverRate = CROSSOVER_RATE;

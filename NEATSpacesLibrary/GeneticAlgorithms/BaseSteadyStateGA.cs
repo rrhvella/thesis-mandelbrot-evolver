@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -74,6 +74,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         private GenomeType best;
         private bool bestCacheExpired;
+        private Func<GenomeType, double> scoreFunction;
         public GenomeType Best
         {
             get
@@ -91,10 +92,12 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
         }
 
-        public BaseSteadyStateGA(int populationSize)
+        public BaseSteadyStateGA(int populationSize, Func<GenomeType, double> scoreFunction)
         {
             this.populationSize = populationSize;
             this.Population = new List<GenomeType>(populationSize);
+
+            this.scoreFunction = scoreFunction;
 
             this.random = new Random();
 
@@ -109,6 +112,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
                 newGenome.Initialise();
                 newGenome.Update();
+
+                newGenome.Score = scoreFunction(newGenome);
 
                 if (GenomeAdded != null)
                 {
@@ -151,6 +156,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
                             children[i].Mutate();
                             children[i].Update();
+
+                            children[i].Score = scoreFunction((GenomeType)children[i]);
 
                             if (GenomeAdded != null)
                             {
