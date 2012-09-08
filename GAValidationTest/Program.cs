@@ -33,7 +33,7 @@ namespace GAValidationTest
 
             public MapGenome()
             {
-                this.GeneticCode = new Map(MAP_SIZE, MAP_SIZE, START_NODE, END_NODE, CHECKPOINTS, MANDATORY_CHECKPOINT_LEVEL);
+                this.GeneCollection = new Map(MAP_SIZE, MAP_SIZE, START_NODE, END_NODE, CHECKPOINTS, MANDATORY_CHECKPOINT_LEVEL);
                 this.random = new Random();
             }
 
@@ -47,7 +47,7 @@ namespace GAValidationTest
                     {
                         if (random.NextDouble() <= FILL_PARAMETER)
                         {
-                            GeneticCode[x, y] = true;
+                            GeneCollection[x, y] = true;
                         }
                     }
                 }
@@ -55,7 +55,7 @@ namespace GAValidationTest
 
             protected override Map GetPhenome()
             {
-                return GeneticCode;
+                return GeneCollection;
             }
 
             protected override double GetScore()
@@ -65,35 +65,40 @@ namespace GAValidationTest
 
             public override Genome<Map, Map>[] Crossover(Genome<Map, Map> partner)
             {
+                if (Parent.CrossoverRate > random.NextDouble())
+                {
+                    return null;
+                }
+
                 var children = new MapGenome[] { new MapGenome(), new MapGenome() };
 
                 //Select a position for one point crossover.
-                var crossoverPosition = random.Next(GeneticCode.Length);
+                var crossoverPosition = random.Next(GeneCollection.Length);
 
-                foreach(var i in Enumerable.Range(0, GeneticCode.Length))
+                foreach(var i in Enumerable.Range(0, GeneCollection.Length))
                 {
                     if (i < crossoverPosition)
                     {
-                        children[0].GeneticCode[i] = GeneticCode[i];
-                        children[1].GeneticCode[i] = partner.GeneticCode[i];
+                        children[0].GeneCollection[i] = GeneCollection[i];
+                        children[1].GeneCollection[i] = partner.GeneCollection[i];
                     }
                     else
                     {
-                        children[1].GeneticCode[i] = GeneticCode[i];
-                        children[0].GeneticCode[i] = partner.GeneticCode[i];
+                        children[1].GeneCollection[i] = GeneCollection[i];
+                        children[0].GeneCollection[i] = partner.GeneCollection[i];
                     }
                 }
 
                 return children;
             }
 
-            public override void Mutate(double mutationProbability)
+            public override void Mutate()
             {
-                foreach(var i in Enumerable.Range(0, GeneticCode.Length))
+                foreach(var i in Enumerable.Range(0, GeneCollection.Length))
                 {
-                    if(random.NextDouble() <= mutationProbability) 
+                    if(random.NextDouble() <= Parent.MutationRate) 
                     {
-                        GeneticCode[i] = !GeneticCode[i];
+                        GeneCollection[i] = !GeneCollection[i];
                     }
                 }
             }

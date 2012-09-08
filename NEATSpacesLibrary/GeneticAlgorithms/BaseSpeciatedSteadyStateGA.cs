@@ -6,7 +6,7 @@ using NEATSpacesLibrary.Extensions;
 
 namespace NEATSpacesLibrary.GeneticAlgorithms
 {
-    public class SpeciatedSteadyStateGA<GenomeType, GType, PType> : 
+    public abstract class BaseSpeciatedSteadyStateGA<GenomeType, GType, PType> : 
             BaseSteadyStateGA<GenomeType, GType, PType>,
             ISpeciatedGA
             where GenomeType : SpeciatedGenome<GType, PType>, new()
@@ -16,8 +16,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public int NoInnovationThreshold { get; set; }
         private List<Species<GType, PType>> populationSpecies;
 
-
-        public SpeciatedSteadyStateGA(int populationSize)
+        public BaseSpeciatedSteadyStateGA(int populationSize)
             : base(populationSize)
         {
             GenomeAdded += new EventHandler<GenomeEventArgs<GenomeType>>(SpeciatedSteadyStateGA_GenomeAddedEventHandler);

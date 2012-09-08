@@ -14,13 +14,19 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             private set;
         }
 
+        public IGA Parent
+        {
+            get;
+            set;
+        }
+
         public PType Phenome
         {
             get;
             private set;
         }
 
-        public GType GeneticCode
+        public GType GeneCollection
         {
             get;
             protected set;
@@ -32,7 +38,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public abstract void Initialise();
         public abstract Genome<GType, PType>[] Crossover(Genome<GType, PType> partner);
         
-        public abstract void Mutate(double mutationProbability);
+        public abstract void Mutate();
 
         public void Update()
         {

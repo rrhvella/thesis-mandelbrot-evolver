@@ -51,7 +51,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         }
     }
 
-    public abstract class BaseSteadyStateGA<GenomeType, GType, PType> where GenomeType : Genome<GType, PType>, new()
+    public abstract class BaseSteadyStateGA<GenomeType, GType, PType> : IGA 
+        where GenomeType : Genome<GType, PType>, new()
     {
         public const int DEFAULT_TOURNAMENT_SIZE = 7;
 
@@ -66,8 +67,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             private set;
         }
 
-        public double CrossoverRate;
-        public double MutationRate;
+        public double CrossoverRate { get; set; }
+        public double MutationRate { get; set; }
 
         private Random random;
 
@@ -99,6 +100,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             (Enumerable.Range(0, populationSize)).AsParallel().ForAll(new Action<int>(delegate (int i) {
                 var newGenome = new GenomeType();
+                newGenome.Parent = this;
 
                 lock (Population)
                 {
@@ -125,34 +127,39 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 var selection = PerformSelection();
                 var children = selection.Parent.Crossover(selection.Partner);
 
-                Enumerable.Range(0, selection.IndividualsToReplace.Length).AsParallel().ForAll(new Action<int>(
-                    delegate(int i)
-                    {
-                        lock (Population)
+                if (children == null)
+                {
+                    Enumerable.Range(0, selection.IndividualsToReplace.Length).AsParallel().ForAll(new Action<int>(
+                        delegate(int i)
                         {
-                            Population.Remove(selection.IndividualsToReplace[i]);
-                        }
+                            lock (Population)
+                            {
+                                Population.Remove(selection.IndividualsToReplace[i]);
+                            }
 
-                        if (GenomeRemoved != null)
-                        {
-                            GenomeRemoved(this, new GenomeEventArgs<GenomeType>(selection.IndividualsToReplace[i]));
-                        }
+                            if (GenomeRemoved != null)
+                            {
+                                GenomeRemoved(this, new GenomeEventArgs<GenomeType>(selection.IndividualsToReplace[i]));
+                            }
 
-                        lock (Population)
-                        {
-                            Population.Add((GenomeType)children[i]);
-                        }
+                            lock (Population)
+                            {
+                                Population.Add((GenomeType)children[i]);
+                            }
 
-                        children[i].Mutate(MutationRate);
-                        children[i].Update();
+                            children[i].Parent = this;
 
-                        if (GenomeAdded != null)
-                        {
-                            GenomeAdded(this, new GenomeEventArgs<GenomeType>((GenomeType)children[i]));
-                        }
-                    }));
+                            children[i].Mutate();
+                            children[i].Update();
 
-                bestCacheExpired = true;
+                            if (GenomeAdded != null)
+                            {
+                                GenomeAdded(this, new GenomeEventArgs<GenomeType>((GenomeType)children[i]));
+                            }
+                        }));
+
+                    bestCacheExpired = true;
+                }
             }
 
             if (IterationComplete != null)
