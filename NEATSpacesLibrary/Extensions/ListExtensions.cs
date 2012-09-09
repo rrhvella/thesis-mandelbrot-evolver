@@ -21,6 +21,11 @@ namespace NEATSpacesLibrary.Extensions
             }
         }
 
+        public static T RandomSingle<T>(this IList<T> self)
+        {
+            return self[(new Random()).Next(self.Count)];
+        }
+
         public static IEnumerable<T> RandomTake<T>(this IList<T> self, int size)
         {
             var indexArray = Enumerable.Range(0, self.Count).ToArray();
