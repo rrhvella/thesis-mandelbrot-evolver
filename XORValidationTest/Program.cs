@@ -39,7 +39,7 @@ namespace XORValidationTest
         public static void Main(string[] args)
         {
             //Initialise the GA.
-            var testGA = new SpeciatedGA<XORTestGenome>(POPULATION_SIZE);
+            var testGA = new SpeciatedSteadyStateGA<XORTestGenome>(POPULATION_SIZE);
 
             testGA.MutationRate = MUTATION_RATE;
             testGA.InterSpeciesMatingRate = INTERSPECIES_MATING_RATE;
@@ -64,7 +64,7 @@ namespace XORValidationTest
                 var best = testGA.Best;
 
                 averageMatingEvents += matingEvents;
-                averageHiddenNodes += (from node in best.Phenotype.Nodes where node.Type == NeuronType.Hidden select node).Count();
+                averageHiddenNodes += (from node in best.Phenome.Nodes where node.Type == NeuronType.Hidden select node).Count();
                 averageEnabledGenes += (from gene in best.Genes where gene.Enabled select gene).Count();
             }
 
