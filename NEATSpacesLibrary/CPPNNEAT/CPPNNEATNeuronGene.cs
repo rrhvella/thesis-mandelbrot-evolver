@@ -5,14 +5,12 @@ using System.Text;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
-    public class CPPNNEATGene
+    public class CPPNNEATNeuronGene
     {
-        public bool Enabled
+        public Func<double[], double> ActivationFunction
         {
-            get
-            {
-                return false;
-            }
+            get;
+            private set;
         }
     }
 }

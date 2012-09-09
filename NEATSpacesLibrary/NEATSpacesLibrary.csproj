@@ -53,10 +53,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CPPNNEAT\CPPNNEATGA.cs" />
+    <Compile Include="CPPNNEAT\CPPNNEATLinkGene.cs" />
+    <Compile Include="CPPNNEAT\CPPNNEATNeuronGene.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="GeneticAlgorithms\BaseSteadyStateGA.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGeneCollection.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGenome.cs" />
+    <Compile Include="GeneticAlgorithms\IGA.cs" />
     <Compile Include="GeneticAlgorithms\ISpeciatedGA.cs" />
     <Compile Include="GeneticAlgorithms\SpeciatedGenome.cs" />
     <Compile Include="GeneticAlgorithms\Species.cs" />
@@ -66,7 +70,7 @@
     <Compile Include="CPPNNEAT\CPPNNetworkNode.cs" />
     <Compile Include="NEATSpaces\Map.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GeneticAlgorithms\SpeciatedSteadyStateGA.cs" />
+    <Compile Include="GeneticAlgorithms\BaseSpeciatedSteadyStateGA.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
