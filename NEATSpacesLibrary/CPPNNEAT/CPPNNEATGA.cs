@@ -99,13 +99,13 @@ namespace NEATSpacesLibrary.CPPNNEAT
             set;
         }
 
-        public int ExcessGenesWeight 
+        public double ExcessGenesWeight 
         { 
             get; 
             set; 
         }
 
-        public int DisjointGenesWeight 
+        public double DisjointGenesWeight 
         { 
             get; 
             set; 

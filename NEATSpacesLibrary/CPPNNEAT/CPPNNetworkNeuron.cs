@@ -38,6 +38,14 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 return x => 2 * Math.Exp(-(Math.Pow(x, 2)/18)) - 1;
             }
         }
+
+        public static Func<double, double> SteepenedSigmoidActivationFunction
+        {
+            get
+            {
+                return x => 1 / (1 + Math.Exp(-4.9 * x));
+            }
+        }
     }
 
     public abstract class CPPNNetworkNeuron
