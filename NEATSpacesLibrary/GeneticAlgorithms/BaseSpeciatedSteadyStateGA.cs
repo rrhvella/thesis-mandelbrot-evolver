@@ -70,7 +70,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         {
             var tournament = Population.Where(elem => elem.Species.CanBreed)
                                 .ToList().RandomTake(DEFAULT_TOURNAMENT_SIZE)
-                                .OrderByDescending(elem => elem.Score)
+                                .OrderByDescending(elem => elem.AdjustedScore)
                                 .ToArray();
 
             var partner = (GenomeType)tournament[1];
@@ -79,7 +79,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             {
                 partner = (GenomeType)tournament[0].Species.Members
                                     .ToList().RandomTake(DEFAULT_TOURNAMENT_SIZE)
-                                    .OrderByDescending(elem => elem.Score)
+                                    .OrderByDescending(elem => elem.AdjustedScore)
                                     .First();
             }
 

@@ -8,10 +8,18 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 {
     public abstract class Genome<GType, PType> 
     {
-        public virtual double Score
+        public double Score
         {
             get;
             set;
+        }
+
+        public virtual double AdjustedScore
+        {
+            get
+            {
+                return Score;
+            }
         }
 
         public IGA Parent
