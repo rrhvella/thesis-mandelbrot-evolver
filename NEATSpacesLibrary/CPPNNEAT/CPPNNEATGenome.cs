@@ -184,7 +184,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             var analysis2 = GetFunctionAnalysis(genome.GeneCollection.NeuronGenes);
 
             var averageFunctionDifference = (Parent as CPPNNEATGA).CanonicalFunctionList
-                                                    .Select(delegate(Func<double[], double> function) {
+                                                    .Select(delegate(Func<double, double> function) {
                                                         return Math.Abs(analysis1[function] - analysis2[function]);
                                                     })
                                                 .Average();
@@ -198,7 +198,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                  FUNCTION_DIFF_WEIGHT * averageFunctionDifference;
         }
 
-        private Dictionary<Func<double[], double>, int> GetFunctionAnalysis(IEnumerable<CPPNNEATNeuronGene> neuronGenes)
+        private Dictionary<Func<double, double>, int> GetFunctionAnalysis(IEnumerable<CPPNNEATNeuronGene> neuronGenes)
         {
             var result = (Parent as CPPNNEATGA).CanonicalFunctionList.ToDictionary(elem => elem, elem => 0);
 
@@ -220,7 +220,8 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         protected override CPPNNetwork GetPhenome()
         {
-            return GeneCollection.CreateNetwork();
+            GeneCollection.Update();
+            return GeneCollection.Phenome;
         }
 
         public override Genome<CPPNNEATGeneCollection, CPPNNetwork>[] Crossover(Genome<CPPNNEATGeneCollection, CPPNNetwork> partner)
@@ -238,8 +239,6 @@ namespace NEATSpacesLibrary.CPPNNEAT
             if (random.NextDouble() <= parent.NewLinkRate)
             {
                 var numberOfNeuronGenes = GeneCollection.NeuronGenes.Count();
-
-                //Start at 1 so as to skip the bias input.
                 GeneCollection.CreateLinkGene(random.Next(0, numberOfNeuronGenes), random.Next(1 + parent.NumberOfInputs, numberOfNeuronGenes));
             }
 
@@ -258,7 +257,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                     }
                     else
                     {
-                        link.Weight = random.NextDouble();
+                        link.Weight = parent.GetRandomWeight();
                     }
                 }
             }

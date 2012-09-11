@@ -13,12 +13,39 @@ namespace NEATSpacesLibrary.CPPNNEAT
             private set;
         }
 
-        public bool Enabled;
-
-        public CPPNNEATLinkGene(CPPNNEATNeuronGene cPPNNEATNeuronGene, CPPNNEATNeuronGene cPPNNEATNeuronGene_2)
+        public CPPNNEATLinkGene(int innovationNumber, CPPNNEATNeuronGene from, CPPNNEATNeuronGene to, double weight)
         {
+            this.InnovationNumber = innovationNumber;
+            this.Enabled = true;
+
+            this.From = from;
+            this.To = to;
+
+            this.Weight = weight;
         }
 
-        public double Weight { get; set; }
+        public bool Enabled
+        {
+            get;
+            set;
+        }
+
+        public double Weight 
+        { 
+            get; 
+            set; 
+        }
+
+        public CPPNNEATNeuronGene From 
+        { 
+            get; 
+            private set; 
+        }
+
+        public CPPNNEATNeuronGene To 
+        { 
+            get; 
+            private set; 
+        }
     }
 }

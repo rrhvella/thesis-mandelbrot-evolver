@@ -5,12 +5,60 @@ using System.Text;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
+    public enum CPPNNeuronType
+    {
+        Bias = 0,
+        Input,
+        Hidden,
+        Output
+    }
+
     public class CPPNNEATNeuronGene
     {
-        public Func<double[], double> ActivationFunction
+        public CPPNNeuronType Type
         {
             get;
             private set;
+        }
+
+        public CPPNNEATNeuronGene(CPPNNeuronType type, Func<double, double> activationFunction)
+        {
+            this.Type = type;
+            this.ActivationFunction = activationFunction;
+        }
+        public Func<double, double> ActivationFunction
+        {
+            get;
+            set;
+        }
+
+        public void Update()
+        {
+            switch (Type)
+            {
+                case CPPNNeuronType.Input:
+                    Phene = new CPPNInputNeuron();
+                    break;
+
+                case CPPNNeuronType.Output:
+                    Phene = new CPPNOutputNeuron(ActivationFunction);
+                    break;
+
+                case CPPNNeuronType.Hidden:
+                    Phene = new CPPNHiddenNeuron(ActivationFunction);
+                    break;
+
+                case CPPNNeuronType.Bias:
+                    Phene = new CPPNBiasNeuron();
+                    break;
+
+            }
+        }
+
+        public CPPNNetworkNeuron Phene 
+        { 
+            get; 
+            private set; 
         }
     }
 }

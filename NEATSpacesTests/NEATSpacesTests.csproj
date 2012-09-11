@@ -42,6 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CPPNNEAT\CPPNEATConstants.cs" />
+    <Compile Include="CPPNNEAT\CPPNNetworkNeuronTests.cs" />
+    <Compile Include="CPPNNEAT\CPPNNetworkTests.cs" />
+    <Compile Include="CPPNNEAT\CPPNNEATGATests.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGeneCollectionTests.cs" />
     <Compile Include="Extensions\ListExtensionsTest.cs" />
     <Compile Include="NEATSpaces\MapTests.cs" />

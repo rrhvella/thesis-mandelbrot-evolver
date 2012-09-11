@@ -67,7 +67,7 @@
     <Compile Include="GeneticAlgorithms\SteadyStateGA.cs" />
     <Compile Include="GeneticAlgorithms\Genome.cs" />
     <Compile Include="CPPNNEAT\CPPNNetwork.cs" />
-    <Compile Include="CPPNNEAT\CPPNNetworkNode.cs" />
+    <Compile Include="CPPNNEAT\CPPNNetworkNeuron.cs" />
     <Compile Include="NEATSpaces\Map.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GeneticAlgorithms\BaseSpeciatedSteadyStateGA.cs" />
