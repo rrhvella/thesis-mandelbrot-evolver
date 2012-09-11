@@ -101,7 +101,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             this.random = new Random();
 
-            (Enumerable.Range(0, populationSize)).AsParallel().ForAll(new Action<int>(delegate (int i) {
+            (Enumerable.Range(0, populationSize)).AsParallel().ForAll(delegate (int i) {
                 var newGenome = new GenomeType();
                 newGenome.Parent = this;
 
@@ -119,7 +119,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 {
                     GenomeAdded(this, new GenomeEventArgs<GenomeType>(newGenome));
                 }
-            }));
+            });
 
 
             bestCacheExpired = true;
@@ -134,7 +134,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
                 if (children != null)
                 {
-                    Enumerable.Range(0, selection.IndividualsToReplace.Length).AsParallel().ForAll(new Action<int>(
+                    Enumerable.Range(0, selection.IndividualsToReplace.Length).AsParallel().ForAll(
                         delegate(int i)
                         {
                             lock (Population)
@@ -163,7 +163,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                             {
                                 GenomeAdded(this, new GenomeEventArgs<GenomeType>((GenomeType)children[i]));
                             }
-                        }));
+                        });
 
                     bestCacheExpired = true;
                 }
