@@ -80,11 +80,6 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
-        public const int EXCESS_GENES_WEIGHT = 1;
-        public const int DISJOINT_GENES_WEIGHT = 1;
-        public const int MATCHING_GENES_WEIGHT = 1;
-        public const int FUNCTION_DIFF_WEIGHT = 1;
-
         private Random random;
 
         public new CPPNNEATGA Parent
@@ -192,10 +187,12 @@ namespace NEATSpacesLibrary.CPPNNEAT
             var n = Math.Max(this.GeneCollection.LinkGenes.Count(),
                             genome.GeneCollection.LinkGenes.Count());
 
-            return EXCESS_GENES_WEIGHT * (totalExcess / n) +
-                 DISJOINT_GENES_WEIGHT * (totalDisjoint / n) +
-                 MATCHING_GENES_WEIGHT * averageWeightDifference +
-                 FUNCTION_DIFF_WEIGHT * averageFunctionDifference;
+            var parent = Parent as CPPNNEATGA;
+
+            return parent.ExcessGenesWeight * (totalExcess / n) +
+                 parent.DisjointGenesWeight * (totalDisjoint / n) +
+                 parent.MatchingGenesWeight * averageWeightDifference +
+                 parent.FunctionDifferenceWeight * averageFunctionDifference;
         }
 
         private Dictionary<Func<double, double>, int> GetFunctionAnalysis(IEnumerable<CPPNNEATNeuronGene> neuronGenes)

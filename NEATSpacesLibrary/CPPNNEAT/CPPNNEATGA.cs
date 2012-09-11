@@ -99,6 +99,30 @@ namespace NEATSpacesLibrary.CPPNNEAT
             set;
         }
 
+        public int ExcessGenesWeight 
+        { 
+            get; 
+            set; 
+        }
+
+        public int DisjointGenesWeight 
+        { 
+            get; 
+            set; 
+        }
+
+        public double MatchingGenesWeight 
+        { 
+            get; 
+            set; 
+        }
+
+        public double FunctionDifferenceWeight 
+        { 
+            get; 
+            set; 
+        }
+
         private int innovationNumber = 0;
         private Random random;
         public int NextInnovationNumber()
@@ -122,5 +146,6 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             return (random.NextDouble() - 0.5) * 2 * MaxWeight;
         }
+
     }
 }
