@@ -7,10 +7,15 @@ namespace NEATSpacesLibrary.Extensions
 {
     public static class ListExtensions
     {
+        private static Random random;
+
+        static ListExtensions()
+        {
+            random = new Random();
+        }
+
         public static void Shuffle<T>(this IList<T> self)
         {
-            var random = new Random();
-
             foreach(var i in Enumerable.Range(0, self.Count - 1)) 
             {
                 var j = random.Next(i + 1, self.Count);
@@ -23,7 +28,7 @@ namespace NEATSpacesLibrary.Extensions
 
         public static T RandomSingle<T>(this IList<T> self)
         {
-            return self[(new Random()).Next(self.Count)];
+            return (self.Count == 0)? default(T) : self[random.Next(self.Count)];
         }
 
         public static IEnumerable<T> RandomTake<T>(this IList<T> self, int size)
@@ -32,6 +37,42 @@ namespace NEATSpacesLibrary.Extensions
             indexArray.Shuffle();
 
             return indexArray.Take(size).Select(elem => self[elem]);
+        }
+
+        public static T RouletteWheelSingle<T>(this IEnumerable<T> self, Func<T, double> probabilitySelector)
+        {
+            //Build roulette wheel.
+            var rouletteWheel = new Queue<Tuple<T, double>>();
+            var total = 0.0;
+
+            foreach (var tuple in self.Select(item => 
+                                            Tuple.Create(item, probabilitySelector(item)))
+                                     .OrderByDescending(tuple => tuple.Item2))
+
+            {
+                if (tuple.Item2 == 0)
+                {
+                    continue;
+                }
+
+                rouletteWheel.Enqueue(Tuple.Create(tuple.Item1, tuple.Item2 + total));
+                total += tuple.Item2;
+            }
+
+            if (rouletteWheel.Count == 0)
+            {
+                return default(T);
+            }
+
+            //Make selection.
+            var selection = random.NextDouble() * total;
+
+            while (rouletteWheel.Peek().Item2 < selection)
+            {
+                rouletteWheel.Dequeue();
+            }
+
+            return rouletteWheel.Dequeue().Item1;
         }
     }
 
