@@ -51,18 +51,7 @@ namespace NEATSpacesTests.CPPNNEAT
         }
 
         [TestCase]
-        public void TestInnovationNumberOfDefaultGenes()
-        {
-            var newGA = new CPPNNEATGA(2, 0, null, new List<Func<double, double>>() { null });
-
-            foreach(var i in Enumerable.Range(0, 3)) {
-                Assert.AreEqual(newGA.DefaultLinkGenes[i].InnovationNumber,
-                                newGA.GetInnovationNumber(newGA.DefaultNeuronGenes[i], newGA.DefaultNeuronGenes[3]));
-            }
-        }
-
-        [TestCase]
-        public void TestInnovationNumberOfNewGenes()
+        public void TestInnovationNumber()
         {
             var newGA = new CPPNNEATGA(2, 0, null, new List<Func<double, double>>() { null });
 
@@ -71,6 +60,17 @@ namespace NEATSpacesTests.CPPNNEAT
 
             Assert.AreEqual(3, newGA.GetInnovationNumber(from, to));
             Assert.AreEqual(3, newGA.GetInnovationNumber(from, to));
+        }
+
+        [TestCase]
+        public void TestInnovationNumberOfDefaultGenes()
+        {
+            var newGA = new CPPNNEATGA(2, 0, null, new List<Func<double, double>>() { null });
+
+            foreach(var i in Enumerable.Range(0, 3)) {
+                Assert.AreEqual(newGA.DefaultLinkGenes[i].InnovationNumber,
+                                newGA.GetInnovationNumber(newGA.DefaultNeuronGenes[i], newGA.DefaultNeuronGenes[3]));
+            }
         }
 
         [TestCase]
