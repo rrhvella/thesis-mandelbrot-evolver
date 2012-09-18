@@ -16,9 +16,9 @@ namespace NEATSpacesTests.CPPNNEAT
         {
             var newGA = new CPPNNEATGA(numberOfInputs, 0, null, new List<Func<double, double>>() { CPPNActivationFunctions.LinearActivationFunction });
             Console.WriteLine(newGA.DefaultNeuronGenes);
-            var groupedNeurons = (from neuron in newGA.DefaultNeuronGenes 
-                                 group neuron by neuron.Type into neuronsByType
-                                 select neuronsByType).ToDictionary(group => group.Key, group => group.Count());
+            var groupedNeurons = (from neuron in newGA.DefaultNeuronGenes
+                                  group neuron by neuron.Type into neuronsByType
+                                  select neuronsByType).ToDictionary(group => group.Key, group => group.Count());
 
 
             Assert.AreEqual(1, groupedNeurons[CPPNNeuronType.Bias]);
@@ -27,15 +27,15 @@ namespace NEATSpacesTests.CPPNNEAT
             Assert.AreEqual(1, groupedNeurons[CPPNNeuronType.Output]);
 
             Assert.AreEqual(newGA.DefaultLinkGenes
-                                .Where(linkGene => linkGene.To.Type == CPPNNeuronType.Output).Count(), 
+                                .Where(linkGene => linkGene.To.Type == CPPNNeuronType.Output).Count(),
                             1 + numberOfInputs);
 
             Assert.AreEqual(newGA.DefaultNeuronGenes.Where(neuron => neuron.Type == CPPNNeuronType.Output).First().ActivationFunction,
                         CPPNActivationFunctions.LinearActivationFunction);
 
-            var groupedLinks = (from link in newGA.DefaultLinkGenes 
-                                 group link by link.From.Type into linksByFromType
-                                 select linksByFromType).ToDictionary(group => group.Key, group => group.Count());
+            var groupedLinks = (from link in newGA.DefaultLinkGenes
+                                group link by link.From.Type into linksByFromType
+                                select linksByFromType).ToDictionary(group => group.Key, group => group.Count());
 
 
             Assert.AreEqual(1, groupedLinks[CPPNNeuronType.Bias]);
@@ -44,7 +44,7 @@ namespace NEATSpacesTests.CPPNNEAT
             Assert.IsFalse(groupedLinks.ContainsKey(CPPNNeuronType.Output));
         }
 
-        [TestCase(ExpectedException=typeof(ApplicationException))]
+        [TestCase(ExpectedException = typeof(ApplicationException))]
         public void TestEnforceNumberOfInputs()
         {
             var newGA = new CPPNNEATGA(0, 0, null, new List<Func<double, double>>() { null });
@@ -67,7 +67,8 @@ namespace NEATSpacesTests.CPPNNEAT
         {
             var newGA = new CPPNNEATGA(2, 0, null, new List<Func<double, double>>() { null });
 
-            foreach(var i in Enumerable.Range(0, 3)) {
+            foreach (var i in Enumerable.Range(0, 3))
+            {
                 Assert.AreEqual(newGA.DefaultLinkGenes[i].InnovationNumber,
                                 newGA.GetInnovationNumber(newGA.DefaultNeuronGenes[i], newGA.DefaultNeuronGenes[3]));
             }
@@ -80,14 +81,16 @@ namespace NEATSpacesTests.CPPNNEAT
             newGA.Initialise();
 
             var targetGeneCollection = newGA.Population[0].GeneCollection;
-                
-            targetGeneCollection.CreateNeuronGene(0);
 
-            Assert.AreEqual(targetGeneCollection.LinkGenes[3].InnovationNumber,
-                    newGA.GetInnovationNumber(targetGeneCollection.LinkGenes[3].From, targetGeneCollection.LinkGenes[3].To));
+            targetGeneCollection.CreateNeuronGene(CPPNNEATConstants.FIRST_INPUT_TO_OUTPUT_INDEX);
+
+            Assert.AreEqual(targetGeneCollection.LinkGenes[CPPNNEATConstants.FIRST_INPUT_TO_HIDDEN_INDEX].InnovationNumber,
+                    newGA.GetInnovationNumber(targetGeneCollection.LinkGenes[CPPNNEATConstants.FIRST_INPUT_TO_HIDDEN_INDEX].From, 
+                                            targetGeneCollection.LinkGenes[CPPNNEATConstants.FIRST_INPUT_TO_HIDDEN_INDEX].To));
 
             Assert.AreEqual(4,
-                    newGA.GetInnovationNumber(targetGeneCollection.LinkGenes[4].From, targetGeneCollection.LinkGenes[4].To));
+                    newGA.GetInnovationNumber(targetGeneCollection.LinkGenes[CPPNNEATConstants.HIDDEN_TO_OUTPUT_INDEX].From, 
+                                            targetGeneCollection.LinkGenes[CPPNNEATConstants.HIDDEN_TO_OUTPUT_INDEX].To));
         }
 
         [TestCase]
@@ -97,12 +100,14 @@ namespace NEATSpacesTests.CPPNNEAT
             newGA.Initialise();
 
             var targetGeneCollection = newGA.Population[0].GeneCollection;
-                
-            targetGeneCollection.CreateNeuronGene(1);
-            targetGeneCollection.TryCreateLinkGene(1, 4);
 
-            Assert.AreEqual(targetGeneCollection.LinkGenes[5].InnovationNumber,
-                    newGA.GetInnovationNumber(targetGeneCollection.LinkGenes[5].From, targetGeneCollection.LinkGenes[5].To));
+            targetGeneCollection.CreateNeuronGene(CPPNNEATConstants.FIRST_INPUT_TO_OUTPUT_INDEX);
+            targetGeneCollection.TryCreateLinkGene(CPPNNEATConstants.OUTPUT_NEURON_INDEX, 
+                                                CPPNNEATConstants.HIDDEN_NEURON_INDEX);
+
+            Assert.AreEqual(targetGeneCollection.LinkGenes[CPPNNEATConstants.LINK_AFTER_FIRST_HIDDEN_NEURON_INDEX].InnovationNumber,
+                    newGA.GetInnovationNumber(targetGeneCollection.LinkGenes[CPPNNEATConstants.LINK_AFTER_FIRST_HIDDEN_NEURON_INDEX].From, 
+                                            targetGeneCollection.LinkGenes[CPPNNEATConstants.LINK_AFTER_FIRST_HIDDEN_NEURON_INDEX].To));
         }
     }
 }

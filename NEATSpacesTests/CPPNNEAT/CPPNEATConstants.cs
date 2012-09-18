@@ -28,6 +28,7 @@ namespace NEATSpacesTests.CPPNNEAT
         public const int SECOND_INPUT_TO_OUTPUT_INDEX = 2;
 
         public const int BIAS_TO_HIDDEN_INDEX = 5;
+        public const int LINK_AFTER_FIRST_HIDDEN_NEURON_INDEX = 5;
         public const int FIRST_INPUT_TO_HIDDEN_INDEX = 3;
         public const int SECOND_INPUT_TO_HIDDEN_INDEX = 6;
         public const int HIDDEN_TO_OUTPUT_INDEX = 4;
