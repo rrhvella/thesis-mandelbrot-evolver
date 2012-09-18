@@ -155,7 +155,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             selectedLink.Enabled = false;
 
-            var newNeuron = new CPPNNEATNeuronGene(CPPNNeuronType.Hidden, ParentGA.CanonicalFunctionList.RandomSingle());
+            var newNeuron = ParentGA.GetHiddenNeuron(selectedLink.InnovationNumber);
 
             TryAddLinkGene(new CPPNNEATLinkGene(ParentGA.GetInnovationNumber(selectedLink.From, newNeuron), selectedLink.From, 
                                         newNeuron, selectedLink.Weight));

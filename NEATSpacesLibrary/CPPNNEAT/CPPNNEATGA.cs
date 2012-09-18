@@ -12,6 +12,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
     {
 
         private Dictionary<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>, int> innovationNumberMap;
+        private Dictionary<int, CPPNNEATNeuronGene> hiddenNeuronMap;
 
         public IList<Func<double, double>> CanonicalFunctionList
         {
@@ -31,6 +32,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             this.CanonicalFunctionList = canonicalFunctionList;
 
             this.innovationNumberMap = new Dictionary<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>, int>();
+            this.hiddenNeuronMap = new Dictionary<int, CPPNNEATNeuronGene>();
 
             this.DefaultNeuronGenes = new List<CPPNNEATNeuronGene>();
             this.DefaultLinkGenes = new List<CPPNNEATLinkGene>();
@@ -154,6 +156,17 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
 
             return innovationNumberMap[key];
+        }
+
+        public CPPNNEATNeuronGene GetHiddenNeuron(int innovationNumber)
+        {
+            if (!hiddenNeuronMap.ContainsKey(innovationNumber))
+            {
+                hiddenNeuronMap[innovationNumber] = new CPPNNEATNeuronGene(CPPNNeuronType.Hidden, 
+                                                                    CanonicalFunctionList.RandomSingle());
+            }
+
+            return hiddenNeuronMap[innovationNumber];
         }
     }
 }

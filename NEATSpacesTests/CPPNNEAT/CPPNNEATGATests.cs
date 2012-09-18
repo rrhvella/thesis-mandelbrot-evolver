@@ -109,5 +109,33 @@ namespace NEATSpacesTests.CPPNNEAT
                     newGA.GetInnovationNumber(targetGeneCollection.LinkGenes[CPPNNEATConstants.LINK_AFTER_FIRST_HIDDEN_NEURON_INDEX].From, 
                                             targetGeneCollection.LinkGenes[CPPNNEATConstants.LINK_AFTER_FIRST_HIDDEN_NEURON_INDEX].To));
         }
+
+        [TestCase]
+        public void TestGetHiddenNeuron()
+        {
+            var newGA = new CPPNNEATGA(2, 1, x => 0.0, new List<Func<double, double>>() { null });
+            newGA.Initialise();
+
+            Assert.IsNotNull(newGA.GetHiddenNeuron(1));
+            Assert.AreSame(newGA.GetHiddenNeuron(1), newGA.GetHiddenNeuron(1));
+        }
+
+        [TestCase]
+        public void TestGetHiddenNeuronOfCreateNeuron()
+        {
+            var newGA = new CPPNNEATGA(2, 1, x => 0.0, new List<Func<double, double>>() { null });
+            newGA.Initialise();
+
+            var testGeneCollection = newGA.Population[0].GeneCollection;
+
+            testGeneCollection.CreateNeuronGene(CPPNNEATConstants.FIRST_INPUT_TO_OUTPUT_INDEX);
+
+            var linkInnovationNumber = testGeneCollection.LinkGenes[CPPNNEATConstants.FIRST_INPUT_TO_OUTPUT_INDEX]
+                                                         .InnovationNumber;
+
+            var linkNeuron = testGeneCollection.LinkGenes[CPPNNEATConstants.FIRST_INPUT_TO_HIDDEN_INDEX].To;
+
+            Assert.AreSame(newGA.GetHiddenNeuron(linkInnovationNumber), linkNeuron);
+        }
     }
 }
