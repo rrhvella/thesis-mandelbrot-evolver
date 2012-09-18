@@ -252,7 +252,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 {
                     if (random.NextDouble() <= parent.WeightPertubationRate)
                     {
-                        link.Weight = (random.NextDouble() - 0.5) * 2 * parent.MaxPerturbation;
+                        link.Weight += (random.NextDouble() - 0.5) * 2 * parent.MaxPerturbation;
                     }
                     else
                     {
