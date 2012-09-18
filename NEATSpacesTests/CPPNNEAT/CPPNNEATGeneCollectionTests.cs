@@ -12,22 +12,6 @@ namespace NEATSpacesTests.CPPNNEAT
     {
         private CPPNNEATGeneCollection testCollection;
 
-        private int BIAS_NEURON_INDEX = 0;
-        private int OUTPUT_NEURON_INDEX = 1;
-        private int HIDDEN_NEURON_INDEX = 4;
-        private int SECOND_INPUT_NEURON_INDEX = 3;
-
-        private int BIAS_TO_OUTPUT_INDEX = 0;
-        private int FIRST_INPUT_TO_OUTPUT_INDEX = 1;
-        private int SECOND_INPUT_TO_OUTPUT_INDEX = 2;
-
-        private int BIAS_TO_HIDDEN_INDEX = 5;
-        private int FIRST_INPUT_TO_HIDDEN_INDEX = 3;
-        private int SECOND_INPUT_TO_HIDDEN_INDEX = 6;
-        private int HIDDEN_TO_OUTPUT_INDEX = 4;
-
-        private int OUTPUT_TO_HIDDEN_INDEX = 7;
-
         [SetUp]
         public void SetUp()
         {
@@ -39,9 +23,9 @@ namespace NEATSpacesTests.CPPNNEAT
 
             this.testCollection = testGenome.GeneCollection;
 
-            this.testCollection.UpdateLinkGeneWeight(BIAS_TO_OUTPUT_INDEX, CPPNNEATConstants.BIAS);
-            this.testCollection.UpdateLinkGeneWeight(FIRST_INPUT_TO_OUTPUT_INDEX, CPPNNEATConstants.WEIGHT_1);
-            this.testCollection.UpdateLinkGeneWeight(SECOND_INPUT_TO_OUTPUT_INDEX, CPPNNEATConstants.WEIGHT_2);
+            this.testCollection.UpdateLinkGeneWeight(CPPNNEATConstants.BIAS_TO_OUTPUT_INDEX, CPPNNEATConstants.BIAS);
+            this.testCollection.UpdateLinkGeneWeight(CPPNNEATConstants.FIRST_INPUT_TO_OUTPUT_INDEX, CPPNNEATConstants.WEIGHT_1);
+            this.testCollection.UpdateLinkGeneWeight(CPPNNEATConstants.SECOND_INPUT_TO_OUTPUT_INDEX, CPPNNEATConstants.WEIGHT_2);
         }
 
         [TestCase(1.0, 0.0)]
@@ -57,18 +41,18 @@ namespace NEATSpacesTests.CPPNNEAT
 
         private void UpdateHiddenNeuronNetwork()
         {
-            testCollection.CreateNeuronGene(FIRST_INPUT_TO_OUTPUT_INDEX);
+            testCollection.CreateNeuronGene(CPPNNEATConstants.FIRST_INPUT_TO_OUTPUT_INDEX);
 
-            testCollection.TryCreateLinkGene(BIAS_NEURON_INDEX, HIDDEN_NEURON_INDEX);
-            testCollection.TryCreateLinkGene(SECOND_INPUT_NEURON_INDEX, HIDDEN_NEURON_INDEX);
+            testCollection.TryCreateLinkGene(CPPNNEATConstants.BIAS_NEURON_INDEX, CPPNNEATConstants.HIDDEN_NEURON_INDEX);
+            testCollection.TryCreateLinkGene(CPPNNEATConstants.SECOND_INPUT_NEURON_INDEX, CPPNNEATConstants.HIDDEN_NEURON_INDEX);
 
-            testCollection.DisableLinkGene(BIAS_TO_OUTPUT_INDEX);
-            testCollection.DisableLinkGene(SECOND_INPUT_TO_OUTPUT_INDEX);
+            testCollection.DisableLinkGene(CPPNNEATConstants.BIAS_TO_OUTPUT_INDEX);
+            testCollection.DisableLinkGene(CPPNNEATConstants.SECOND_INPUT_TO_OUTPUT_INDEX);
 
-            this.testCollection.UpdateLinkGeneWeight(BIAS_TO_HIDDEN_INDEX, CPPNNEATConstants.BIAS);
-            this.testCollection.UpdateLinkGeneWeight(FIRST_INPUT_TO_HIDDEN_INDEX, CPPNNEATConstants.WEIGHT_1);
-            this.testCollection.UpdateLinkGeneWeight(SECOND_INPUT_TO_HIDDEN_INDEX, CPPNNEATConstants.WEIGHT_2);
-            this.testCollection.UpdateLinkGeneWeight(HIDDEN_TO_OUTPUT_INDEX, CPPNNEATConstants.WEIGHT_3);
+            this.testCollection.UpdateLinkGeneWeight(CPPNNEATConstants.BIAS_TO_HIDDEN_INDEX, CPPNNEATConstants.BIAS);
+            this.testCollection.UpdateLinkGeneWeight(CPPNNEATConstants.FIRST_INPUT_TO_HIDDEN_INDEX, CPPNNEATConstants.WEIGHT_1);
+            this.testCollection.UpdateLinkGeneWeight(CPPNNEATConstants.SECOND_INPUT_TO_HIDDEN_INDEX, CPPNNEATConstants.WEIGHT_2);
+            this.testCollection.UpdateLinkGeneWeight(CPPNNEATConstants.HIDDEN_TO_OUTPUT_INDEX, CPPNNEATConstants.WEIGHT_3);
         }
         
         private static double HiddenNeuronActivation(double weight5Coefficient, double input1, double input2) 
@@ -100,9 +84,11 @@ namespace NEATSpacesTests.CPPNNEAT
         {
             UpdateHiddenNeuronNetwork();
 
-            testCollection.TryCreateLinkGene(OUTPUT_NEURON_INDEX, HIDDEN_NEURON_INDEX);
+            testCollection.TryCreateLinkGene(CPPNNEATConstants.OUTPUT_NEURON_INDEX, 
+                                            CPPNNEATConstants.HIDDEN_NEURON_INDEX);
 
-            testCollection.UpdateLinkGeneWeight(OUTPUT_TO_HIDDEN_INDEX, CPPNNEATConstants.WEIGHT_4);
+            testCollection.UpdateLinkGeneWeight(CPPNNEATConstants.OUTPUT_TO_HIDDEN_INDEX, 
+                                            CPPNNEATConstants.WEIGHT_4);
             testCollection.Update();
 
             var network = testCollection.Phenome;
@@ -129,8 +115,15 @@ namespace NEATSpacesTests.CPPNNEAT
         [TestCase]
         public void TestInputLinkException()
         {
-            Assert.Throws<ApplicationException>(delegate() { testCollection.TryCreateLinkGene(BIAS_NEURON_INDEX, BIAS_NEURON_INDEX); });
-            Assert.Throws<ApplicationException>(delegate() { testCollection.TryCreateLinkGene(BIAS_NEURON_INDEX, SECOND_INPUT_NEURON_INDEX); });
+            Assert.Throws<ApplicationException>(delegate() { 
+                    testCollection.TryCreateLinkGene(CPPNNEATConstants.BIAS_NEURON_INDEX, 
+                                                        CPPNNEATConstants.BIAS_NEURON_INDEX); 
+            });
+
+            Assert.Throws<ApplicationException>(delegate() { 
+                    testCollection.TryCreateLinkGene(CPPNNEATConstants.BIAS_NEURON_INDEX, 
+                                                        CPPNNEATConstants.SECOND_INPUT_NEURON_INDEX); 
+            });
         }
 
         [TestCase]
@@ -138,7 +131,7 @@ namespace NEATSpacesTests.CPPNNEAT
         {
             var numberOfLinks = testCollection.LinkGenes.Count;
 
-            Assert.AreEqual(false, testCollection.TryCreateLinkGene(BIAS_NEURON_INDEX, OUTPUT_NEURON_INDEX));
+            Assert.AreEqual(false, testCollection.TryCreateLinkGene(CPPNNEATConstants.BIAS_NEURON_INDEX, CPPNNEATConstants.OUTPUT_NEURON_INDEX));
             Assert.AreEqual(numberOfLinks, testCollection.LinkGenes.Count);
         }
 
