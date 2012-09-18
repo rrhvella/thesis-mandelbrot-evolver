@@ -26,10 +26,11 @@ namespace NEATSpacesLibrary.CPPNNEAT
             this.Type = type;
             this.ActivationFunction = activationFunction;
         }
+
         public Func<double, double> ActivationFunction
         {
             get;
-            set;
+            private set;
         }
 
         public void Update()
@@ -51,7 +52,6 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 case CPPNNeuronType.Bias:
                     Phene = new CPPNBiasNeuron();
                     break;
-
             }
         }
 

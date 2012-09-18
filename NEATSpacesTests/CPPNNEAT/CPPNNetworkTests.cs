@@ -44,18 +44,6 @@ namespace NEATSpacesTests.CPPNNEAT
                     network.GetActivation(new double[] { input1, input2 }));
         }
 
-        [TestCase(1.0, 0.0)]
-        [TestCase(0.0, -1.0)]
-        [TestCase(-1.0, 1.0)]
-        public void TestActivationParallel(double input1, double input2)
-        {
-            var network = CreateHiddenNeuronNetwork();
-
-            network.AddLink(hiddenNeuron, outputNeuron, CPPNNEATConstants.WEIGHT_4);
-            Assert.AreEqual(CPPNNEATConstants.ParallelActivation(input1, input2),
-                        network.GetActivation(new double[] { input1, input2 }));
-        }
-
         private CPPNNetwork CreateHiddenNeuronNetwork()
         {
             var network = CreateNeuronNetwork();

@@ -10,6 +10,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         double CrossoverRate { get; set; }
         double MutationRate { get; set; }
 
-        void Iterate(); 
+        void Iterate();
+
+        void Update();
     }
 }

@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.6.1.12217, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -43,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CPPNNEAT\CPPNEATConstants.cs" />
+    <Compile Include="CPPNNEAT\CPPNNEATGenomeTests.cs" />
     <Compile Include="CPPNNEAT\CPPNNetworkNeuronTests.cs" />
     <Compile Include="CPPNNEAT\CPPNNetworkTests.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGATests.cs" />

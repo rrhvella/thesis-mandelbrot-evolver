@@ -49,5 +49,60 @@ namespace NEATSpacesTests.CPPNNEAT
         {
             var newGA = new CPPNNEATGA(0, 0, null, new List<Func<double, double>>() { null });
         }
+
+        [TestCase]
+        public void TestInnovationNumberOfDefaultGenes()
+        {
+            var newGA = new CPPNNEATGA(2, 0, null, new List<Func<double, double>>() { null });
+
+            foreach(var i in Enumerable.Range(0, 3)) {
+                Assert.AreEqual(newGA.DefaultLinkGenes[i].InnovationNumber,
+                                newGA.GetInnovationNumber(newGA.DefaultNeuronGenes[i], newGA.DefaultNeuronGenes[3]));
+            }
+        }
+
+        [TestCase]
+        public void TestInnovationNumberOfNewGenes()
+        {
+            var newGA = new CPPNNEATGA(2, 0, null, new List<Func<double, double>>() { null });
+
+            var from = new CPPNNEATNeuronGene(CPPNNeuronType.Input, null);
+            var to = new CPPNNEATNeuronGene(CPPNNeuronType.Input, null);
+
+            Assert.AreEqual(3, newGA.GetInnovationNumber(from, to));
+            Assert.AreEqual(3, newGA.GetInnovationNumber(from, to));
+        }
+
+        [TestCase]
+        public void TestInnovationNumberOfCreateNeuron()
+        {
+            var newGA = new CPPNNEATGA(2, 1, x => 0.0, new List<Func<double, double>>() { null });
+            newGA.Initialise();
+
+            var targetGeneCollection = newGA.Population[0].GeneCollection;
+                
+            targetGeneCollection.CreateNeuronGene(0);
+
+            Assert.AreEqual(targetGeneCollection.LinkGenes[3].InnovationNumber,
+                    newGA.GetInnovationNumber(targetGeneCollection.LinkGenes[3].From, targetGeneCollection.LinkGenes[3].To));
+
+            Assert.AreEqual(4,
+                    newGA.GetInnovationNumber(targetGeneCollection.LinkGenes[4].From, targetGeneCollection.LinkGenes[4].To));
+        }
+
+        [TestCase]
+        public void TestInnovationNumberOfCreateLink()
+        {
+            var newGA = new CPPNNEATGA(2, 1, x => 0.0, new List<Func<double, double>>() { null });
+            newGA.Initialise();
+
+            var targetGeneCollection = newGA.Population[0].GeneCollection;
+                
+            targetGeneCollection.CreateNeuronGene(1);
+            targetGeneCollection.TryCreateLinkGene(1, 4);
+
+            Assert.AreEqual(targetGeneCollection.LinkGenes[5].InnovationNumber,
+                    newGA.GetInnovationNumber(targetGeneCollection.LinkGenes[5].From, targetGeneCollection.LinkGenes[5].To));
+        }
     }
 }

@@ -6,32 +6,59 @@ using NEATSpacesLibrary.Extensions;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
+    public static class LinkGenesListExtensions
+    {
+        public static IEnumerable<CPPNNEATNeuronGene> Neurons(this IEnumerable<CPPNNEATLinkGene> self) 
+        {
+            return self.Select(elem => elem.From).Union(self.Select(elem => elem.To))
+                    .Distinct();
+        }
+    }
+
     public class CPPNNEATGeneCollection
     {
-        public CPPNNEATGA Parent 
-        { 
-            get; 
-            set; 
-        }
+        private Dictionary<int, CPPNNEATLinkGene> linkGeneMap;
 
-        public CPPNNEATGeneCollection()
-        {
-            this.LinkGenes = new List<CPPNNEATLinkGene>();
-            this.NeuronGenes = new List<CPPNNEATNeuronGene>();
-        }
-
-        public bool Enabled
+        internal CPPNNEATGenome Parent
         {
             get;
             set;
         }
 
-        public IList<CPPNNEATLinkGene> LinkGenes
+        public CPPNNEATGA ParentGA 
         {
-            get;
-            private set;
+            get
+            {
+                return (CPPNNEATGA)Parent.Parent;
+            }
         }
 
+        private bool sortedLinkGenesCacheExpired;
+        private List<CPPNNEATLinkGene> sortedLinkGenes;
+
+        private HashSet<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>> possibleConnections;
+
+        public IList<CPPNNEATLinkGene> LinkGenes
+        {
+            get
+            {
+                if (sortedLinkGenesCacheExpired)
+                {
+                    sortedLinkGenes = linkGeneMap.Values.ToList();
+                    sortedLinkGenes.Sort(new Comparison<CPPNNEATLinkGene>(
+                                delegate(CPPNNEATLinkGene first, CPPNNEATLinkGene second) {
+                                    return first.InnovationNumber.CompareTo(second.InnovationNumber);
+                                }
+                    ));
+
+                    sortedLinkGenesCacheExpired = false;
+                }
+
+                return sortedLinkGenes;
+            }
+        }
+
+        private ISet<CPPNNEATNeuronGene> neuronGeneSet;
         public IList<CPPNNEATNeuronGene> NeuronGenes
         {
             get;
@@ -44,14 +71,129 @@ namespace NEATSpacesLibrary.CPPNNEAT
             private set;
         }
 
+        public CPPNNEATGeneCollection()
+        {
+            this.linkGeneMap = new Dictionary<int, CPPNNEATLinkGene>();
+            this.NeuronGenes = new List<CPPNNEATNeuronGene>();
+            this.neuronGeneSet = new HashSet<CPPNNEATNeuronGene>();
+            this.possibleConnections = new HashSet<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>>();
+        }
+
+        public void Initialise()
+        {
+            sortedLinkGenesCacheExpired = true;
+
+            foreach (var linkGene in ParentGA.DefaultLinkGenes)
+            {
+                TryAddLinkGene(new CPPNNEATLinkGene(linkGene.InnovationNumber, linkGene.From, 
+                                                linkGene.To, ParentGA.GetRandomWeight()));
+            }
+        }
+
+        public bool TryAddLinkGene(CPPNNEATLinkGene gene)
+        {
+            if (linkGeneMap.ContainsKey(gene.InnovationNumber) && linkGeneMap[gene.InnovationNumber].Enabled)
+            {
+                return false;
+            }
+
+            linkGeneMap[gene.InnovationNumber] = gene;
+
+            AddNeuronGene(gene.From);
+            AddNeuronGene(gene.To);
+
+            possibleConnections.Remove(Tuple.Create(gene.From, gene.To));
+            sortedLinkGenesCacheExpired = true;
+
+            Parent.Update();
+
+            return true;
+        }
+
+        private void AddNeuronGene(CPPNNEATNeuronGene neuron)
+        {
+            if (!neuronGeneSet.Contains(neuron))
+            {
+                NeuronGenes.Add(neuron);
+                neuronGeneSet.Add(neuron);
+
+                foreach (var toNeuron in NeuronGenes.Where(gene => gene.Type != CPPNNeuronType.Input &&
+                                                                gene.Type != CPPNNeuronType.Bias))
+                {
+                    possibleConnections.Add(Tuple.Create(neuron, toNeuron));
+                }
+
+                if (neuron.Type != CPPNNeuronType.Input && neuron.Type != CPPNNeuronType.Bias)
+                {
+                    foreach (var fromNeuron in NeuronGenes)
+                    {
+                        possibleConnections.Add(Tuple.Create(fromNeuron, neuron));
+                    }
+                }
+
+                Parent.Update();
+            }
+        }
+
+        public bool TryCreateLinkGene(int neuronGeneIndexFrom, int neuronGeneIndexTo)
+        {
+            return TryCreateLinkGene(NeuronGenes[neuronGeneIndexFrom], NeuronGenes[neuronGeneIndexTo]);
+        }
+
+        private bool TryCreateLinkGene(CPPNNEATNeuronGene from, CPPNNEATNeuronGene to)
+        {
+            if (to.Type == CPPNNeuronType.Bias || to.Type == CPPNNeuronType.Input)
+            {
+                throw new ApplicationException("Links should not go into input or bias neurons");
+            }
+
+            return TryAddLinkGene(new CPPNNEATLinkGene(ParentGA.GetInnovationNumber(from, to), from, to, 
+                                ParentGA.GetRandomWeight()));
+        }
+
+        private void CreateNeuronGene(CPPNNEATLinkGene selectedLink)
+        {
+            selectedLink.Enabled = false;
+
+            var newNeuron = new CPPNNEATNeuronGene(CPPNNeuronType.Hidden, ParentGA.CanonicalFunctionList.RandomSingle());
+
+            TryAddLinkGene(new CPPNNEATLinkGene(ParentGA.GetInnovationNumber(selectedLink.From, newNeuron), selectedLink.From, 
+                                        newNeuron, selectedLink.Weight));
+            TryAddLinkGene(new CPPNNEATLinkGene(ParentGA.GetInnovationNumber(newNeuron, selectedLink.To), newNeuron, selectedLink.To, 
+                                        1));
+        }
+
+        public void CreateNeuronGene(int linkGeneIndex)
+        {
+            CreateNeuronGene(LinkGenes[linkGeneIndex]);
+        }
+
+        public void UpdateLinkGeneWeight(int linkGeneIndex, double newWeight)
+        {
+            LinkGenes[linkGeneIndex].Weight = newWeight;
+            Parent.Update();
+        }
+
+        private void DisableLinkGene(CPPNNEATLinkGene selectedLink)
+        {
+            selectedLink.Enabled = false;
+            possibleConnections.Add(Tuple.Create(selectedLink.From, selectedLink.To));
+
+            Parent.Update();
+        }
+
+        public void DisableLinkGene(int linkGeneIndex)
+        {
+            DisableLinkGene(LinkGenes[linkGeneIndex]);
+        }
+
         public void Update()
         {
             Phenome = new CPPNNetwork();
 
             var enabledLinks = LinkGenes.Where(link => link.Enabled);
-            var enabledNeurons = enabledLinks.Select(link => link.From)
-                                    .Union(enabledLinks.Select(link => link.To))
-                                    .Distinct();
+            var enabledNeurons = enabledLinks.Neurons().Union(NeuronGenes.Where(neuron => neuron.Type == CPPNNeuronType.Input ||
+                                                                                        neuron.Type == CPPNNeuronType.Output));
 
             foreach (var neuronGene in enabledNeurons)
             {
@@ -65,52 +207,48 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
-        public void AddLinkGene(CPPNNEATLinkGene gene)
+        private CPPNNEATLinkGene GetRandomEnabledLinkGene()
         {
-            LinkGenes.Add(gene);
+            return LinkGenes.Where(link => link.Enabled).ToList().RandomSingle(); 
         }
 
-        public void AddNeuronGene(CPPNNEATNeuronGene neuron)
+        public bool TryCreateNeuronGene()
         {
-            NeuronGenes.Add(neuron);
-        }
+            var selectedLink = GetRandomEnabledLinkGene();
 
-        public void CreateLinkGene(int neuronGeneIndexFrom, int neuronGeneIndexTo)
-        {
-            if (NeuronGenes[neuronGeneIndexTo].Type == CPPNNeuronType.Bias ||
-                    NeuronGenes[neuronGeneIndexTo].Type == CPPNNeuronType.Input)
+            if (selectedLink == null)
             {
-                throw new ApplicationException("Links should not go into input or bias neurons");
+                return false;
             }
 
-            LinkGenes.Add(new CPPNNEATLinkGene(Parent.NextInnovationNumber(), NeuronGenes[neuronGeneIndexFrom], 
-                                             NeuronGenes[neuronGeneIndexTo], Parent.GetRandomWeight()));
+            CreateNeuronGene(selectedLink);
+            return true;
         }
 
-        public void CreateNeuronGene(int linkGeneIndex)
+        public bool TryCreateLinkGene()
         {
-            var selectedLink = LinkGenes[linkGeneIndex];
-            selectedLink.Enabled = false;
+            var connection = possibleConnections.ToList().RandomSingle();
 
-            var newNeuron = new CPPNNEATNeuronGene(CPPNNeuronType.Hidden, Parent.CanonicalFunctionList.RandomSingle());
-
-            AddLinkGene(new CPPNNEATLinkGene(Parent.NextInnovationNumber(), selectedLink.From, newNeuron, Parent.GetRandomWeight()));
-            AddLinkGene(new CPPNNEATLinkGene(Parent.NextInnovationNumber(), newNeuron, selectedLink.To, Parent.GetRandomWeight()));
-
-            AddNeuronGene(newNeuron);
-        }
-
-        public void Initialise()
-        {
-            foreach (var neuronGene in Parent.DefaultNeuronGenes)
+            if (connection == null)
             {
-                AddNeuronGene(neuronGene);
+                return false;
             }
 
-            foreach (var linkGene in Parent.DefaultLinkGenes)
-            {
-                AddLinkGene(new CPPNNEATLinkGene(linkGene.InnovationNumber, linkGene.From, linkGene.To, Parent.GetRandomWeight()));
-            }
+            return TryCreateLinkGene(connection.Item1, connection.Item2);
         }
+
+        public bool TryDisableLinkGene()
+        {
+            var selectedLink = GetRandomEnabledLinkGene();
+
+            if (selectedLink == null)
+            {
+                return false;
+            }
+
+            DisableLinkGene(selectedLink);
+            return true;
+        }
+
     }
 }

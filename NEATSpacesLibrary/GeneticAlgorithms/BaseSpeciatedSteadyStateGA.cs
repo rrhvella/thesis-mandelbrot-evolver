@@ -16,6 +16,14 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public int NoInnovationThreshold { get; set; }
         private List<Species<GType, PType>> populationSpecies;
 
+        public bool Failed
+        {
+            get
+            {
+                return !populationSpecies.Any(species => species.CanBreed);
+            }
+        }
+
         public BaseSpeciatedSteadyStateGA(int populationSize, Func<GenomeType, double> scoreFunction)
             : base(populationSize, scoreFunction)
         {
@@ -26,14 +34,36 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             populationSpecies = new List<Species<GType, PType>>();
         }
 
+
+        public new void Iterate()
+        {
+            if (Failed)
+            {
+                return;
+            }
+
+            base.Iterate();
+        }
+
         private void SpeciatedSteadyStateGA_IterationComplete(object sender, EventArgs e)
         {
-            foreach (var species in populationSpecies.Where(elem => elem.CanBreed).ToList())
+            var breedingSpecies = populationSpecies.Where(elem => elem.CanBreed);
+
+            foreach (var species in breedingSpecies)
             {
-                if (++(species.TotalIterations) >= NoInnovationThreshold)
+                if (species.Best.Score <= species.PreviousScore)
                 {
-                    species.CanBreed = false;
+                    if (++(species.TotalIterationsWithNoInnovation) >= NoInnovationThreshold)
+                    {
+                        species.CanBreed = false;
+                    }
                 }
+                else
+                {
+                    species.TotalIterationsWithNoInnovation = 0;
+                }
+
+                species.PreviousScore = species.Best.Score;
             }
         }
 
@@ -68,23 +98,28 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         protected override GASelectionResult<GenomeType> PerformSelection()
         {
-            var tournament = Population.Where(elem => elem.Species.CanBreed)
+            var tournamentSuccessful = Population.Where(elem => elem.Species.CanBreed)
                                 .ToList().RandomTake(DEFAULT_TOURNAMENT_SIZE)
                                 .OrderByDescending(elem => elem.AdjustedScore)
                                 .ToArray();
 
-            var partner = (GenomeType)tournament[1];
+            var tournamentStraglers = Population.ToList().RandomTake(DEFAULT_TOURNAMENT_SIZE)
+                                .OrderByDescending(elem => elem.AdjustedScore)
+                                .ToArray();
 
-            if ((new Random()).NextDouble() > InterSpeciesMatingRate)
+            var partner = (GenomeType)tournamentSuccessful[1];
+
+            if (random.NextDouble() > InterSpeciesMatingRate)
             {
-                partner = (GenomeType)tournament[0].Species.Members
+                partner = (GenomeType)tournamentSuccessful[0].Species.Members
                                     .ToList().RandomTake(DEFAULT_TOURNAMENT_SIZE)
                                     .OrderByDescending(elem => elem.AdjustedScore)
                                     .First();
             }
 
-            return new GASelectionResult<GenomeType>(tournament[0], (GenomeType)partner, tournament[DEFAULT_TOURNAMENT_SIZE - 1],
-                                                    tournament[DEFAULT_TOURNAMENT_SIZE - 2]);
+            return new GASelectionResult<GenomeType>(tournamentSuccessful[0], (GenomeType)partner, 
+                                                    tournamentStraglers[tournamentStraglers.Length - 1],
+                                                    tournamentStraglers[tournamentStraglers.Length - 2]);
 
         }
     }

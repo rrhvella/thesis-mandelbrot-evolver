@@ -27,10 +27,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
         public bool Enabled
         {
             get;
-            set;
+            internal set;
         }
 
-        public double Weight 
+        internal double Weight 
         { 
             get; 
             set; 
@@ -46,6 +46,11 @@ namespace NEATSpacesLibrary.CPPNNEAT
         { 
             get; 
             private set; 
+        }
+
+        public CPPNNEATLinkGene Copy()
+        {
+            return (CPPNNEATLinkGene)this.MemberwiseClone();
         }
     }
 }

@@ -7,9 +7,11 @@ using NEATSpacesLibrary.GeneticAlgorithms;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
-    public class CPPNNEATGA : 
-        BaseSpeciatedSteadyStateGA<CPPNNEATGenome, CPPNNEATGeneCollection, CPPNNetwork> 
+    public class CPPNNEATGA :
+        BaseSpeciatedSteadyStateGA<CPPNNEATGenome, CPPNNEATGeneCollection, CPPNNetwork>
     {
+
+        private Dictionary<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>, int> innovationNumberMap;
 
         public IList<Func<double, double>> CanonicalFunctionList
         {
@@ -17,7 +19,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             private set;
         }
 
-        public CPPNNEATGA(int numberOfInputs, int populationSize, Func<CPPNNEATGenome, double> scoreFunction, 
+        public CPPNNEATGA(int numberOfInputs, int populationSize, Func<CPPNNEATGenome, double> scoreFunction,
                         List<Func<double, double>> canonicalFunctionList): base(populationSize, scoreFunction)
         {
             if (numberOfInputs == 0)
@@ -28,6 +30,8 @@ namespace NEATSpacesLibrary.CPPNNEAT
             this.NumberOfInputs = numberOfInputs;
             this.CanonicalFunctionList = canonicalFunctionList;
 
+            this.innovationNumberMap = new Dictionary<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>, int>();
+
             this.DefaultNeuronGenes = new List<CPPNNEATNeuronGene>();
             this.DefaultLinkGenes = new List<CPPNNEATLinkGene>();
 
@@ -37,19 +41,18 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
             var currentGene = new CPPNNEATNeuronGene(CPPNNeuronType.Bias, null);
             DefaultNeuronGenes.Add(currentGene);
-            DefaultLinkGenes.Add(new CPPNNEATLinkGene(NextInnovationNumber(), currentGene, outputGene, 0));
+            DefaultLinkGenes.Add(new CPPNNEATLinkGene(GetInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
 
             foreach (var i in Enumerable.Range(0, numberOfInputs))
             {
                 currentGene = new CPPNNEATNeuronGene(CPPNNeuronType.Input, null);
 
                 DefaultNeuronGenes.Add(currentGene);
-                DefaultLinkGenes.Add(new CPPNNEATLinkGene(NextInnovationNumber(), currentGene, outputGene, 0));
+                DefaultLinkGenes.Add(new CPPNNEATLinkGene(GetInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
             }
 
             DefaultNeuronGenes.Add(outputGene);
         }
-
         public int NumberOfInputs
         {
             get;
@@ -74,6 +77,12 @@ namespace NEATSpacesLibrary.CPPNNEAT
             set;
         }
 
+        public double DisableGeneRate
+        {
+            get;
+            set;
+        }
+
         public double WeightPertubationRate
         {
             get;
@@ -92,54 +101,40 @@ namespace NEATSpacesLibrary.CPPNNEAT
             set;
         }
 
-
-        public double DisableGeneRate
+        public double ExcessGenesWeight
         {
             get;
             set;
         }
 
-        public double ExcessGenesWeight 
-        { 
-            get; 
-            set; 
-        }
-
-        public double DisjointGenesWeight 
-        { 
-            get; 
-            set; 
-        }
-
-        public double MatchingGenesWeight 
-        { 
-            get; 
-            set; 
-        }
-
-        public double FunctionDifferenceWeight 
-        { 
-            get; 
-            set; 
-        }
-
-        private int innovationNumber = 0;
-        private Random random;
-        public int NextInnovationNumber()
+        public double DisjointGenesWeight
         {
-            return innovationNumber++;
+            get;
+            set;
         }
 
-        public IList<CPPNNEATNeuronGene> DefaultNeuronGenes 
-        { 
-            get; 
-            private set; 
+        public double MatchingGenesWeight
+        {
+            get;
+            set;
         }
 
-        public IList<CPPNNEATLinkGene> DefaultLinkGenes 
-        { 
-            get; 
-            private set; 
+        public double FunctionDifferenceWeight
+        {
+            get;
+            set;
+        }
+
+        public IList<CPPNNEATNeuronGene> DefaultNeuronGenes
+        {
+            get;
+            private set;
+        }
+
+        public IList<CPPNNEATLinkGene> DefaultLinkGenes
+        {
+            get;
+            private set;
         }
 
         public double GetRandomWeight()
@@ -147,5 +142,18 @@ namespace NEATSpacesLibrary.CPPNNEAT
             return (random.NextDouble() - 0.5) * 2 * MaxWeight;
         }
 
+
+        private int innovationNumber = 0;
+        public int GetInnovationNumber(CPPNNEATNeuronGene from, CPPNNEATNeuronGene to)
+        {
+            var key = new Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>(from, to);
+
+            if (!innovationNumberMap.ContainsKey(key))
+            {
+                innovationNumberMap[key] = innovationNumber++;
+            }
+
+            return innovationNumberMap[key];
+        }
     }
 }

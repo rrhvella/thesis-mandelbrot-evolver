@@ -7,14 +7,26 @@ namespace NEATSpacesLibrary.CPPNNEAT
 {
     public class CPPNNetwork
     {
-        private HashSet<CPPNNetworkNeuron> neurons;
+        public HashSet<CPPNNetworkNeuron> Neurons 
+        { 
+            get; 
+            private set; 
+        }
 
         private List<CPPNInputNeuron> inputNeurons;
         private CPPNOutputNeuron outputNeuron;
 
+        public IEnumerable<CPPNInputNeuron> InputNeurons
+        {
+            get
+            {
+                return inputNeurons;
+            }
+        }
+
         public CPPNNetwork()
         {
-            this.neurons = new HashSet<CPPNNetworkNeuron>();
+            this.Neurons = new HashSet<CPPNNetworkNeuron>();
             this.inputNeurons = new List<CPPNInputNeuron>();
         }
 
@@ -37,7 +49,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         public void AddLink(CPPNNetworkNeuron from, CPPNNetworkNeuron to, double weight)
         {
-            if (neurons.Contains(from) && neurons.Contains(to))
+            if (Neurons.Contains(from) && Neurons.Contains(to))
             {
                 (to as CPPNOutputNeuron).AddChild(from, weight);
             }
@@ -45,7 +57,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         public void AddNeuron(CPPNNetworkNeuron neuron)
         {
-            neurons.Add(neuron);
+            Neurons.Add(neuron);
 
             if (neuron is CPPNInputNeuron)
             {

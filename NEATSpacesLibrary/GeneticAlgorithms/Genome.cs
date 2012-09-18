@@ -11,7 +11,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public double Score
         {
             get;
-            set;
+            internal set;
         }
 
         public virtual double AdjustedScore
@@ -22,10 +22,16 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
         }
 
-        public IGA Parent
+        public bool PhenomeExpired
         {
             get;
             set;
+        }
+
+        public IGA Parent
+        {
+            get;
+            internal set;
         }
 
         public PType Phenome
@@ -43,13 +49,33 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         protected abstract PType GetPhenome();
         
         public abstract void Initialise();
-        public abstract Genome<GType, PType>[] Crossover(Genome<GType, PType> partner);
-        
-        public abstract void Mutate();
+        protected abstract Genome<GType, PType>[] InnerCrossover(Genome<GType, PType> partner);
+        protected abstract void InnerMutate();
+
+        public void UpdatePhenome()
+        {
+            Phenome = GetPhenome();
+            PhenomeExpired = false;
+        }
 
         public void Update()
         {
-            Phenome = GetPhenome();
+            PhenomeExpired = true;
+            Parent.Update();
+        }
+
+        public Genome<GType, PType>[] Crossover(Genome<GType, PType> partner)
+        {
+            var children = InnerCrossover(partner);
+            Update();
+
+            return children;
+        }
+
+        public void Mutate()
+        {
+            InnerMutate();
+            Update();
         }
     }
 }

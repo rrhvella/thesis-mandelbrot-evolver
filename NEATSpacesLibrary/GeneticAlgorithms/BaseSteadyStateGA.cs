@@ -70,7 +70,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public double CrossoverRate { get; set; }
         public double MutationRate { get; set; }
 
-        private Random random;
+        protected Random random;
 
         private GenomeType best;
         private bool bestCacheExpired;
@@ -81,7 +81,22 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             {
                 if (bestCacheExpired)
                 {
-                    best = Population.MaxBy(elem => elem.Score);
+                    var bestScore = 0.0;
+
+                    foreach (var genome in Population)
+                    {
+                        if (genome.PhenomeExpired)
+                        {
+                            genome.UpdatePhenome();
+                            genome.Score = scoreFunction(genome);
+                        }
+
+                        if (genome.Score > bestScore)
+                        {
+                            bestScore = genome.Score;
+                            best = genome;
+                        }
+                    }
                 }
 
                 return best;
@@ -95,84 +110,74 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public BaseSteadyStateGA(int populationSize, Func<GenomeType, double> scoreFunction)
         {
             this.populationSize = populationSize;
-            this.Population = new List<GenomeType>(populationSize);
-
             this.scoreFunction = scoreFunction;
 
             this.random = new Random();
+        }
 
-            (Enumerable.Range(0, populationSize)).AsParallel().ForAll(delegate (int i) {
+        public void Initialise()
+        {
+            this.Population = new List<GenomeType>(populationSize);
+
+            foreach(var i in Enumerable.Range(0, populationSize)) 
+            {
                 var newGenome = new GenomeType();
                 newGenome.Parent = this;
 
-                lock (Population)
-                {
-                    Population.Add(newGenome);
-                }
+                Population.Add(newGenome);
 
                 newGenome.Initialise();
-                newGenome.Update();
-
-                newGenome.Score = scoreFunction(newGenome);
+                newGenome.PhenomeExpired = true;
 
                 if (GenomeAdded != null)
                 {
                     GenomeAdded(this, new GenomeEventArgs<GenomeType>(newGenome));
                 }
-            });
+            }
 
-
-            bestCacheExpired = true;
+            Update();
         }
 
         public void Iterate()
         {
+            var selection = PerformSelection();
+
             if (random.NextDouble() <= CrossoverRate)
             {
-                var selection = PerformSelection();
                 var children = selection.Parent.Crossover(selection.Partner);
 
-                if (children != null)
+                foreach (var i in Enumerable.Range(0, selection.IndividualsToReplace.Length))
                 {
-                    Enumerable.Range(0, selection.IndividualsToReplace.Length).AsParallel().ForAll(
-                        delegate(int i)
-                        {
-                            lock (Population)
-                            {
-                                Population.Remove(selection.IndividualsToReplace[i]);
-                            }
+                    Population.Remove(selection.IndividualsToReplace[i]);
 
-                            if (GenomeRemoved != null)
-                            {
-                                GenomeRemoved(this, new GenomeEventArgs<GenomeType>(selection.IndividualsToReplace[i]));
-                            }
+                    if (GenomeRemoved != null)
+                    {
+                        GenomeRemoved(this, new GenomeEventArgs<GenomeType>(selection.IndividualsToReplace[i]));
+                    }
 
-                            lock (Population)
-                            {
-                                Population.Add((GenomeType)children[i]);
-                            }
+                    Population.Add((GenomeType)children[i]);
 
-                            children[i].Parent = this;
+                    children[i].Parent = this;
+                    children[i].Mutate();
 
-                            children[i].Mutate();
-                            children[i].Update();
-
-                            children[i].Score = scoreFunction((GenomeType)children[i]);
-
-                            if (GenomeAdded != null)
-                            {
-                                GenomeAdded(this, new GenomeEventArgs<GenomeType>((GenomeType)children[i]));
-                            }
-                        });
-
-                    bestCacheExpired = true;
+                    if (GenomeAdded != null)
+                    {
+                        GenomeAdded(this, new GenomeEventArgs<GenomeType>((GenomeType)children[i]));
+                    }
                 }
             }
+
+            Update();
 
             if (IterationComplete != null)
             {
                 IterationComplete(this, new EventArgs());
             }
+        }
+
+        public void Update()
+        {
+            bestCacheExpired = true;
         }
 
         protected abstract GASelectionResult<GenomeType> PerformSelection();

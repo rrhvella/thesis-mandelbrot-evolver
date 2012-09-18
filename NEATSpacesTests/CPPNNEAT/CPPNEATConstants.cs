@@ -16,7 +16,7 @@ namespace NEATSpacesTests.CPPNNEAT
         public const double WEIGHT_4 = 1.5;
         public const double WEIGHT_5 = 0.5;
         public static readonly Func<double, double> OUTPUT_ACTIVATION_FUNCTION = CPPNActivationFunctions.TanHActivationFunction;
-        public static readonly Func<double, double> HIDDEN_ACTIVATION_FUNCTION = CPPNActivationFunctions.LinearActivationFunction;
+        public static readonly Func<double, double> HIDDEN_ACTIVATION_FUNCTION = CPPNActivationFunctions.TanHActivationFunction;
 
         private static double Level1(double input1, double input2) 
         {

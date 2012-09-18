@@ -43,23 +43,6 @@ namespace NEATSpacesTests.CPPNNEAT
             Assert.AreEqual(CPPNNEATConstants.RecursiveActivation2(input1, input2, output1), outputNeuron.Activation);
         }
 
-        [TestCase(1.0, 0.0)]
-        [TestCase(0.0, -1.0)]
-        [TestCase(-1.0, 1.0)]
-        public void TestActivationParallel(double input1, double input2)
-        {
-            var outputNeuron = new CPPNOutputNeuron(CPPNNEATConstants.OUTPUT_ACTIVATION_FUNCTION);
-            var hiddenNeuron = new CPPNHiddenNeuron(CPPNNEATConstants.HIDDEN_ACTIVATION_FUNCTION);
-
-            CreateNeuronNetwork(input1, input2, hiddenNeuron);
-
-            outputNeuron.AddChild(hiddenNeuron, CPPNNEATConstants.WEIGHT_3);
-            outputNeuron.AddChild(hiddenNeuron, CPPNNEATConstants.WEIGHT_4);
-
-            var output1 = outputNeuron.Activation;
-            Assert.AreEqual(CPPNNEATConstants.ParallelActivation(input1, input2), outputNeuron.Activation);
-        }
-
         private void CreateNeuronNetwork(double input1, double input2, CPPNOutputNeuron outputNeuron)
         {
             var biasNeuron = new CPPNBiasNeuron();

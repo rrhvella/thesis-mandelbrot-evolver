@@ -58,13 +58,8 @@ namespace GAValidationTest
                 return GeneCollection;
             }
 
-            public override Genome<Map, Map>[] Crossover(Genome<Map, Map> partner)
+            protected override Genome<Map, Map>[] InnerCrossover(Genome<Map, Map> partner)
             {
-                if (Parent.CrossoverRate > random.NextDouble())
-                {
-                    return null;
-                }
-
                 var children = new MapGenome[] { new MapGenome(), new MapGenome() };
 
                 //Select a position for one point crossover.
@@ -87,7 +82,7 @@ namespace GAValidationTest
                 return children;
             }
 
-            public override void Mutate()
+            protected override void InnerMutate()
             {
                 foreach(var i in Enumerable.Range(0, GeneCollection.Length))
                 {
@@ -102,7 +97,9 @@ namespace GAValidationTest
         public static void Main(string[] args)
         {
             Console.WriteLine(String.Format("Initialising the population..."));
+
             var testGA = new SteadyStateGA<MapGenome, Map, Map>(POPULATION_SIZE, genome => genome.Phenome.DistanceFromStartToEnd);
+            testGA.Initialise();
 
             testGA.MutationRate = MUTATION_RATE;
             testGA.CrossoverRate = CROSSOVER_RATE;
