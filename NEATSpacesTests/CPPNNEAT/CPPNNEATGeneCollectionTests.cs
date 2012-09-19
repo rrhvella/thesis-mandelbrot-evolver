@@ -146,5 +146,18 @@ namespace NEATSpacesTests.CPPNNEAT
 
             Assert.AreEqual(10, testCollection.LinkGenes.Count);
         }
+
+        [TestCase]
+        public void TestTryCreateLinkGeneAfterDisableLink()
+        {
+            UpdateHiddenNeuronNetwork();
+
+            while (testCollection.TryCreateLinkGene())
+            {
+            }
+
+            Assert.IsTrue(testCollection.TryDisableLinkGene());
+            Assert.IsTrue(testCollection.TryCreateLinkGene());
+        }
     }
 }
