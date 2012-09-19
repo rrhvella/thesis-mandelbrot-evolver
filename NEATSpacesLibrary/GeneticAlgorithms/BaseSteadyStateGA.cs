@@ -67,9 +67,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             private set;
         }
 
-        public double CrossoverRate { get; set; }
-        public double MutationRate { get; set; }
-
         protected Random random;
 
         private GenomeType best;
@@ -141,29 +138,25 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public void Iterate()
         {
             var selection = PerformSelection();
+            var children = selection.Parent.Crossover(selection.Partner);
 
-            if (random.NextDouble() <= CrossoverRate)
+            foreach (var i in Enumerable.Range(0, selection.IndividualsToReplace.Length))
             {
-                var children = selection.Parent.Crossover(selection.Partner);
+                Population.Remove(selection.IndividualsToReplace[i]);
 
-                foreach (var i in Enumerable.Range(0, selection.IndividualsToReplace.Length))
+                if (GenomeRemoved != null)
                 {
-                    Population.Remove(selection.IndividualsToReplace[i]);
+                    GenomeRemoved(this, new GenomeEventArgs<GenomeType>(selection.IndividualsToReplace[i]));
+                }
 
-                    if (GenomeRemoved != null)
-                    {
-                        GenomeRemoved(this, new GenomeEventArgs<GenomeType>(selection.IndividualsToReplace[i]));
-                    }
+                Population.Add((GenomeType)children[i]);
 
-                    Population.Add((GenomeType)children[i]);
+                children[i].Parent = this;
+                children[i].Mutate();
 
-                    children[i].Parent = this;
-                    children[i].Mutate();
-
-                    if (GenomeAdded != null)
-                    {
-                        GenomeAdded(this, new GenomeEventArgs<GenomeType>((GenomeType)children[i]));
-                    }
+                if (GenomeAdded != null)
+                {
+                    GenomeAdded(this, new GenomeEventArgs<GenomeType>((GenomeType)children[i]));
                 }
             }
 

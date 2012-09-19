@@ -62,17 +62,14 @@ namespace GAValidationTest
             {
                 var children = new MapGenome[] { new MapGenome(), new MapGenome() };
 
-                //Select a position for one point crossover.
-                var crossoverPosition = random.Next(GeneCollection.Length);
-
                 foreach(var i in Enumerable.Range(0, GeneCollection.Length))
                 {
-                    if (i < crossoverPosition)
+                    if (random.NextDouble() <= CROSSOVER_RATE)
                     {
                         children[0].GeneCollection[i] = GeneCollection[i];
                         children[1].GeneCollection[i] = partner.GeneCollection[i];
-                    }
-                    else
+                    } 
+                    else 
                     {
                         children[1].GeneCollection[i] = GeneCollection[i];
                         children[0].GeneCollection[i] = partner.GeneCollection[i];
@@ -86,7 +83,7 @@ namespace GAValidationTest
             {
                 foreach(var i in Enumerable.Range(0, GeneCollection.Length))
                 {
-                    if(random.NextDouble() <= Parent.MutationRate) 
+                    if(random.NextDouble() <= MUTATION_RATE) 
                     {
                         GeneCollection[i] = !GeneCollection[i];
                     }
@@ -100,9 +97,6 @@ namespace GAValidationTest
 
             var testGA = new SteadyStateGA<MapGenome, Map, Map>(POPULATION_SIZE, genome => genome.Phenome.DistanceFromStartToEnd);
             testGA.Initialise();
-
-            testGA.MutationRate = MUTATION_RATE;
-            testGA.CrossoverRate = CROSSOVER_RATE;
 
             var data = new List<double>();
 

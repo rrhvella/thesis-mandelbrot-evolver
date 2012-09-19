@@ -7,11 +7,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 {
     public interface IGA
     {
-        double CrossoverRate { get; set; }
-        double MutationRate { get; set; }
-
         void Iterate();
-
         void Update();
     }
 }
