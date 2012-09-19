@@ -34,6 +34,23 @@ namespace NEATSpacesTests.CPPNNEAT
                 {
                     var children = parent.Crossover(partner);
 
+                    foreach (var child in children)
+                    {
+                        var childGenesCount = child.GeneCollection.LinkGenes.Count;
+                        var parentGenesCount = parent.GeneCollection.LinkGenes.Count;
+                        var partnerGenesCount = partner.GeneCollection.LinkGenes.Count;
+
+                        Assert.IsTrue(childGenesCount == parentGenesCount ||
+                                    childGenesCount == partnerGenesCount); 
+
+                        Assert.AreEqual(childGenesCount + parentGenesCount + partnerGenesCount,
+                                    child.GeneCollection.LinkGenes.Union(
+                                        partner.GeneCollection.LinkGenes.Union(
+                                            parent.GeneCollection.LinkGenes)).Count());
+                    }
+
+
+
                     parent = partner;
                     partner = (CPPNNEATGenome)children[0];
 
