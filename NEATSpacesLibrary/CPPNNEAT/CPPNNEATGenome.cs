@@ -124,6 +124,13 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 }
 
                 var newGene = geneToCopy.Copy();
+
+                if (geneToCopy.Enabled && (!match.FirstCollection.Enabled || !match.SecondCollection.Enabled) &&
+                    random.NextDouble() <= (Parent as CPPNNEATGA).DisableGeneRate)
+                {
+                    newGene.Enabled = false;
+                }
+
                 GeneCollection.TryAddLinkGene(newGene);
             }
 
@@ -209,8 +216,8 @@ namespace NEATSpacesLibrary.CPPNNEAT
         protected override void InnerMutate()
         {
             var parent = Parent as CPPNNEATGA;
-            var probabilityMap = new[] { parent.DisableGeneRate, parent.WeightMutationRate, 
-                                        parent.NewLinkRate, parent.NewNeuronRate };
+            var probabilityMap = new[] { parent.WeightMutationRate, parent.NewLinkRate, 
+                                        parent.NewNeuronRate, parent.NoChangeRate };
 
             var selection = Enumerable.Range(0, probabilityMap.Length).RouletteWheelSingle(i => probabilityMap[i]);
             var performWeightMutation = false;
@@ -218,18 +225,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
             switch (selection)
             {
                 case 0:
-                    if (!GeneCollection.TryDisableLinkGene())
-                    {
-                        performWeightMutation = true;
-                    }
-
-                    break;
-
-                case 1:
                     performWeightMutation = true;
                     break;
 
-                case 2:
+                case 1:
                     if (!GeneCollection.TryCreateLinkGene())
                     {
                         performWeightMutation = true;
@@ -237,7 +236,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
                     break;
 
-                case 3:
+                case 2:
                     if (!GeneCollection.TryCreateNeuronGene())
                     {
                         performWeightMutation = true;
