@@ -107,7 +107,15 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                                 .OrderByDescending(elem => elem.AdjustedScore)
                                 .ToArray();
 
-            var partner = (GenomeType)tournamentSuccessful[1];
+            GenomeType partner = null;
+            if (tournamentSuccessful.Count() > 1)
+            {
+                partner = tournamentSuccessful[1];
+            }
+            else
+            {
+                partner = tournamentSuccessful[0];
+            }
 
             if (random.NextDouble() > InterSpeciesMatingRate)
             {
