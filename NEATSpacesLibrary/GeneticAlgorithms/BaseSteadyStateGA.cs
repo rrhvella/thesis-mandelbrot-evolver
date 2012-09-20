@@ -86,7 +86,11 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             private set;
         }
 
-        protected Random random;
+        public Random Random
+        {
+            get;
+            private set;
+        }
 
         private GenomeType best;
         private bool bestCacheExpired;
@@ -132,7 +136,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             this.populationSize = populationSize;
             this.scoreFunction = scoreFunction;
 
-            this.random = new Random();
+            this.Random = new Random();
         }
 
         public void Initialise()

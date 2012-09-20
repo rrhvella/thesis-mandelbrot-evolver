@@ -29,12 +29,10 @@ namespace GAValidationTest
             private double FILL_PARAMETER = 0.05;
 
             private const int MAP_SIZE = 30;
-            private Random random;
 
             public MapGenome()
             {
                 this.GeneCollection = new Map(MAP_SIZE, MAP_SIZE, START_NODE, END_NODE, CHECKPOINTS, MANDATORY_CHECKPOINT_LEVEL);
-                this.random = new Random();
             }
 
             public override void Initialise()
@@ -64,7 +62,7 @@ namespace GAValidationTest
 
                 foreach(var i in Enumerable.Range(0, GeneCollection.Length))
                 {
-                    if (random.NextDouble() <= CROSSOVER_RATE)
+                    if (Parent.Random.NextDouble() <= CROSSOVER_RATE)
                     {
                         children[0].GeneCollection[i] = GeneCollection[i];
                         children[1].GeneCollection[i] = partner.GeneCollection[i];
@@ -83,7 +81,7 @@ namespace GAValidationTest
             {
                 foreach(var i in Enumerable.Range(0, GeneCollection.Length))
                 {
-                    if(random.NextDouble() <= MUTATION_RATE) 
+                    if(Parent.Random.NextDouble() <= MUTATION_RATE) 
                     {
                         GeneCollection[i] = !GeneCollection[i];
                     }

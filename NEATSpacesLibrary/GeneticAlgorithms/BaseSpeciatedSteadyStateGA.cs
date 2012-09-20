@@ -117,7 +117,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 partner = tournamentSuccessful[0];
             }
 
-            if (random.NextDouble() > InterSpeciesMatingRate)
+            if (Random.NextDouble() > InterSpeciesMatingRate)
             {
                 partner = (GenomeType)tournamentSuccessful[0].Species.Members
                                     .ToList().RandomTake(DEFAULT_TOURNAMENT_SIZE)

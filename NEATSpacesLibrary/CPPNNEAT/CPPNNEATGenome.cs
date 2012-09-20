@@ -87,13 +87,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
-        private Random random;
-
         public CPPNNEATGenome() 
         {
-            this.random = new Random();
             this.GeneCollection = new CPPNNEATGeneCollection();
-
             this.GeneCollection.Parent = this;
         }
 
@@ -110,7 +106,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
             else if (partner.Score == parent.Score)
             {
-                disjointAndExcessSource = (random.NextDouble() <= 0.5) ? differences.FirstCollection : 
+                disjointAndExcessSource = (Parent.Random.NextDouble() <= 0.5) ? differences.FirstCollection : 
                                                                     differences.SecondCollection;
             }
 
@@ -118,7 +114,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             {
                 var geneToCopy = match.FirstCollection;
 
-                if (random.NextDouble() <= 0.5)
+                if (Parent.Random.NextDouble() <= 0.5)
                 {
                     geneToCopy = match.SecondCollection;
                 }
@@ -127,7 +123,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 GeneCollection.TryAddLinkGene(newGene);
 
                 if (geneToCopy.Enabled && (!match.FirstCollection.Enabled || !match.SecondCollection.Enabled) &&
-                    random.NextDouble() <= (Parent as CPPNNEATGA).DisableGeneRate)
+                    Parent.Random.NextDouble() <= (Parent as CPPNNEATGA).DisableGeneRate)
                 {
                     GeneCollection.DisableLinkGene(newGene.InnovationNumber);
                 }
@@ -248,9 +244,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
             {
                 foreach (var link in GeneCollection.LinkGenes)
                 {
-                    if (random.NextDouble() <= parent.WeightPertubationRate)
+                    if (Parent.Random.NextDouble() <= parent.WeightPertubationRate)
                     {
-                        link.Weight += (random.NextDouble() - 0.5) * 2 * parent.MaxPerturbation;
+                        link.Weight += (Parent.Random.NextDouble() - 0.5) * 2 * parent.MaxPerturbation;
                     }
                     else
                     {

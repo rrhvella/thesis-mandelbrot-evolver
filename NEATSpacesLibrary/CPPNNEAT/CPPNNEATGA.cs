@@ -39,8 +39,6 @@ namespace NEATSpacesLibrary.CPPNNEAT
             this.DefaultNeuronGenes = new List<CPPNNEATNeuronGene>();
             this.DefaultLinkGenes = new List<CPPNNEATLinkGene>();
 
-            this.random = new Random();
-
             var outputGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, CPPNNeuronType.Output, 
                                                     canonicalFunctionList.RandomSingle());
 
@@ -150,7 +148,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         public double GetRandomWeight()
         {
-            return (random.NextDouble() - 0.5) * 2 * MaxWeight;
+            return (Random.NextDouble() - 0.5) * 2 * MaxWeight;
         }
 
 

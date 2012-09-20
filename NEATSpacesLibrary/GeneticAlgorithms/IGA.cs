@@ -7,6 +7,11 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 {
     public interface IGA
     {
+        Random Random
+        {
+            get;
+        }
+
         void Iterate();
         void Update();
     }
