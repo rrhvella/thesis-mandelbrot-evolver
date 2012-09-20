@@ -162,9 +162,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
             var newNeuron = ParentGA.GetHiddenNeuron(selectedLink.InnovationNumber);
 
             TryAddLinkGene(new CPPNNEATLinkGene(ParentGA.GetInnovationNumber(selectedLink.From, newNeuron), selectedLink.From, 
-                                        newNeuron, selectedLink.Weight));
+                                        newNeuron, 1));
             TryAddLinkGene(new CPPNNEATLinkGene(ParentGA.GetInnovationNumber(newNeuron, selectedLink.To), newNeuron, selectedLink.To, 
-                                        1));
+                                        selectedLink.Weight));
         }
 
         public void CreateNeuronGene(int linkGeneIndex)
