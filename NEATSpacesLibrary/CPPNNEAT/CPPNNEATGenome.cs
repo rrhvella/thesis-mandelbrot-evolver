@@ -9,6 +9,8 @@ namespace NEATSpacesLibrary.CPPNNEAT
 {
     public class CPPNNEATGenome : SpeciatedGenome<CPPNNEATGeneCollection, CPPNNetwork>
     {
+        private static int SMALL_GENOME_THRESHOLD = 20;
+
         public class DifferenceAnalysis
         {
             public class DifferenceAnalysisCollection
@@ -163,6 +165,11 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
             var n = (double)Math.Max(this.GeneCollection.LinkGenes.Count(),
                             genome.GeneCollection.LinkGenes.Count());
+
+            if (n <= SMALL_GENOME_THRESHOLD)
+            {
+                n = 1;
+            }
 
             var parent = Parent as CPPNNEATGA;
 
