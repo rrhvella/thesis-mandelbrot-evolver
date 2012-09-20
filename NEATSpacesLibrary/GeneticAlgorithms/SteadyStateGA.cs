@@ -14,13 +14,13 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         {
         }
 
-        protected override GASelectionResult<GenomeType> PerformSelection()
+        protected override GASelectionResult<GenomeType, GType, PType> PerformSelection()
         {
             var tournament = Population.RandomTake(DEFAULT_TOURNAMENT_SIZE)
                                         .OrderByDescending(elem => elem.AdjustedScore)
                                         .ToArray();
 
-            return new GASelectionResult<GenomeType>(tournament[0], tournament[1], 
+            return new GASelectionResult<GenomeType, GType, PType>(tournament[0], tournament[1], 
                         tournament[DEFAULT_TOURNAMENT_SIZE - 2], 
                         tournament[DEFAULT_TOURNAMENT_SIZE - 1]);
         }

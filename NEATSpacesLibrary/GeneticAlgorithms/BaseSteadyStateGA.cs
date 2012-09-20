@@ -21,7 +21,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         }
     }
 
-    public class GASelectionResult<GenomeType>
+    public class GASelectionResult<GenomeType, GType, PType> where GenomeType: Genome<GType, PType>
     {
         public GenomeType Parent
         {
@@ -49,6 +49,25 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             this.IndividualsToReplace = new[] { individualToReplace1, individualToReplace2 };
         }
+
+        public string DebugInformation()
+        {
+            var result = new StringBuilder();
+
+            result.AppendLine("Parent: ");
+            result.AppendLine(Parent.DebugInformation());
+
+            result.AppendLine("Partner: ");
+            result.AppendLine(Parent.DebugInformation());
+
+            result.AppendLine("Individual to replace 1: ");
+            result.AppendLine(IndividualsToReplace[0].DebugInformation());
+
+            result.AppendLine("Individual to replace 2: ");
+            result.AppendLine(IndividualsToReplace[1].DebugInformation());
+
+            return result.ToString();
+        }
     }
 
     public abstract class BaseSteadyStateGA<GenomeType, GType, PType> : IGA 
@@ -72,6 +91,10 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         private GenomeType best;
         private bool bestCacheExpired;
         private Func<GenomeType, double> scoreFunction;
+
+        private GASelectionResult<GenomeType, GType, PType> previousSelection;
+        private Genome<GType, PType>[] previousChildren;
+
         public GenomeType Best
         {
             get
@@ -137,26 +160,26 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         public void Iterate()
         {
-            var selection = PerformSelection();
-            var children = selection.Parent.Crossover(selection.Partner);
+            previousSelection = PerformSelection();
+            previousChildren = previousSelection.Parent.Crossover(previousSelection.Partner);
 
-            foreach (var i in Enumerable.Range(0, selection.IndividualsToReplace.Length))
+            foreach (var i in Enumerable.Range(0, previousSelection.IndividualsToReplace.Length))
             {
-                Population.Remove(selection.IndividualsToReplace[i]);
+                Population.Remove(previousSelection.IndividualsToReplace[i]);
 
                 if (GenomeRemoved != null)
                 {
-                    GenomeRemoved(this, new GenomeEventArgs<GenomeType>(selection.IndividualsToReplace[i]));
+                    GenomeRemoved(this, new GenomeEventArgs<GenomeType>(previousSelection.IndividualsToReplace[i]));
                 }
 
-                Population.Add((GenomeType)children[i]);
+                Population.Add((GenomeType)previousChildren[i]);
 
-                children[i].Parent = this;
-                children[i].Mutate();
+                previousChildren[i].Parent = this;
+                previousChildren[i].Mutate();
 
                 if (GenomeAdded != null)
                 {
-                    GenomeAdded(this, new GenomeEventArgs<GenomeType>((GenomeType)children[i]));
+                    GenomeAdded(this, new GenomeEventArgs<GenomeType>((GenomeType)previousChildren[i]));
                 }
             }
 
@@ -173,6 +196,35 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             bestCacheExpired = true;
         }
 
-        protected abstract GASelectionResult<GenomeType> PerformSelection();
+        protected abstract GASelectionResult<GenomeType, GType, PType> PerformSelection();
+
+        protected virtual string InnerDebugInformation()
+        {
+            var result = new StringBuilder();
+
+            result.Append(Population.GenomeDebugInformation<GenomeType, GType, PType>());
+
+            return result.ToString();
+        }
+
+        public string DebugInformation()
+        {
+            var result = new StringBuilder();
+
+            result.AppendLine("Best: ");
+            result.AppendLine(Best.DebugInformation());
+
+            result.AppendLine();
+
+            result.AppendLine("Previous selection: ");
+            result.AppendLine(previousSelection.DebugInformation());
+            
+            result.AppendLine("Previous children: ");
+            result.AppendLine(previousChildren.GenomeDebugInformation<Genome<GType, PType>, GType, PType>());
+
+            result.AppendLine(InnerDebugInformation());
+
+            return result.ToString();
+        }
     }
 }

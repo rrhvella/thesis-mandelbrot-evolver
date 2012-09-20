@@ -68,5 +68,20 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 return members.Count;
             }
         }
+
+        public string DebugInformation()
+        {
+            StringBuilder result = new StringBuilder();
+
+            result.Append("Best: ");
+            result.Append(Best.DebugInformation());
+
+            result.AppendLine();
+            result.AppendLine();
+
+            result.Append(members.GenomeDebugInformation<SpeciatedGenome<GType, PType>, GType, PType>());
+
+            return result.ToString();
+        }
     }
 }

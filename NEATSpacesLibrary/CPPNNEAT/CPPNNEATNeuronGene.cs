@@ -15,14 +15,18 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
     public class CPPNNEATNeuronGene
     {
+        private int innovationNumber;
+
         public CPPNNeuronType Type
         {
             get;
             private set;
         }
 
-        public CPPNNEATNeuronGene(CPPNNeuronType type, Func<double, double> activationFunction)
+        public CPPNNEATNeuronGene(int innovationNumber, CPPNNeuronType type, Func<double, double> activationFunction)
         {
+            this.innovationNumber = innovationNumber;
+
             this.Type = type;
             this.ActivationFunction = activationFunction;
         }
@@ -59,6 +63,34 @@ namespace NEATSpacesLibrary.CPPNNEAT
         { 
             get; 
             private set; 
+        }
+
+        public string DebugInformation()
+        {
+            var result = new StringBuilder();
+
+            switch (Type)
+            {
+                case CPPNNeuronType.Bias:
+                    result.Append("B");
+                    break;
+
+                case CPPNNeuronType.Output:
+                    result.Append("O");
+                    break;
+
+                case CPPNNeuronType.Input:
+                    result.Append("I");
+                    break;
+
+                case CPPNNeuronType.Hidden:
+                    result.Append("H");
+                    break;
+            }
+
+            result.AppendFormat("({0})", innovationNumber);
+
+            return result.ToString();
         }
     }
 }

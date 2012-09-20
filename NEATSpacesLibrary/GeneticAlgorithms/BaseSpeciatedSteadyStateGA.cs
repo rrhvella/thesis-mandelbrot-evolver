@@ -96,7 +96,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             e.Genome.Species = newSpecies;
         }
 
-        protected override GASelectionResult<GenomeType> PerformSelection()
+        protected override GASelectionResult<GenomeType, GType, PType> PerformSelection()
         {
             var tournamentSuccessful = Population.Where(elem => elem.Species.CanBreed)
                                 .ToList().RandomTake(DEFAULT_TOURNAMENT_SIZE)
@@ -125,10 +125,27 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                                     .First();
             }
 
-            return new GASelectionResult<GenomeType>(tournamentSuccessful[0], (GenomeType)partner, 
+            return new GASelectionResult<GenomeType, GType, PType>(tournamentSuccessful[0], (GenomeType)partner, 
                                                     tournamentStraglers[tournamentStraglers.Length - 1],
                                                     tournamentStraglers[tournamentStraglers.Length - 2]);
 
+        }
+
+        protected override string InnerDebugInformation()
+        {
+            var result = new StringBuilder();
+
+            foreach (var i in Enumerable.Range(0, populationSpecies.Count))
+            {
+                result.Append("Species ");
+                result.AppendLine(i.ToString());
+
+                result.AppendLine();
+
+                result.AppendLine(populationSpecies[i].DebugInformation());
+            }
+
+            return result.ToString();
         }
     }
 }

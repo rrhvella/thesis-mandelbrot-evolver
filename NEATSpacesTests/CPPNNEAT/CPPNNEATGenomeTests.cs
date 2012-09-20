@@ -96,7 +96,7 @@ namespace NEATSpacesTests.CPPNNEAT
             var geneCollection1 = ga.Population[0].GeneCollection;
             var biasPlusInputs = 1 + ga.NumberOfInputs;
 
-            var neuron = new CPPNNEATNeuronGene(CPPNNeuronType.Hidden, x => 0);
+            var neuron = new CPPNNEATNeuronGene(0, CPPNNeuronType.Hidden, x => 0);
 
             foreach (var i in ids1)
             {

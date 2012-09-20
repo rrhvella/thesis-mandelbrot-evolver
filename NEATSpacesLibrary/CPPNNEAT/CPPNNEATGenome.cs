@@ -268,5 +268,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             GeneCollection.Initialise();
         }
+
+        protected override string InnerDebugInformation()
+        {
+            return String.Join("-", GeneCollection.LinkGenes.Select(link => link.DebugInformation()));
+        }
     }
 }

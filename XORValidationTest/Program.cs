@@ -1,17 +1,28 @@
-﻿using System;
+﻿#define DEBUG_GA
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NEATSpacesLibrary.CPPNNEAT;
 using NEATSpacesLibrary.GeneticAlgorithms;
+using System.IO;
 
 namespace XORValidationTest
 {
     public class Program
     {
+#if DEBUG_GA
+        private const int NUMBER_OF_RUNS = 1;
+        private static int POPULATION_SIZE = 4;
+        private static int MATING_LIMIT = 10;
+#else 
         private const int NUMBER_OF_RUNS = 100;
-        private static double OPTIMAL_SCORE = 16;
         private static int POPULATION_SIZE = 150;
+        private static int MATING_LIMIT = -1;
+#endif
+
+        private static double OPTIMAL_SCORE = 16;
 
         private static double INTERSPECIES_MATING_RATE = 0.001;
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
@@ -39,6 +50,7 @@ namespace XORValidationTest
         private const int OUTPUT_ACTIVATION_PRECISION = 8;
         private const int DEBUG_PRECISION = 8;
 
+        private const string DEBUG_FILE = "debug.txt";
         
         public static void Main(string[] args)
         {
@@ -56,6 +68,8 @@ namespace XORValidationTest
 
             var averageNeuronCount = 0.0;
             var STDDEVNeuronCount = 0.0;
+
+            var debugFile = new StreamWriter(new FileStream(DEBUG_FILE, FileMode.Create));
 
             Console.WriteLine(String.Format("0 out of {0} runs completed.", NUMBER_OF_RUNS));
 
@@ -93,7 +107,10 @@ namespace XORValidationTest
                 while (testGA.Best.Score < OPTIMAL_SCORE && !testGA.Failed)
                 {
                     testGA.Iterate();
-                    matingEvents++;
+                    if (++matingEvents == MATING_LIMIT)
+                    {
+                        break;
+                    }
 
                     if(matingEvents % MATING_EVENTS_PER_GENERATION == 0) 
                     {
@@ -110,6 +127,15 @@ namespace XORValidationTest
                         Console.WriteLine();
                         Console.WriteLine("Number of failures: " + numberOfFailures);
                     }
+
+#if DEBUG_GA
+                    debugFile.Write("Iteration ");
+                    debugFile.WriteLine(matingEvents.ToString());
+
+                    debugFile.WriteLine();
+
+                    debugFile.WriteLine(testGA.DebugInformation());
+#endif
                 }
                 
                 var best = testGA.Best;
@@ -149,6 +175,8 @@ namespace XORValidationTest
 
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
+
+            debugFile.Close();
         }
         
         public static double FitnessFunction(CPPNNEATGenome genome) {

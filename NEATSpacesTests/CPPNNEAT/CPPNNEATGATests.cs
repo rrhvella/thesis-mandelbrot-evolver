@@ -55,8 +55,8 @@ namespace NEATSpacesTests.CPPNNEAT
         {
             var newGA = new CPPNNEATGA(2, 0, null, new List<Func<double, double>>() { null });
 
-            var from = new CPPNNEATNeuronGene(CPPNNeuronType.Input, null);
-            var to = new CPPNNEATNeuronGene(CPPNNeuronType.Input, null);
+            var from = new CPPNNEATNeuronGene(0, CPPNNeuronType.Input, null);
+            var to = new CPPNNEATNeuronGene(0, CPPNNeuronType.Input, null);
 
             Assert.AreEqual(3, newGA.GetInnovationNumber(from, to));
             Assert.AreEqual(3, newGA.GetInnovationNumber(from, to));

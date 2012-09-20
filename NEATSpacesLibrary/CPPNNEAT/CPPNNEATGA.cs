@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define LOG_GA
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,15 +41,16 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
             this.random = new Random();
 
-            var outputGene = new CPPNNEATNeuronGene(CPPNNeuronType.Output, canonicalFunctionList.RandomSingle());
+            var outputGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, CPPNNeuronType.Output, 
+                                                    canonicalFunctionList.RandomSingle());
 
-            var currentGene = new CPPNNEATNeuronGene(CPPNNeuronType.Bias, null);
+            var currentGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, CPPNNeuronType.Bias, null);
             DefaultNeuronGenes.Add(currentGene);
             DefaultLinkGenes.Add(new CPPNNEATLinkGene(GetInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
 
             foreach (var i in Enumerable.Range(0, numberOfInputs))
             {
-                currentGene = new CPPNNEATNeuronGene(CPPNNeuronType.Input, null);
+                currentGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, CPPNNeuronType.Input, null);
 
                 DefaultNeuronGenes.Add(currentGene);
                 DefaultLinkGenes.Add(new CPPNNEATLinkGene(GetInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
@@ -152,6 +155,8 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
 
         private int innovationNumber = 0;
+        private int neuronInnovationNumber = 0;
+
         public int GetInnovationNumber(CPPNNEATNeuronGene from, CPPNNEATNeuronGene to)
         {
             var key = new Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>(from, to);
@@ -168,7 +173,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             if (!hiddenNeuronMap.ContainsKey(innovationNumber))
             {
-                hiddenNeuronMap[innovationNumber] = new CPPNNEATNeuronGene(CPPNNeuronType.Hidden, 
+                hiddenNeuronMap[innovationNumber] = new CPPNNEATNeuronGene(neuronInnovationNumber++, CPPNNeuronType.Hidden, 
                                                                     CanonicalFunctionList.RandomSingle());
             }
 
