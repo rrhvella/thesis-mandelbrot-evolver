@@ -58,7 +58,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             result.AppendLine(Parent.DebugInformation());
 
             result.AppendLine("Partner: ");
-            result.AppendLine(Parent.DebugInformation());
+            result.AppendLine(Partner.DebugInformation());
 
             result.AppendLine("Individual to replace 1: ");
             result.AppendLine(IndividualsToReplace[0].DebugInformation());
