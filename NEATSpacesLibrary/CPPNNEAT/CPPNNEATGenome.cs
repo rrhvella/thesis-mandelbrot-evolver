@@ -230,10 +230,6 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 case 1:
                     if (!GeneCollection.TryCreateLinkGene())
                     {
-                        if (GeneCollection.LinkGenes.Where(link => !link.Enabled).Count() > 0)
-                        {
-                            throw new ApplicationException("Roqoh");
-                        }
                         performWeightMutation = true;
                     }
 
