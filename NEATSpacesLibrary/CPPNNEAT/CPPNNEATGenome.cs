@@ -124,14 +124,13 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 }
 
                 var newGene = geneToCopy.Copy();
+                GeneCollection.TryAddLinkGene(newGene);
 
                 if (geneToCopy.Enabled && (!match.FirstCollection.Enabled || !match.SecondCollection.Enabled) &&
                     random.NextDouble() <= (Parent as CPPNNEATGA).DisableGeneRate)
                 {
-                    newGene.Enabled = false;
+                    GeneCollection.DisableLinkGene(newGene.InnovationNumber);
                 }
-
-                GeneCollection.TryAddLinkGene(newGene);
             }
 
             foreach (var linkGene in disjointAndExcessSource
@@ -166,7 +165,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                                                     })
                                                 .Average();
 
-            var n = Math.Max(this.GeneCollection.LinkGenes.Count(),
+            var n = (double)Math.Max(this.GeneCollection.LinkGenes.Count(),
                             genome.GeneCollection.LinkGenes.Count());
 
             var parent = Parent as CPPNNEATGA;
@@ -231,6 +230,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 case 1:
                     if (!GeneCollection.TryCreateLinkGene())
                     {
+                        if (GeneCollection.LinkGenes.Where(link => !link.Enabled).Count() > 0)
+                        {
+                            throw new ApplicationException("Roqoh");
+                        }
                         performWeightMutation = true;
                     }
 

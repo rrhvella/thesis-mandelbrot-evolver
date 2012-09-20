@@ -34,23 +34,35 @@ namespace NEATSpacesTests.CPPNNEAT
                 {
                     var children = parent.Crossover(partner);
 
-                    foreach (var child in children)
+                    //Perform tests on child 2.
+                    var testChild = children[1];
+
+                    var childGenesCount = testChild.GeneCollection.LinkGenes.Count;
+                    var parentGenesCount = parent.GeneCollection.LinkGenes.Count;
+                    var partnerGenesCount = partner.GeneCollection.LinkGenes.Count;
+
+                    Assert.IsTrue(childGenesCount == parentGenesCount ||
+                                childGenesCount == partnerGenesCount); 
+
+                    Assert.AreEqual(childGenesCount + parentGenesCount + partnerGenesCount,
+                                testChild.GeneCollection.LinkGenes.Union(
+                                    partner.GeneCollection.LinkGenes.Union(
+                                        parent.GeneCollection.LinkGenes)).Count());
+
+                    while (testChild.GeneCollection.TryCreateLinkGene())
                     {
-                        var childGenesCount = child.GeneCollection.LinkGenes.Count;
-                        var parentGenesCount = parent.GeneCollection.LinkGenes.Count;
-                        var partnerGenesCount = partner.GeneCollection.LinkGenes.Count;
-
-                        Assert.IsTrue(childGenesCount == parentGenesCount ||
-                                    childGenesCount == partnerGenesCount); 
-
-                        Assert.AreEqual(childGenesCount + parentGenesCount + partnerGenesCount,
-                                    child.GeneCollection.LinkGenes.Union(
-                                        partner.GeneCollection.LinkGenes.Union(
-                                            parent.GeneCollection.LinkGenes)).Count());
                     }
 
+                    var inputsWithBias = (ga.NumberOfInputs + 1);
+                    var childNeuronsWithoutInputs = testChild.GeneCollection.NeuronGenes.Count - inputsWithBias;
 
+                    Assert.AreEqual(inputsWithBias * childNeuronsWithoutInputs +
+                                   childNeuronsWithoutInputs * childNeuronsWithoutInputs,
+                                   testChild.GeneCollection.LinkGenes.Count);
 
+                    Assert.AreEqual(0, testChild.GeneCollection.LinkGenes.Where(link => !link.Enabled).Count());
+
+                    //Mutate parents for next generation.
                     parent = partner;
                     partner = (CPPNNEATGenome)children[0];
 

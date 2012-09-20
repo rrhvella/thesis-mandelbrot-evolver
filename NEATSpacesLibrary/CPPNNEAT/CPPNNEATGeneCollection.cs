@@ -102,7 +102,11 @@ namespace NEATSpacesLibrary.CPPNNEAT
             AddNeuronGene(gene.From);
             AddNeuronGene(gene.To);
 
-            possibleConnections.Remove(Tuple.Create(gene.From, gene.To));
+            if (gene.Enabled)
+            {
+                possibleConnections.Remove(Tuple.Create(gene.From, gene.To));
+            }
+
             sortedLinkGenesCacheExpired = true;
 
             Parent.Update();
@@ -153,7 +157,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         private void CreateNeuronGene(CPPNNEATLinkGene selectedLink)
         {
-            selectedLink.Enabled = false;
+            DisableLinkGene(selectedLink);
 
             var newNeuron = ParentGA.GetHiddenNeuron(selectedLink.InnovationNumber);
 
@@ -182,9 +186,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
             Parent.Update();
         }
 
-        public void DisableLinkGene(int linkGeneIndex)
+        public void DisableLinkGene(int innovationNumber)
         {
-            DisableLinkGene(LinkGenes[linkGeneIndex]);
+            DisableLinkGene(linkGeneMap[innovationNumber]);
         }
 
         public void Update()
