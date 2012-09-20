@@ -74,7 +74,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             StringBuilder result = new StringBuilder();
 
             result.Append("Best: ");
-            result.Append(Best.DebugInformation());
+            result.AppendLine(Best.DebugInformation());
 
             result.AppendLine();
             result.AppendLine();
