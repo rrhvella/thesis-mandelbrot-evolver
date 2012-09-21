@@ -73,6 +73,9 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         {
             StringBuilder result = new StringBuilder();
 
+            result.AppendFormat("Can breed?: {0}", (CanBreed)? "Yes": "No");
+            result.AppendLine();
+
             result.Append("Best: ");
             result.AppendLine(Best.DebugInformation());
 
