@@ -80,6 +80,12 @@ namespace NEATSpacesLibrary.CPPNNEAT
             set;
         }
 
+        public double NoChangeRate
+        {
+            get;
+            set;
+        }
+
         public double DisableGeneRate
         {
             get;
