@@ -79,7 +79,8 @@ namespace XORValidationTest
                 var testGA = new CPPNNEATGA(2, POPULATION_SIZE, FitnessFunction, 
                     new List<Func<double,double>>() {
                         CPPNActivationFunctions.SteepenedSigmoidActivationFunction
-                    });
+                    },
+                    true);
 
                 testGA.InterSpeciesMatingRate = INTERSPECIES_MATING_RATE;
                 testGA.CompatibilityDistanceThreshold = COMPATIBILITY_DISTANCE_THRESHOLD;
