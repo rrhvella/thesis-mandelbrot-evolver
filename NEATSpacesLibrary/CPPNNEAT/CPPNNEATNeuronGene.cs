@@ -17,15 +17,23 @@ namespace NEATSpacesLibrary.CPPNNEAT
     {
         private int innovationNumber;
 
+        public double Level
+        {
+            get;
+            private set;
+        }
+
         public CPPNNeuronType Type
         {
             get;
             private set;
         }
 
-        public CPPNNEATNeuronGene(int innovationNumber, CPPNNeuronType type, Func<double, double> activationFunction)
+        public CPPNNEATNeuronGene(int innovationNumber, double level, 
+                                CPPNNeuronType type, Func<double, double> activationFunction)
         {
             this.innovationNumber = innovationNumber;
+            this.Level = level;
 
             this.Type = type;
             this.ActivationFunction = activationFunction;

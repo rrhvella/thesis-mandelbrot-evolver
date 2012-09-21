@@ -14,6 +14,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
     {
 
         private Dictionary<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>, int> innovationNumberMap;
+        private Dictionary<int, Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>> edgeMap;
         private Dictionary<int, CPPNNEATNeuronGene> hiddenNeuronMap;
 
         public IList<Func<double, double>> CanonicalFunctionList
@@ -23,7 +24,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         }
 
         public CPPNNEATGA(int numberOfInputs, int populationSize, Func<CPPNNEATGenome, double> scoreFunction,
-                        List<Func<double, double>> canonicalFunctionList): base(populationSize, scoreFunction)
+                        List<Func<double, double>> canonicalFunctionList, bool feedForwardOnly): base(populationSize, scoreFunction)
         {
             if (numberOfInputs == 0)
             {
@@ -35,24 +36,27 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
             this.innovationNumberMap = new Dictionary<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>, int>();
             this.hiddenNeuronMap = new Dictionary<int, CPPNNEATNeuronGene>();
+            this.edgeMap = new Dictionary<int, Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>>();
 
             this.DefaultNeuronGenes = new List<CPPNNEATNeuronGene>();
             this.DefaultLinkGenes = new List<CPPNNEATLinkGene>();
 
-            var outputGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, CPPNNeuronType.Output, 
+            var outputGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, 1, CPPNNeuronType.Output, 
                                                     canonicalFunctionList.RandomSingle());
 
-            var currentGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, CPPNNeuronType.Bias, null);
+            var currentGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, 0, CPPNNeuronType.Bias, null);
             DefaultNeuronGenes.Add(currentGene);
             DefaultLinkGenes.Add(new CPPNNEATLinkGene(GetInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
 
             foreach (var i in Enumerable.Range(0, numberOfInputs))
             {
-                currentGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, CPPNNeuronType.Input, null);
+                currentGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, 0, CPPNNeuronType.Input, null);
 
                 DefaultNeuronGenes.Add(currentGene);
                 DefaultLinkGenes.Add(new CPPNNEATLinkGene(GetInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
             }
+
+            this.FeedForwardOnly = feedForwardOnly;
 
             DefaultNeuronGenes.Add(outputGene);
         }
@@ -154,6 +158,11 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         private int innovationNumber = 0;
         private int neuronInnovationNumber = 0;
+        public bool FeedForwardOnly
+        {
+            get;
+            private set;
+        }
 
         public int GetInnovationNumber(CPPNNEATNeuronGene from, CPPNNEATNeuronGene to)
         {
@@ -161,7 +170,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
             if (!innovationNumberMap.ContainsKey(key))
             {
-                innovationNumberMap[key] = innovationNumber++;
+                innovationNumberMap[key] = innovationNumber;
+                edgeMap[innovationNumber] = key;
+
+                innovationNumber++;
             }
 
             return innovationNumberMap[key];
@@ -171,7 +183,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             if (!hiddenNeuronMap.ContainsKey(innovationNumber))
             {
-                hiddenNeuronMap[innovationNumber] = new CPPNNEATNeuronGene(neuronInnovationNumber++, CPPNNeuronType.Hidden, 
+                var edge = edgeMap[innovationNumber];
+                var level = (edge.Item1.Level + edge.Item2.Level) / 2;
+
+                hiddenNeuronMap[innovationNumber] = new CPPNNEATNeuronGene(neuronInnovationNumber++, level, CPPNNeuronType.Hidden, 
                                                                     CanonicalFunctionList.RandomSingle());
             }
 

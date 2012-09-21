@@ -14,7 +14,9 @@ namespace NEATSpacesTests.CPPNNEAT
         [TestCase(3)]
         public void TestConstructor(int numberOfInputs)
         {
-            var newGA = new CPPNNEATGA(numberOfInputs, 0, null, new List<Func<double, double>>() { CPPNActivationFunctions.LinearActivationFunction });
+            var newGA = new CPPNNEATGA(numberOfInputs, 0, null, 
+                                new List<Func<double, double>>() { CPPNActivationFunctions.LinearActivationFunction },
+                                false);
             Console.WriteLine(newGA.DefaultNeuronGenes);
             var groupedNeurons = (from neuron in newGA.DefaultNeuronGenes
                                   group neuron by neuron.Type into neuronsByType
@@ -47,16 +49,16 @@ namespace NEATSpacesTests.CPPNNEAT
         [TestCase(ExpectedException = typeof(ApplicationException))]
         public void TestEnforceNumberOfInputs()
         {
-            var newGA = new CPPNNEATGA(0, 0, null, new List<Func<double, double>>() { null });
+            var newGA = new CPPNNEATGA(0, 0, null, new List<Func<double, double>>() { null }, false);
         }
 
         [TestCase]
         public void TestInnovationNumber()
         {
-            var newGA = new CPPNNEATGA(2, 0, null, new List<Func<double, double>>() { null });
+            var newGA = new CPPNNEATGA(2, 0, null, new List<Func<double, double>>() { null }, false);
 
-            var from = new CPPNNEATNeuronGene(0, CPPNNeuronType.Input, null);
-            var to = new CPPNNEATNeuronGene(0, CPPNNeuronType.Input, null);
+            var from = new CPPNNEATNeuronGene(0, 0, CPPNNeuronType.Input, null);
+            var to = new CPPNNEATNeuronGene(0, 0, CPPNNeuronType.Input, null);
 
             Assert.AreEqual(3, newGA.GetInnovationNumber(from, to));
             Assert.AreEqual(3, newGA.GetInnovationNumber(from, to));
@@ -65,7 +67,7 @@ namespace NEATSpacesTests.CPPNNEAT
         [TestCase]
         public void TestInnovationNumberOfDefaultGenes()
         {
-            var newGA = new CPPNNEATGA(2, 0, null, new List<Func<double, double>>() { null });
+            var newGA = new CPPNNEATGA(2, 0, null, new List<Func<double, double>>() { null }, false);
 
             foreach (var i in Enumerable.Range(0, 3))
             {
@@ -77,7 +79,7 @@ namespace NEATSpacesTests.CPPNNEAT
         [TestCase]
         public void TestInnovationNumberOfCreateNeuron()
         {
-            var newGA = new CPPNNEATGA(2, 1, x => 0.0, new List<Func<double, double>>() { null });
+            var newGA = new CPPNNEATGA(2, 1, x => 0.0, new List<Func<double, double>>() { null }, false);
             newGA.Initialise();
 
             var targetGeneCollection = newGA.Population[0].GeneCollection;
@@ -96,7 +98,7 @@ namespace NEATSpacesTests.CPPNNEAT
         [TestCase]
         public void TestInnovationNumberOfCreateLink()
         {
-            var newGA = new CPPNNEATGA(2, 1, x => 0.0, new List<Func<double, double>>() { null });
+            var newGA = new CPPNNEATGA(2, 1, x => 0.0, new List<Func<double, double>>() { null }, false);
             newGA.Initialise();
 
             var targetGeneCollection = newGA.Population[0].GeneCollection;
@@ -113,7 +115,7 @@ namespace NEATSpacesTests.CPPNNEAT
         [TestCase]
         public void TestGetHiddenNeuron()
         {
-            var newGA = new CPPNNEATGA(2, 1, x => 0.0, new List<Func<double, double>>() { null });
+            var newGA = new CPPNNEATGA(2, 1, x => 0.0, new List<Func<double, double>>() { null }, false);
             newGA.Initialise();
 
             Assert.IsNotNull(newGA.GetHiddenNeuron(1));
@@ -123,7 +125,7 @@ namespace NEATSpacesTests.CPPNNEAT
         [TestCase]
         public void TestGetHiddenNeuronOfCreateNeuron()
         {
-            var newGA = new CPPNNEATGA(2, 1, x => 0.0, new List<Func<double, double>>() { null });
+            var newGA = new CPPNNEATGA(2, 1, x => 0.0, new List<Func<double, double>>() { null }, false);
             newGA.Initialise();
 
             var testGeneCollection = newGA.Population[0].GeneCollection;

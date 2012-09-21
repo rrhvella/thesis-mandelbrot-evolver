@@ -10,20 +10,32 @@ namespace NEATSpacesTests.CPPNNEAT
     public class CPPNNEATGenomeTests
     {
         private const int NUMBER_OF_MATING_EVENTS = 100;
+        private readonly double[] INPUT = new double[] { 0.0, 0.0 };
+
+        private int NUMBER_OF_INPUTS = 2;
+        private int NUMBER_OF_GENOMES = 2;
+        private double NEW_LINK_RATE = 1;
+        private double NEW_NEURON_RATE = 1;
+        private double MAX_PERTURBATION_RATE = 2;
+        private double MAX_WEIGHT = 5;
+        private double WEIGHT_MUTATION_RATE = 1;
+        private double WEIGHT_PERTURBATION_RATE = 1;
 
         [TestCase]
         public void TestMatingAndMutationStability()
         {
-            var ga = new CPPNNEATGA(2, 2, x => 0.0, 
-                        new List<Func<double, double>>() { CPPNActivationFunctions.LinearActivationFunction });
+            var ga = new CPPNNEATGA(NUMBER_OF_INPUTS, NUMBER_OF_GENOMES, x => 0.0, 
+                        new List<Func<double, double>>() { CPPNActivationFunctions.LinearActivationFunction },
+                        false);
+
             ga.Initialise();
 
-            ga.NewLinkRate = 1;
-            ga.NewNeuronRate = 1;
-            ga.MaxPerturbation = 2;
-            ga.MaxWeight = 5;
-            ga.WeightMutationRate = 1;
-            ga.WeightPertubationRate = 1;
+            ga.NewLinkRate = NEW_LINK_RATE;
+            ga.NewNeuronRate = NEW_NEURON_RATE;
+            ga.MaxPerturbation = MAX_PERTURBATION_RATE;
+            ga.MaxWeight = MAX_WEIGHT;
+            ga.WeightMutationRate = WEIGHT_MUTATION_RATE;
+            ga.WeightPertubationRate = WEIGHT_PERTURBATION_RATE;
 
             var parent = ga.Population[0];
             var partner = ga.Population[1];
@@ -72,6 +84,82 @@ namespace NEATSpacesTests.CPPNNEAT
                     partner.Mutate();
 
                     parent.UpdatePhenome();
+                    parent.Phenome.GetActivation(INPUT);
+
+                    partner.UpdatePhenome();
+                    partner.Phenome.GetActivation(INPUT);
+                });
+            }
+        }
+
+        [TestCase]
+        public void TestMatingAndMutationStabilityFeedForward()
+        {
+            var ga = new CPPNNEATGA(NUMBER_OF_INPUTS, NUMBER_OF_GENOMES, x => 0.0, 
+                        new List<Func<double, double>>() { CPPNActivationFunctions.LinearActivationFunction },
+                        true);
+
+            ga.Initialise();
+
+            ga.NewLinkRate = NEW_LINK_RATE;
+            ga.NewNeuronRate = NEW_NEURON_RATE;
+            ga.MaxPerturbation = MAX_PERTURBATION_RATE;
+            ga.MaxWeight = MAX_WEIGHT;
+            ga.WeightMutationRate = WEIGHT_MUTATION_RATE;
+            ga.WeightPertubationRate = WEIGHT_PERTURBATION_RATE;
+
+            var parent = ga.Population[0];
+            var partner = ga.Population[1];
+
+            foreach(var i in Enumerable.Range(0, NUMBER_OF_MATING_EVENTS)) {
+                
+                Assert.DoesNotThrow(delegate()
+                {
+                    var children = parent.Crossover(partner);
+
+                    //Perform tests on child 2.
+                    var testChild = children[1];
+
+                    var childGenesCount = testChild.GeneCollection.LinkGenes.Count;
+                    var parentGenesCount = parent.GeneCollection.LinkGenes.Count;
+                    var partnerGenesCount = partner.GeneCollection.LinkGenes.Count;
+
+                    while (testChild.GeneCollection.TryCreateLinkGene())
+                    {
+                    }
+
+                    var neuronLevelCount = (from neuron in testChild.GeneCollection.NeuronGenes
+                                                group neuron by neuron.Level into neuronsByLevel
+                                                orderby neuronsByLevel.Key
+                                                select neuronsByLevel.Count()).ToArray();
+
+
+                    var totalExpectedEdges = 0;
+                    foreach (var nIndex in Enumerable.Range(0, neuronLevelCount.Length - 1))
+                    {
+                        foreach (var n2Index in Enumerable.Range(nIndex + 1, neuronLevelCount.Length - nIndex - 1))
+                        {
+                            totalExpectedEdges += neuronLevelCount[nIndex] * neuronLevelCount[n2Index];
+                        }
+                    }
+                    
+                    Assert.AreEqual(totalExpectedEdges, testChild.GeneCollection.LinkGenes.Count());
+                    Assert.AreEqual(0, testChild.GeneCollection.LinkGenes.Where(link => !link.Enabled).Count());
+
+                    //Use first child to test nn.
+                    children[0].UpdatePhenome();
+                    Assert.AreEqual(children[0].Phenome.GetActivation(INPUT), children[0].Phenome.GetActivation(INPUT));
+
+                    //Mutate parents for next generation.
+                    parent = partner;
+                    partner = (CPPNNEATGenome)children[0];
+
+                    partner.Species = parent.Species;
+
+                    parent.Mutate();
+                    partner.Mutate();
+
+                    parent.UpdatePhenome();
                     parent.Phenome.GetActivation(new double[] { 0, 0 });
 
                     partner.UpdatePhenome();
@@ -90,13 +178,13 @@ namespace NEATSpacesTests.CPPNNEAT
                                         int disjointFirst, int disjointSecond, 
                                         int excessFirst, int excessSecond)
         {
-            var ga = new CPPNNEATGA(1, 2, x => 0, new List<Func<double, double>>() { x => 0 });
+            var ga = new CPPNNEATGA(1, 2, x => 0, new List<Func<double, double>>() { x => 0 }, false);
             ga.Initialise();
 
             var geneCollection1 = ga.Population[0].GeneCollection;
             var biasPlusInputs = 1 + ga.NumberOfInputs;
 
-            var neuron = new CPPNNEATNeuronGene(0, CPPNNeuronType.Hidden, x => 0);
+            var neuron = new CPPNNEATNeuronGene(0, 1, CPPNNeuronType.Hidden, x => 0);
 
             foreach (var i in ids1)
             {

@@ -122,14 +122,19 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 neuronGeneSet.Add(neuron);
 
                 foreach (var toNeuron in NeuronGenes.Where(gene => gene.Type != CPPNNeuronType.Input &&
-                                                                gene.Type != CPPNNeuronType.Bias))
+                                                                gene.Type != CPPNNeuronType.Bias && (
+                                                                    !ParentGA.FeedForwardOnly ||
+                                                                    gene.Level > neuron.Level
+                                                                )))
                 {
                     possibleConnections.Add(Tuple.Create(neuron, toNeuron));
                 }
 
                 if (neuron.Type != CPPNNeuronType.Input && neuron.Type != CPPNNeuronType.Bias)
                 {
-                    foreach (var fromNeuron in NeuronGenes)
+                    foreach (var fromNeuron in NeuronGenes.Where(gene => !ParentGA.FeedForwardOnly ||
+                                                                gene.Level < neuron.Level
+                                                            ))
                     {
                         possibleConnections.Add(Tuple.Create(fromNeuron, neuron));
                     }
@@ -146,9 +151,13 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         private bool TryCreateLinkGene(CPPNNEATNeuronGene from, CPPNNEATNeuronGene to)
         {
-            if (to.Type == CPPNNeuronType.Bias || to.Type == CPPNNeuronType.Input)
+            if (to.Level == 0)
             {
                 throw new ApplicationException("Links should not go into input or bias neurons");
+            }
+            else if (ParentGA.FeedForwardOnly && from.Level >= to.Level)
+            {
+                throw new ApplicationException("Cannot create recursive connections in feed forward only networks");
             }
 
             return TryAddLinkGene(new CPPNNEATLinkGene(ParentGA.GetInnovationNumber(from, to), from, to, 
