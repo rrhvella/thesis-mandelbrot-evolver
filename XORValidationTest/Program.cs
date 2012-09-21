@@ -1,4 +1,4 @@
-﻿#define DEBUG_GA
+﻿//#define DEBUG_GA
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace XORValidationTest
 #if DEBUG_GA
         private const int NUMBER_OF_RUNS = 1;
         private static int POPULATION_SIZE = 10;
-        private static int MATING_LIMIT = 100;
+        private static int MATING_LIMIT = 5000;
 #else 
         private const int NUMBER_OF_RUNS = 100;
         private static int POPULATION_SIZE = 150;
@@ -27,7 +27,7 @@ namespace XORValidationTest
         private static double INTERSPECIES_MATING_RATE = 0.001;
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
         private static int MATING_EVENTS_PER_GENERATION = 75;
-        private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
+        private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 200;
 
         private static readonly double[] CORRECT_RESULT = new double[] {0, 1, 1, 0};
 
@@ -47,7 +47,7 @@ namespace XORValidationTest
         private const double DISJOINT_GENES_WEIGHT = 1.0;
         private const double MATCHING_GENES_WEIGHT = 0.4;
 
-        private const int OUTPUT_ACTIVATION_PRECISION = 1;
+        private const int OUTPUT_ACTIVATION_PRECISION = 2;
         private const int DEBUG_PRECISION = 8;
 
         private const string DEBUG_FILE = "debug.txt";

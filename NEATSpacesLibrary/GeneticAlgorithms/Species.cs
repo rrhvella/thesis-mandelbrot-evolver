@@ -23,6 +23,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 if (averageFitnessCacheInvalidated)
                 {
                     averageFitness = members.Select(member => member.AdjustedScore).Average();
+                    averageFitnessCacheInvalidated = false;
                 }
 
                 return averageFitness;
@@ -33,10 +34,18 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         public SpeciatedGenome<GType, PType> Best { get; private set; }
 
+        private bool listCacheInvalidated;
         public IEnumerable<SpeciatedGenome<GType, PType>> Members
         {
             get
             {
+                if (listCacheInvalidated)
+                {
+                    members.Sort(new Comparison<SpeciatedGenome<GType, PType>>(
+                                        (member1, member2) => member2.Score.CompareTo(member1.Score)));
+                    listCacheInvalidated = false;
+                }
+
                 return members;
             }
         }
@@ -49,6 +58,9 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             this.members = new List<SpeciatedGenome<GType, PType>>() { representative };
             this.CanBreed = true;
+
+            this.averageFitnessCacheInvalidated = true;
+            this.listCacheInvalidated = true;
         }
 
         public bool BelongsTo(SpeciatedGenome<GType, PType> genome)
@@ -65,6 +77,12 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 Best = genome;
             }
 
+            Update();
+        }
+
+        private void Update()
+        {
+            listCacheInvalidated = true;
             averageFitnessCacheInvalidated = true;
         }
 
@@ -77,7 +95,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 Best = members.MaxBy(member => member.Score);
             }
 
-            averageFitnessCacheInvalidated = true;
+            Update();
         }
 
         public int Count
