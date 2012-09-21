@@ -1,4 +1,4 @@
-﻿//#define DEBUG_GA
+﻿#define DEBUG_GA
 
 using System;
 using System.Collections.Generic;
@@ -14,8 +14,8 @@ namespace XORValidationTest
     {
 #if DEBUG_GA
         private const int NUMBER_OF_RUNS = 1;
-        private static int POPULATION_SIZE = 4;
-        private static int MATING_LIMIT = 10;
+        private static int POPULATION_SIZE = 10;
+        private static int MATING_LIMIT = 100;
 #else 
         private const int NUMBER_OF_RUNS = 100;
         private static int POPULATION_SIZE = 150;
@@ -105,7 +105,7 @@ namespace XORValidationTest
 
                 var matingEvents = 0;
 
-                while (testGA.Best.Score < OPTIMAL_SCORE && !testGA.Failed)
+                while (Math.Round(testGA.Best.Score, OUTPUT_ACTIVATION_PRECISION) < OPTIMAL_SCORE && !testGA.Failed)
                 {
                     testGA.Iterate();
                     if (++matingEvents == MATING_LIMIT)
@@ -182,8 +182,7 @@ namespace XORValidationTest
         
         public static double FitnessFunction(CPPNNEATGenome genome) {
             var result = (from num in Enumerable.Range(0, 4) 
-                    select Math.Round(genome.Phenome.GetActivation(new double[] {num / 2, num % 2}), 
-                                        OUTPUT_ACTIVATION_PRECISION)).ToArray();
+                    select genome.Phenome.GetActivation(new double[] {num / 2, num % 2})).ToArray();
 
             return Math.Pow(4 - result.Zip(CORRECT_RESULT, 
                                         (a, t) => Math.Abs(t - a))

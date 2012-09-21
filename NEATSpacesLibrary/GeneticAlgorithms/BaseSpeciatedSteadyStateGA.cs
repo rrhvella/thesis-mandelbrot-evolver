@@ -98,50 +98,17 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         protected override GASelectionResult<GenomeType, GType, PType> PerformSelection()
         {
-            var tournamentSuccessful = Population.Where(elem => elem.Species.CanBreed)
-                                .ToList().RandomTake(DEFAULT_TOURNAMENT_SIZE)
-                                .OrderByDescending(elem => elem.AdjustedScore)
-                                .ToArray();
+            var individualsToReplace = Population.OrderBy(member => member.AdjustedScore).Take(2).ToArray();
+            var totalFitness = populationSpecies.Select(species => species.AverageFitness).Sum();
 
-            var tournamentStraglers = Population.ToList().RandomTake(DEFAULT_TOURNAMENT_SIZE)
-                                .OrderByDescending(elem => elem.AdjustedScore)
-                                .ToArray();
+            var parentSpecies = populationSpecies
+                                        .Where(species => species.CanBreed)
+                                        .RouletteWheelTake(species => species.AverageFitness / totalFitness, 2)
+                                        .ToArray();
 
-            var parent = tournamentSuccessful[0];
-            GenomeType partner = null;
-
-            if (tournamentSuccessful.Count() > 1)
-            {
-                partner = tournamentSuccessful[1];
-            }
-            else
-            {
-                partner = tournamentSuccessful[0];
-            }
-
-            if (parent.Species != partner.Species || Random.NextDouble() > InterSpeciesMatingRate)
-            {
-                var speciesTournament = tournamentSuccessful[0].Species.Members
-                                    .ToList().RandomTake(DEFAULT_TOURNAMENT_SIZE)
-                                    .OrderByDescending(elem => elem.AdjustedScore)
-                                    .ToArray();
-
-                parent = (GenomeType)speciesTournament[0];
-
-                if (speciesTournament.Count() > 1)
-                {
-                    partner = (GenomeType)speciesTournament[1];
-                }
-                else
-                {
-                    partner = parent;
-                }
-            }
-
-            return new GASelectionResult<GenomeType, GType, PType>(tournamentSuccessful[0], (GenomeType)partner, 
-                                                    tournamentStraglers[tournamentStraglers.Length - 1],
-                                                    tournamentStraglers[tournamentStraglers.Length - 2]);
-
+            return new GASelectionResult<GenomeType, GType, PType>((GenomeType)parentSpecies[0].Best, 
+                                                                (GenomeType)parentSpecies[1].Best,
+                                                                individualsToReplace[0], individualsToReplace[1]);
         }
 
         protected override string InnerDebugInformation()

@@ -41,8 +41,14 @@ namespace NEATSpacesLibrary.Extensions
 
         public static T RouletteWheelSingle<T>(this IEnumerable<T> self, Func<T, double> probabilitySelector)
         {
+            return self.RouletteWheelTake(probabilitySelector, 1).First();
+        }
+
+        public static IEnumerable<T> RouletteWheelTake<T>(this IEnumerable<T> self, 
+                                                    Func<T, double> probabilitySelector, int count)
+        {
             //Build roulette wheel.
-            var rouletteWheel = new Queue<Tuple<T, double>>();
+            var rouletteWheel = new List<Tuple<T, double>>();
             var total = 0.0;
 
             foreach (var tuple in self.Select(item => 
@@ -55,24 +61,30 @@ namespace NEATSpacesLibrary.Extensions
                     continue;
                 }
 
-                rouletteWheel.Enqueue(Tuple.Create(tuple.Item1, tuple.Item2 + total));
+                rouletteWheel.Add(Tuple.Create(tuple.Item1, tuple.Item2 + total));
                 total += tuple.Item2;
             }
 
             if (rouletteWheel.Count == 0)
             {
-                return default(T);
+                yield return default(T);
             }
-
-            //Make selection.
-            var selection = random.NextDouble() * total;
-
-            while (rouletteWheel.Peek().Item2 < selection)
+            else
             {
-                rouletteWheel.Dequeue();
-            }
+                foreach(var spin in Enumerable.Range(0, count)) 
+                {
+                    //Make selection.
+                    var selection = random.NextDouble() * total;
 
-            return rouletteWheel.Dequeue().Item1;
+                    var i = 0;
+                    while (rouletteWheel[i].Item2 < selection)
+                    {
+                        i++;
+                    }
+
+                    yield return rouletteWheel[i].Item1;
+                }
+            }
         }
     }
 

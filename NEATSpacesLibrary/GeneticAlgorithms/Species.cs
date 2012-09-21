@@ -14,6 +14,21 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         internal bool CanBreed { get; set; }
         internal int TotalIterationsWithNoInnovation {get; set;}
 
+        private double averageFitness;
+        private bool averageFitnessCacheInvalidated;
+        public double AverageFitness
+        {
+            get
+            {
+                if (averageFitnessCacheInvalidated)
+                {
+                    averageFitness = members.Select(member => member.AdjustedScore).Average();
+                }
+
+                return averageFitness;
+            }
+        }
+
         private List<SpeciatedGenome<GType, PType>> members;
 
         public SpeciatedGenome<GType, PType> Best { get; private set; }
@@ -49,6 +64,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             {
                 Best = genome;
             }
+
+            averageFitnessCacheInvalidated = true;
         }
 
         public void Remove(SpeciatedGenome<GType, PType> genome)
@@ -59,6 +76,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             {
                 Best = members.MaxBy(member => member.Score);
             }
+
+            averageFitnessCacheInvalidated = true;
         }
 
         public int Count
