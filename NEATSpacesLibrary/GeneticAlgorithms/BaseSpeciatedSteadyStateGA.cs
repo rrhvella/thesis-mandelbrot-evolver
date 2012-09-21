@@ -107,7 +107,9 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                                 .OrderByDescending(elem => elem.AdjustedScore)
                                 .ToArray();
 
+            var parent = tournamentSuccessful[0];
             GenomeType partner = null;
+
             if (tournamentSuccessful.Count() > 1)
             {
                 partner = tournamentSuccessful[1];
@@ -117,12 +119,23 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 partner = tournamentSuccessful[0];
             }
 
-            if (Random.NextDouble() > InterSpeciesMatingRate)
+            if (parent.Species != partner.Species || Random.NextDouble() > InterSpeciesMatingRate)
             {
-                partner = (GenomeType)tournamentSuccessful[0].Species.Members
+                var speciesTournament = tournamentSuccessful[0].Species.Members
                                     .ToList().RandomTake(DEFAULT_TOURNAMENT_SIZE)
                                     .OrderByDescending(elem => elem.AdjustedScore)
-                                    .First();
+                                    .ToArray();
+
+                parent = (GenomeType)speciesTournament[0];
+
+                if (speciesTournament.Count() > 1)
+                {
+                    partner = (GenomeType)speciesTournament[1];
+                }
+                else
+                {
+                    partner = parent;
+                }
             }
 
             return new GASelectionResult<GenomeType, GType, PType>(tournamentSuccessful[0], (GenomeType)partner, 
