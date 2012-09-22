@@ -260,5 +260,13 @@ namespace NEATSpacesLibrary.NEATSpaces
                 return collisionMap.Length;
             }
         }
+
+        public Map Copy()
+        {
+            var result = new Map(width, height, start, end, checkpoints, mandatoryCheckPointLevel);
+            result.collisionMap = (bool[,])collisionMap.Clone();
+
+            return result;
+        }
     }
 }

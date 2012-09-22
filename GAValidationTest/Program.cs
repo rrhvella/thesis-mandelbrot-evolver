@@ -87,6 +87,14 @@ namespace GAValidationTest
                     }
                 }
             }
+
+            public override Genome<Map, Map> InnerCopy()
+            {
+                var result = (MapGenome)this.MemberwiseClone();
+                result.GeneCollection = result.GeneCollection.Copy(); ;
+
+                return result;
+            }
         }
 
         public static void Main(string[] args)
