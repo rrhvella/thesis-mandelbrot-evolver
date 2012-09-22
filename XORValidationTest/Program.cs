@@ -38,7 +38,7 @@ namespace XORValidationTest
         private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
 #else
         private static int MATING_EVENTS_PER_GENERATION = 75;
-        private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 300;
+        private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
 #endif
 
         private static readonly double[] CORRECT_RESULT = new double[] {0, 1, 1, 0};
@@ -46,14 +46,13 @@ namespace XORValidationTest
         private static double WEIGHT_MUTATION_RATE = 0.8;
         private static double NEW_NEURON_RATE = 0.03;
         private static double NEW_LINK_RATE = 0.05;
-        private static double NO_CHANGE_RATE = 0.12;
 
         private static double WEIGHT_PERTUBATION_RATE = 0.9;
 
         private static double DISABLE_GENE_RATE = 0.75;
 
-        private static double MAX_PERTURBATION = 0.5;
-        private static double MAX_WEIGHT = 2;
+        private static double MAX_PERTURBATION = 10;
+        private static double MAX_WEIGHT = 20;
 
         private const double EXCESS_GENES_WEIGHT = 1.0;
         private const double DISJOINT_GENES_WEIGHT = 1.0;
@@ -102,7 +101,6 @@ namespace XORValidationTest
                 testGA.WeightMutationRate = WEIGHT_MUTATION_RATE;
                 testGA.NewNeuronRate = NEW_NEURON_RATE;
                 testGA.NewLinkRate = NEW_LINK_RATE;
-                testGA.NoChangeRate = NO_CHANGE_RATE;
                 
                 testGA.DisableGeneRate = DISABLE_GENE_RATE;
 

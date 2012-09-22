@@ -218,38 +218,19 @@ namespace NEATSpacesLibrary.CPPNNEAT
         protected override void InnerMutate()
         {
             var parent = Parent as CPPNNEATGA;
-            var probabilityMap = new[] { parent.WeightMutationRate, parent.NewLinkRate, 
-                                        parent.NewNeuronRate, parent.NoChangeRate };
-
-            var selection = Enumerable.Range(0, probabilityMap.Length).RouletteWheelSingle(i => probabilityMap[i]);
-            var performWeightMutation = false;
-
-            switch (selection)
+            if (parent.Random.NextDouble() <= parent.NewLinkRate)
             {
-                case 0:
-                    performWeightMutation = true;
-                    break;
-
-                case 1:
-                    if (!GeneCollection.TryCreateLinkGene())
-                    {
-                        performWeightMutation = true;
-                    }
-
-                    break;
-
-                case 2:
-                    if (!GeneCollection.TryCreateNeuronGene())
-                    {
-                        performWeightMutation = true;
-                    }
-
-                    break;
+                 GeneCollection.TryCreateLinkGene();
             }
 
-            if (performWeightMutation)
+            if (parent.Random.NextDouble() <= parent.NewNeuronRate)
             {
-                foreach (var link in GeneCollection.LinkGenes)
+                 GeneCollection.TryCreateNeuronGene();
+            }
+
+            foreach (var link in GeneCollection.LinkGenes)
+            {
+                if (parent.Random.NextDouble() <= parent.WeightMutationRate)
                 {
                     if (Parent.Random.NextDouble() <= parent.WeightPertubationRate)
                     {
