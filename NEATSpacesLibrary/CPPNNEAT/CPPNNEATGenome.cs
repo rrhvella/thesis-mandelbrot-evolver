@@ -273,12 +273,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
             return String.Join("-", GeneCollection.LinkGenes.Select(link => link.DebugInformation()));
         }
 
-        public override Genome<CPPNNEATGeneCollection, CPPNNetwork> Copy()
+        public override Genome<CPPNNEATGeneCollection, CPPNNetwork> InnerCopy()
         {
             var result = (CPPNNEATGenome)this.MemberwiseClone();
             result.GeneCollection = result.GeneCollection.Copy();
-
-            result.Update();
 
             return result;
         }

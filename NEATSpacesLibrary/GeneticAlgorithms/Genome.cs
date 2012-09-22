@@ -119,6 +119,14 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             return result.ToString();
         }
 
-        public abstract Genome<GType, PType> Copy();
+        public abstract Genome<GType, PType> InnerCopy();
+
+        public Genome<GType, PType> Copy()
+        {
+            var result = InnerCopy();
+            result.Update();
+
+            return result;
+        }
     }
 }
