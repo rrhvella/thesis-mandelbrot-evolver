@@ -1,5 +1,5 @@
 ﻿//#define DEBUG_GA
-#define GENERATIONAL_GA
+//#define GENERATIONAL_GA
 
 using System;
 using System.Collections.Generic;
@@ -136,16 +136,23 @@ namespace XORValidationTest
                     {
                         Console.Clear();
                         Console.WriteLine(String.Format("{0} out of {1} runs completed.", i, NUMBER_OF_RUNS));
-                        Console.WriteLine(matingEvents / MATING_EVENTS_PER_GENERATION + " generations completed for current run.");
+
+                        Console.Write(matingEvents / MATING_EVENTS_PER_GENERATION);
+                        Console.WriteLine(" generations completed for current run.");
                         Console.WriteLine();
                         Console.WriteLine(String.Format("Current fitness: {0:f2}", testGA.Best.Score));
                         Console.WriteLine();
-                        Console.WriteLine("Average number of generations: " + averageMatingEvents / MATING_EVENTS_PER_GENERATION);
-                        Console.WriteLine("Average number of hidden nodes: " + averageHiddenNodes);
-                        Console.WriteLine("Average number of enabled genes: " + averageEnabledGenes);
-                        Console.WriteLine("Standard deviation of neuron count: " + STDDEVNeuronCount);
+                        Console.Write("Average number of generations: ");
+                        Console.WriteLine(averageMatingEvents / MATING_EVENTS_PER_GENERATION);
+                        Console.Write("Average number of hidden nodes: ");
+                        Console.WriteLine(averageHiddenNodes);
+                        Console.Write("Average number of enabled genes: ");
+                        Console.WriteLine(averageEnabledGenes);
+                        Console.Write("Standard deviation of neuron count: ");
+                        Console.WriteLine(STDDEVNeuronCount);
                         Console.WriteLine();
-                        Console.WriteLine("Number of failures: " + numberOfFailures);
+                        Console.Write("Number of failures: ");
+                        Console.WriteLine(numberOfFailures);
                     }
 
 #if DEBUG_GA
