@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NEATSpacesLibrary.GeneticAlgorithms;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
@@ -13,7 +14,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         Output
     }
 
-    public class CPPNNEATNeuronGene
+    public class CPPNNEATNeuronGene: IDebugabble
     {
         private int innovationNumber;
 

@@ -6,7 +6,7 @@ using NEATSpacesLibrary.Extensions;
 
 namespace NEATSpacesLibrary.GeneticAlgorithms
 {
-    public class Species<GType, PType> 
+    public class Species<GType, PType> : IDebugabble
     {
         private ISpeciatedGA parent;
 
@@ -22,6 +22,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             {
                 if (averageFitnessCacheInvalidated)
                 {
+                    parent.UpdateGenomes();
+
                     averageFitness = members.Select(member => member.AdjustedScore).Average();
                     averageFitnessCacheInvalidated = false;
                 }
@@ -32,7 +34,15 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         private List<SpeciatedGenome<GType, PType>> members;
 
-        public SpeciatedGenome<GType, PType> Best { get; private set; }
+        public SpeciatedGenome<GType, PType> Best
+        {
+            get
+            {
+                return Members.First();
+            }
+        }
+
+        private SpeciatedGenome<GType, PType> representative;
 
         private bool listCacheInvalidated;
         public IEnumerable<SpeciatedGenome<GType, PType>> Members
@@ -41,6 +51,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             {
                 if (listCacheInvalidated)
                 {
+                    parent.UpdateGenomes();
+
                     members.Sort(new Comparison<SpeciatedGenome<GType, PType>>(
                                         (member1, member2) => member2.Score.CompareTo(member1.Score)));
                     listCacheInvalidated = false;
@@ -53,34 +65,31 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public Species(ISpeciatedGA parent, SpeciatedGenome<GType, PType> representative)
         {
             this.parent = parent;
-            this.Best = representative;
-            this.PreviousScore = Best.Score;
+            this.representative = representative;
 
             this.members = new List<SpeciatedGenome<GType, PType>>() { representative };
             this.CanBreed = true;
 
-            this.averageFitnessCacheInvalidated = true;
-            this.listCacheInvalidated = true;
+            this.PreviousScore = Best.Score;
+
+            Update();
         }
 
         public bool BelongsTo(SpeciatedGenome<GType, PType> genome)
         {
-            return Best.CompatibilityDistance(genome) <= parent.CompatibilityDistanceThreshold;
+            return representative.CompatibilityDistance(genome) <= parent.CompatibilityDistanceThreshold;
         }
 
         public void Add(SpeciatedGenome<GType, PType> genome)
         {
             members.Add(genome);
 
-            if (genome.Score > Best.Score)
-            {
-                Best = genome;
-            }
+            representative = genome;
 
             Update();
         }
 
-        private void Update()
+        public void Update()
         {
             listCacheInvalidated = true;
             averageFitnessCacheInvalidated = true;
@@ -89,12 +98,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public void Remove(SpeciatedGenome<GType, PType> genome)
         {
             members.Remove(genome);
-
-            if (genome == Best && members.Count > 0)
-            {
-                Best = members.MaxBy(member => member.Score);
-            }
-
             Update();
         }
 
@@ -119,9 +122,15 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             result.AppendLine();
             result.AppendLine();
 
-            result.Append(members.GenomeDebugInformation<SpeciatedGenome<GType, PType>, GType, PType>());
+            result.Append(Members.GenomeDebugInformation<SpeciatedGenome<GType, PType>, GType, PType>());
 
             return result.ToString();
+        }
+
+        public void Clear()
+        {
+            members.Clear();
+            Update();
         }
     }
 }

@@ -5,14 +5,16 @@ using System.Text;
 
 namespace NEATSpacesLibrary.GeneticAlgorithms
 {
-    public interface IGA
+    public interface IGA : IDebugabble
     {
         Random Random
         {
             get;
         }
 
-        void Iterate();
+        void SteadyStateIterate();
         void Update();
+
+        void UpdateGenomes();
     }
 }

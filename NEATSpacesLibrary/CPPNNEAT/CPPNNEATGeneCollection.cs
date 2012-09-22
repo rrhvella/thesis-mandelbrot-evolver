@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NEATSpacesLibrary.Extensions;
+using NEATSpacesLibrary.GeneticAlgorithms;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
@@ -15,7 +16,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         }
     }
 
-    public class CPPNNEATGeneCollection
+    public class CPPNNEATGeneCollection 
     {
         private Dictionary<int, CPPNNEATLinkGene> linkGeneMap;
 
@@ -263,5 +264,18 @@ namespace NEATSpacesLibrary.CPPNNEAT
             return true;
         }
 
+
+        public CPPNNEATGeneCollection Copy()
+        {
+            var result = new CPPNNEATGeneCollection();
+            result.Parent = this.Parent;
+
+            foreach (var gene in LinkGenes)
+            {
+                result.TryAddLinkGene(gene.Copy());
+            }
+
+            return result;
+        }
     }
 }

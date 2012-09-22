@@ -1,6 +1,4 @@
-﻿#define LOG_GA
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +8,7 @@ using NEATSpacesLibrary.GeneticAlgorithms;
 namespace NEATSpacesLibrary.CPPNNEAT
 {
     public class CPPNNEATGA :
-        BaseSpeciatedSteadyStateGA<CPPNNEATGenome, CPPNNEATGeneCollection, CPPNNetwork>
+        BaseSpeciatedGA<CPPNNEATGenome, CPPNNEATGeneCollection, CPPNNetwork>
     {
 
         private Dictionary<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>, int> innovationNumberMap;

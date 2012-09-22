@@ -1,4 +1,5 @@
 ﻿//#define DEBUG_GA
+#define GENERATIONAL_GA
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,12 @@ namespace XORValidationTest
 #if DEBUG_GA
         private const int NUMBER_OF_RUNS = 1;
         private static int POPULATION_SIZE = 10;
+#if GENERATIONAL_GA
+        private static int MATING_LIMIT = 100;
+#else 
         private static int MATING_LIMIT = 5000;
+#endif
+
 #else 
         private const int NUMBER_OF_RUNS = 100;
         private static int POPULATION_SIZE = 150;
@@ -26,8 +32,14 @@ namespace XORValidationTest
 
         private static double INTERSPECIES_MATING_RATE = 0.001;
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
+        
+#if GENERATIONAL_GA 
+        private static int MATING_EVENTS_PER_GENERATION = 1;
+        private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
+#else
         private static int MATING_EVENTS_PER_GENERATION = 75;
-        private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 200;
+        private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 300;
+#endif
 
         private static readonly double[] CORRECT_RESULT = new double[] {0, 1, 1, 0};
 
@@ -40,8 +52,8 @@ namespace XORValidationTest
 
         private static double DISABLE_GENE_RATE = 0.75;
 
-        private static double MAX_PERTURBATION = 2;
-        private static double MAX_WEIGHT = 5;
+        private static double MAX_PERTURBATION = 0.5;
+        private static double MAX_WEIGHT = 2;
 
         private const double EXCESS_GENES_WEIGHT = 1.0;
         private const double DISJOINT_GENES_WEIGHT = 1.0;
@@ -51,6 +63,7 @@ namespace XORValidationTest
         private const int DEBUG_PRECISION = 8;
 
         private const string DEBUG_FILE = "debug.txt";
+        private const double CROSSOVER_RATE = 0.75;
         
         public static void Main(string[] args)
         {
@@ -101,13 +114,21 @@ namespace XORValidationTest
                 testGA.DisjointGenesWeight = DISJOINT_GENES_WEIGHT;
                 testGA.MatchingGenesWeight = MATCHING_GENES_WEIGHT;
 
+#if GENERATIONAL_GA
+                testGA.CrossoverRate = CROSSOVER_RATE;
+#endif
+
                 testGA.Initialise();
 
                 var matingEvents = 0;
 
                 while (Math.Round(testGA.Best.Score, OUTPUT_ACTIVATION_PRECISION) < OPTIMAL_SCORE && !testGA.Failed)
                 {
-                    testGA.Iterate();
+#if GENERATIONAL_GA
+                    testGA.GenerationalIterate();
+#else 
+                    testGA.SteadyStateIterate();
+#endif
                     if (++matingEvents == MATING_LIMIT)
                     {
                         break;

@@ -57,7 +57,7 @@
     <Compile Include="CPPNNEAT\CPPNNEATLinkGene.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATNeuronGene.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
-    <Compile Include="GeneticAlgorithms\BaseSteadyStateGA.cs" />
+    <Compile Include="GeneticAlgorithms\BaseGA.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGeneCollection.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGenome.cs" />
     <Compile Include="GeneticAlgorithms\IGA.cs" />
@@ -70,7 +70,7 @@
     <Compile Include="CPPNNEAT\CPPNNetworkNeuron.cs" />
     <Compile Include="NEATSpaces\Map.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GeneticAlgorithms\BaseSpeciatedSteadyStateGA.cs" />
+    <Compile Include="GeneticAlgorithms\BaseSpeciatedGA.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

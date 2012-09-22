@@ -16,5 +16,15 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         }
         public Species<GType, PType> Species;
         public abstract double CompatibilityDistance(SpeciatedGenome<GType, PType> genome);
+
+        public override void Update()
+        {
+            if (Species != null)
+            {
+                Species.Update();
+            }
+
+            base.Update();
+        }
     }
 }

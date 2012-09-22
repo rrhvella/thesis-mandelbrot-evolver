@@ -26,7 +26,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         }
     }
 
-    public abstract class Genome<GType, PType> 
+    public abstract class Genome<GType, PType> : IDebugabble 
     {
         public double Score
         {
@@ -78,7 +78,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             PhenomeExpired = false;
         }
 
-        public void Update()
+        public virtual void Update()
         {
             PhenomeExpired = true;
             Parent.Update();
@@ -118,5 +118,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             return result.ToString();
         }
+
+        public abstract Genome<GType, PType> Copy();
     }
 }

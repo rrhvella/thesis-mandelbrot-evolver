@@ -107,7 +107,7 @@ namespace GAValidationTest
 
                 foreach (var j in Enumerable.Range(0, MATING_EVENTS_PER_GENERATION))
                 {
-                    testGA.Iterate();
+                    testGA.SteadyStateIterate();
                     averageFitness += testGA.Best.Score;
                 }
 

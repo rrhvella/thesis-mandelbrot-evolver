@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NEATSpacesLibrary.GeneticAlgorithms;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
-    public class CPPNNEATLinkGene
+    public class CPPNNEATLinkGene: IDebugabble
     {
         public int InnovationNumber
         {
