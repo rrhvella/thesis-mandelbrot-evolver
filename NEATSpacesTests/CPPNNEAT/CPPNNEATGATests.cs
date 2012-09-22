@@ -60,8 +60,8 @@ namespace NEATSpacesTests.CPPNNEAT
             var from = new CPPNNEATNeuronGene(0, 0, CPPNNeuronType.Input, null);
             var to = new CPPNNEATNeuronGene(0, 0, CPPNNeuronType.Input, null);
 
-            Assert.AreEqual(3, newGA.GetInnovationNumber(from, to));
-            Assert.AreEqual(3, newGA.GetInnovationNumber(from, to));
+            Assert.AreEqual(3, newGA.GetEdgeInnovationNumber(from, to));
+            Assert.AreEqual(3, newGA.GetEdgeInnovationNumber(from, to));
         }
 
         [TestCase]
@@ -72,7 +72,7 @@ namespace NEATSpacesTests.CPPNNEAT
             foreach (var i in Enumerable.Range(0, 3))
             {
                 Assert.AreEqual(newGA.DefaultLinkGenes[i].InnovationNumber,
-                                newGA.GetInnovationNumber(newGA.DefaultNeuronGenes[i], newGA.DefaultNeuronGenes[3]));
+                                newGA.GetEdgeInnovationNumber(newGA.DefaultNeuronGenes[i], newGA.DefaultNeuronGenes[3]));
             }
         }
 
@@ -87,11 +87,11 @@ namespace NEATSpacesTests.CPPNNEAT
             targetGeneCollection.CreateNeuronGene(CPPNNEATConstants.FIRST_INPUT_TO_OUTPUT_INDEX);
 
             Assert.AreEqual(targetGeneCollection.LinkGenes[CPPNNEATConstants.FIRST_INPUT_TO_HIDDEN_INDEX].InnovationNumber,
-                    newGA.GetInnovationNumber(targetGeneCollection.LinkGenes[CPPNNEATConstants.FIRST_INPUT_TO_HIDDEN_INDEX].From, 
+                    newGA.GetEdgeInnovationNumber(targetGeneCollection.LinkGenes[CPPNNEATConstants.FIRST_INPUT_TO_HIDDEN_INDEX].From, 
                                             targetGeneCollection.LinkGenes[CPPNNEATConstants.FIRST_INPUT_TO_HIDDEN_INDEX].To));
 
             Assert.AreEqual(4,
-                    newGA.GetInnovationNumber(targetGeneCollection.LinkGenes[CPPNNEATConstants.HIDDEN_TO_OUTPUT_INDEX].From, 
+                    newGA.GetEdgeInnovationNumber(targetGeneCollection.LinkGenes[CPPNNEATConstants.HIDDEN_TO_OUTPUT_INDEX].From, 
                                             targetGeneCollection.LinkGenes[CPPNNEATConstants.HIDDEN_TO_OUTPUT_INDEX].To));
         }
 
@@ -108,7 +108,7 @@ namespace NEATSpacesTests.CPPNNEAT
                                                 CPPNNEATConstants.HIDDEN_NEURON_INDEX);
 
             Assert.AreEqual(targetGeneCollection.LinkGenes[CPPNNEATConstants.LINK_AFTER_FIRST_HIDDEN_NEURON_INDEX].InnovationNumber,
-                    newGA.GetInnovationNumber(targetGeneCollection.LinkGenes[CPPNNEATConstants.LINK_AFTER_FIRST_HIDDEN_NEURON_INDEX].From, 
+                    newGA.GetEdgeInnovationNumber(targetGeneCollection.LinkGenes[CPPNNEATConstants.LINK_AFTER_FIRST_HIDDEN_NEURON_INDEX].From, 
                                             targetGeneCollection.LinkGenes[CPPNNEATConstants.LINK_AFTER_FIRST_HIDDEN_NEURON_INDEX].To));
         }
 

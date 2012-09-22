@@ -161,7 +161,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 throw new ApplicationException("Cannot create recursive connections in feed forward only networks");
             }
 
-            return TryAddLinkGene(new CPPNNEATLinkGene(ParentGA.GetInnovationNumber(from, to), from, to, 
+            return TryAddLinkGene(new CPPNNEATLinkGene(ParentGA.GetEdgeInnovationNumber(from, to), from, to, 
                                 ParentGA.GetRandomWeight()));
         }
 
@@ -171,9 +171,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
             var newNeuron = ParentGA.GetHiddenNeuron(selectedLink.InnovationNumber);
 
-            TryAddLinkGene(new CPPNNEATLinkGene(ParentGA.GetInnovationNumber(selectedLink.From, newNeuron), selectedLink.From, 
+            TryAddLinkGene(new CPPNNEATLinkGene(ParentGA.GetEdgeInnovationNumber(selectedLink.From, newNeuron), selectedLink.From, 
                                         newNeuron, 1));
-            TryAddLinkGene(new CPPNNEATLinkGene(ParentGA.GetInnovationNumber(newNeuron, selectedLink.To), newNeuron, selectedLink.To, 
+            TryAddLinkGene(new CPPNNEATLinkGene(ParentGA.GetEdgeInnovationNumber(newNeuron, selectedLink.To), newNeuron, selectedLink.To, 
                                         selectedLink.Weight));
         }
 

@@ -11,7 +11,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         BaseSpeciatedGA<CPPNNEATGenome, CPPNNEATGeneCollection, CPPNNetwork>
     {
 
-        private Dictionary<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>, int> innovationNumberMap;
+        private Dictionary<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>, int> edgeInnovationNumberMap;
         private Dictionary<int, Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>> edgeMap;
         private Dictionary<int, CPPNNEATNeuronGene> hiddenNeuronMap;
 
@@ -32,7 +32,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             this.NumberOfInputs = numberOfInputs;
             this.CanonicalFunctionList = canonicalFunctionList;
 
-            this.innovationNumberMap = new Dictionary<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>, int>();
+            this.edgeInnovationNumberMap = new Dictionary<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>, int>();
             this.hiddenNeuronMap = new Dictionary<int, CPPNNEATNeuronGene>();
             this.edgeMap = new Dictionary<int, Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>>();
 
@@ -44,14 +44,14 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
             var currentGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, 0, CPPNNeuronType.Bias, null);
             DefaultNeuronGenes.Add(currentGene);
-            DefaultLinkGenes.Add(new CPPNNEATLinkGene(GetInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
+            DefaultLinkGenes.Add(new CPPNNEATLinkGene(GetEdgeInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
 
             foreach (var i in Enumerable.Range(0, numberOfInputs))
             {
                 currentGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, 0, CPPNNeuronType.Input, null);
 
                 DefaultNeuronGenes.Add(currentGene);
-                DefaultLinkGenes.Add(new CPPNNEATLinkGene(GetInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
+                DefaultLinkGenes.Add(new CPPNNEATLinkGene(GetEdgeInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
             }
 
             this.FeedForwardOnly = feedForwardOnly;
@@ -148,7 +148,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         }
 
 
-        private int innovationNumber = 0;
+        private int edgeInnovationNumber = 0;
         private int neuronInnovationNumber = 0;
         public bool FeedForwardOnly
         {
@@ -156,19 +156,19 @@ namespace NEATSpacesLibrary.CPPNNEAT
             private set;
         }
 
-        public int GetInnovationNumber(CPPNNEATNeuronGene from, CPPNNEATNeuronGene to)
+        public int GetEdgeInnovationNumber(CPPNNEATNeuronGene from, CPPNNEATNeuronGene to)
         {
             var key = new Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>(from, to);
 
-            if (!innovationNumberMap.ContainsKey(key))
+            if (!edgeInnovationNumberMap.ContainsKey(key))
             {
-                innovationNumberMap[key] = innovationNumber;
-                edgeMap[innovationNumber] = key;
+                edgeInnovationNumberMap[key] = edgeInnovationNumber;
+                edgeMap[edgeInnovationNumber] = key;
 
-                innovationNumber++;
+                edgeInnovationNumber++;
             }
 
-            return innovationNumberMap[key];
+            return edgeInnovationNumberMap[key];
         }
 
         public CPPNNEATNeuronGene GetHiddenNeuron(int innovationNumber)
