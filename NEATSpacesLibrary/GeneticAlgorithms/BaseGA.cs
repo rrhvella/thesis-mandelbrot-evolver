@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NEATSpacesLibrary.Extensions;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace NEATSpacesLibrary.GeneticAlgorithms
 {
@@ -146,10 +147,25 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public event EventHandler<EventArgs> IterationComplete;
 
         private int populationSize;
+        private bool populationOrderCacheInvalidated;
+        private List<GenomeType> population;
         public List<GenomeType> Population
         {
-            get;
-            private set;
+            get
+            {
+                if (populationOrderCacheInvalidated)
+                {
+                    UpdateGenomes();
+                    population.Sort(new Comparison<GenomeType>((first, second) => second.Score.CompareTo(first.Score)));
+                    populationOrderCacheInvalidated = false;
+                }
+
+                return population;
+            }
+            private set
+            {
+                population = value;
+            }
         }
 
         public Random Random
@@ -158,8 +174,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             private set;
         }
 
-        private GenomeType best;
-        private bool bestCacheExpired;
         private Func<GenomeType, double> scoreFunction;
 
         private IDebugabble previousSelection;
@@ -169,19 +183,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         {
             get
             {
-                if (bestCacheExpired)
-                {
-                    UpdateGenomes();
-                    best = Population.MaxBy(genome => genome.Score);
-
-                    bestCacheExpired = false;
-                }
-
-                return best;
-            }
-            private set
-            {
-                best = value;
+                return Population[0];
             }
         }
 
@@ -303,7 +305,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         public void Update()
         {
-            bestCacheExpired = true;
+            populationOrderCacheInvalidated = true;
         }
 
         protected abstract GASteadyStateSelectionResult<GenomeType, GType, PType> PerformSteadyStateSelection();
@@ -340,7 +342,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         public void UpdateGenomes()
         {
-            foreach (var genome in Population.Where(elem => elem.PhenomeExpired))
+            foreach (var genome in population.Where(elem => elem.PhenomeExpired))
             {
                 UpdateGenome(genome);
             }

@@ -182,6 +182,8 @@ namespace NEATSpacesTests.CPPNNEAT
             ga.Initialise();
 
             var geneCollection1 = ga.Population[0].GeneCollection;
+            var geneCollection2 = ga.Population[1].GeneCollection;
+
             var biasPlusInputs = 1 + ga.NumberOfInputs;
 
             var neuron = new CPPNNEATNeuronGene(0, 1, CPPNNeuronType.Hidden, x => 0);
@@ -190,8 +192,6 @@ namespace NEATSpacesTests.CPPNNEAT
             {
                 geneCollection1.TryAddLinkGene(new CPPNNEATLinkGene(i + biasPlusInputs, neuron, neuron, 0));
             }
-
-            var geneCollection2 = ga.Population[1].GeneCollection;
 
             foreach (var i in ids2)
             {
