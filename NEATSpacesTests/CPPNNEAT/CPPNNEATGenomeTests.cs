@@ -9,7 +9,7 @@ namespace NEATSpacesTests.CPPNNEAT
 {
     public class CPPNNEATGenomeTests
     {
-        private const int NUMBER_OF_MATING_EVENTS = 100;
+        private const int NUMBER_OF_MATING_EVENTS = 10;
         private readonly double[] INPUT = new double[] { 0.0, 0.0 };
 
         private int NUMBER_OF_INPUTS = 2;

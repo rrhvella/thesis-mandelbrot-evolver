@@ -28,10 +28,27 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
     public abstract class Genome<GType, PType> : IDebugabble 
     {
+        private double score;
         public double Score
         {
-            get;
-            internal set;
+            get
+            {
+                if (Parent == null)
+                {
+                    throw new ApplicationException("Attempted to retrieve score from an orphan genome. Please use a genetic algortihm");
+                }
+
+                if (PhenomeExpired)
+                {
+                    throw new ApplicationException("Attempted to retrieve score from a stale genome. Please force the genetic algorithm to update its genomes");
+                }
+
+                return score;
+            }
+            internal set
+            {
+                score = value;
+            }
         }
 
         public virtual double AdjustedScore
@@ -54,10 +71,27 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             internal set;
         }
 
+        private PType phenome;
         public PType Phenome
         {
-            get;
-            private set;
+            get
+            {
+                if (Parent == null)
+                {
+                    throw new ApplicationException("Attempted to retrieve phenome from an orphan genome. Please use a genetic algortihm");
+                }
+
+                if (PhenomeExpired)
+                {
+                    throw new ApplicationException("Attempted to retrieve phenome from a stale genome. Please force the genetic algorithm to update its genomes");
+                }
+
+                return phenome;
+            }
+            private set
+            {
+                phenome = value;
+            }
         }
 
         public GType GeneCollection

@@ -200,21 +200,15 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 var newGenome = new GenomeType();
                 newGenome.Parent = this;
 
-                Population.Add(newGenome);
-
                 newGenome.Initialise();
-                newGenome.Update();
-
-                if (GenomeAdded != null)
-                {
-                    GenomeAdded(this, new GenomeEventArgs<GenomeType>(newGenome));
-                }
+                AddGenome(newGenome);
             }
         }
 
         private void AddGenome(GenomeType genome) 
         {
             Population.Add(genome);
+            UpdateGenome(genome);
 
             if (GenomeAdded != null)
             {
@@ -346,11 +340,16 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         {
             foreach (var genome in Population.Where(elem => elem.PhenomeExpired))
             {
-                if (genome.PhenomeExpired)
-                {
-                    genome.UpdatePhenome();
-                    genome.Score = scoreFunction(genome);
-                }
+                UpdateGenome(genome);
+            }
+        }
+
+        private void UpdateGenome(GenomeType genome)
+        {
+            if (genome.PhenomeExpired)
+            {
+                genome.UpdatePhenome();
+                genome.Score = scoreFunction(genome);
             }
         }
     }
