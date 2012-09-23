@@ -50,14 +50,40 @@ namespace NEATSpacesTests.Extensions
         [TestCase(new double[] { 1, 2, 3, -4, -5, -6 })]
         public void TestRouletteWheelSelection(double[] probabilities)
         {
-            probabilities = probabilities.Where(elem => elem > 0).ToArray();
-            var probabilitiesTotal = probabilities.Sum();
             var data = (from i in Enumerable.Range(0, NUMBER_OF_TRIALS)
                         group i by Enumerable.Range(0, probabilities.Count()).Cast<int?>()
                              .RouletteWheelSingle(j => probabilities[(int)j]) into results
-                        select results)
-                            .Where(results => results.Key != null)
+                        select results).Where(results => results.Key != null)
                             .ToDictionary(results => results.Key, results => results.Count());
+
+            RouletteWheelTest(probabilities, data);
+        }
+
+        [TestCase(new double[] { 0.5, 0.5 })]
+        [TestCase(new double[] { 0.75, 0.25 })]
+        [TestCase(new double[] { 0.5 })]
+        [TestCase(new double[] { 0 })]
+        [TestCase(new double[] {})]
+        [TestCase(new double[] { 1, 2, 3, 4, 5, 6 })]
+        [TestCase(new double[] { -1, -2, -3, -4, -5, -6 })]
+        [TestCase(new double[] { 1, 2, 3, -4, -5, -6 })]
+        public void TestRouletteWheelTake(double[] probabilities)
+        {
+            var data = (from i in Enumerable.Range(0, probabilities.Count()).Cast<int?>()
+                             .RouletteWheelTake(j => probabilities[(int)j],
+                                                  NUMBER_OF_TRIALS)
+                        group i by i into results
+                        select results).Where(results => results.Key != null)
+                            .ToDictionary(results => results.Key, results => results.Count());
+
+            RouletteWheelTest(probabilities, data);
+        }
+
+
+        private void RouletteWheelTest(double[] probabilities, Dictionary<int?, int> data) 
+        {
+            probabilities = probabilities.Where(elem => elem > 0).ToArray();
+            var probabilitiesTotal = probabilities.Sum();
 
             Assert.IsTrue(data.Count > 0 || probabilitiesTotal <= 0);
 
@@ -72,5 +98,6 @@ namespace NEATSpacesTests.Extensions
                 Assert.GreaterOrEqual(actualP, p - marginOfError);
             }
         }
+
     }
 }
