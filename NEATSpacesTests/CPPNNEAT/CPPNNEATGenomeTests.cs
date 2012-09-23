@@ -94,7 +94,7 @@ namespace NEATSpacesTests.CPPNNEAT
                     var childGenesCount = testChild.GeneCollection.LinkGenes.Count;
                     var parentGenesCount = parent.GeneCollection.LinkGenes.Count;
                     var partnerGenesCount = partner.GeneCollection.LinkGenes.Count;
-
+                    
                     while (testChild.GeneCollection.TryCreateLinkGene())
                     {
                     }
@@ -211,6 +211,35 @@ namespace NEATSpacesTests.CPPNNEAT
             Assert.AreEqual(function1Count, functionAnalysis[func1]);
             Assert.AreEqual(function2Count, functionAnalysis[func2]);
             Assert.AreEqual(function3Count, functionAnalysis[func3]);
+        }
+
+        [TestCase]
+        public void TestGenomeCopying()
+        {
+            var testGA = new CPPNNEATGA(NUMBER_OF_INPUTS, 1, x => 0, new List<Func<double, double>>() { CPPNActivationFunctions.TanHActivationFunction },
+                                        false);
+            testGA.Initialise();
+
+            var testGenome = testGA.Population[0];
+
+            var testGenomeCopy = testGenome.Copy();
+
+            testGenome.UpdatePhenome();
+            testGenomeCopy.UpdatePhenome();
+
+            Assert.AreEqual(testGenome.GeneCollection.Phenome.GetActivation(INPUT),
+                        testGenomeCopy.GeneCollection.Phenome.GetActivation(INPUT));
+
+            Assert.AreEqual(testGenome.GeneCollection.Phenome.GetActivation(INPUT),
+                        testGenomeCopy.GeneCollection.Phenome.GetActivation(INPUT));
+
+            Assert.AreNotSame(testGenome, testGenomeCopy);
+            Assert.AreNotSame(testGenome.GeneCollection, testGenomeCopy.GeneCollection);
+            Assert.AreNotSame(testGenome.Phenome, testGenomeCopy.Phenome);
+
+            Assert.AreEqual(testGenomeCopy.GeneCollection.LinkGenes.Count * 2,
+                        testGenomeCopy.GeneCollection.LinkGenes.Union(testGenome.GeneCollection.LinkGenes).Count());
+
         }
     }
 }
