@@ -188,7 +188,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
 
             var populationSizeAfterChampions = currentPopulationSize - result.ToRetain.Count;
-            var populationBreeders = SelectBreeders(Population);
 
             //Add parent pairs and to mutate.
             foreach (var species in populationSpecies.Where(species => species.CanBreed))
@@ -218,6 +217,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
                     if(Random.NextDouble() <= InterSpeciesMatingRate) 
                     {
+                        var populationBreeders = SelectBreeders(Population);
                         partner = populationBreeders.RandomSingle();
                     } 
                     else 
@@ -228,7 +228,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                     result.ParentPairs.Add(Tuple.Create(parent, partner));
                 }
 
-                AddMutants(populationBreeders, mutationAmount);
+                AddMutants(speciesBreeders, mutationAmount);
             }
 
             if (currentPopulationSize > result.Count)
