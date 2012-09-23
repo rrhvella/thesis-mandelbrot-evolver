@@ -113,29 +113,25 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             var individualsToReplace = Population.OrderBy(member => member.AdjustedScore).Take(2).ToArray();
             var totalFitness = populationSpecies.Select(species => species.AverageFitness).Sum();
 
-            var selectedSpecies = populationSpecies
+            var parents = populationSpecies
                                         .Where(species => species.CanBreed)
                                         .RouletteWheelSingle(species => species.AverageFitness / totalFitness)
                                         .Members
-                                        .Cast<GenomeType>();
+                                        .Cast<GenomeType>()
+                                        .ToArray();
+            var parent = parents[0];
+            var partner = parent;
 
-            var breeders = SelectBreeders(selectedSpecies);
-
-            var parent = breeders.RandomSingle();
-            GenomeType partner = null;
-
-            if (Random.NextDouble() <= InterSpeciesMatingRate)
+            if (parents.Length > 1)
             {
-                partner = SelectBreeders(Population).RandomSingle();
+                partner = parents[1];
             }
-            else
-            {
-                partner = breeders.RandomSingle();
-            }
+
 
             return new GASteadyStateSelectionResult<GenomeType, GType, PType>(parent, partner,
                                                                 individualsToReplace[0], individualsToReplace[1]);
         }
+      
 
         private IList<GenomeType> SelectBreeders(IEnumerable<GenomeType> candidates)
         {

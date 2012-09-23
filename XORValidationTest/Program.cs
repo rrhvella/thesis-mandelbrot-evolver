@@ -1,5 +1,5 @@
 ﻿//#define DEBUG_GA
-//#define GENERATIONAL_GA
+#define GENERATIONAL_GA
 
 using System;
 using System.Collections.Generic;
@@ -29,13 +29,13 @@ namespace XORValidationTest
 #endif
 
         private static double OPTIMAL_SCORE = 16;
-
-        private static double INTERSPECIES_MATING_RATE = 0.001;
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
         
 #if GENERATIONAL_GA 
+        private static double INTERSPECIES_MATING_RATE = 0.001;
         private static int MATING_EVENTS_PER_GENERATION = 1;
         private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
+        private static double ELITISM_RATE = 0.33;
 #else
         private static int MATING_EVENTS_PER_GENERATION = 75;
         private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
@@ -63,8 +63,6 @@ namespace XORValidationTest
 
         private const string DEBUG_FILE = "debug.txt";
         private const double CROSSOVER_RATE = 0.75;
-
-        private static double ELITISM_RATE = 0.33;
         
         public static void Main(string[] args)
         {
@@ -96,7 +94,6 @@ namespace XORValidationTest
                     },
                     true);
 
-                testGA.InterSpeciesMatingRate = INTERSPECIES_MATING_RATE;
                 testGA.CompatibilityDistanceThreshold = COMPATIBILITY_DISTANCE_THRESHOLD;
                 testGA.NoInnovationThreshold = NO_INNOVATION_THRESHOLD;
 
@@ -110,14 +107,14 @@ namespace XORValidationTest
                 testGA.MaxPerturbation = MAX_PERTURBATION;
                 testGA.MaxWeight = MAX_WEIGHT;
 
-                testGA.ElitismRate = ELITISM_RATE;
-
                 testGA.ExcessGenesWeight = EXCESS_GENES_WEIGHT;
                 testGA.DisjointGenesWeight = DISJOINT_GENES_WEIGHT;
                 testGA.MatchingGenesWeight = MATCHING_GENES_WEIGHT;
 
 #if GENERATIONAL_GA
                 testGA.CrossoverRate = CROSSOVER_RATE;
+                testGA.ElitismRate = ELITISM_RATE;
+                testGA.InterSpeciesMatingRate = INTERSPECIES_MATING_RATE;
 #endif
 
                 testGA.Initialise();
