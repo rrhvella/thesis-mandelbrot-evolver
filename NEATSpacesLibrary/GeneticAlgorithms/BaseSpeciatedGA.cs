@@ -122,7 +122,12 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             var breeders = SelectBreeders(selectedSpecies);
 
             var parent = breeders.RandomSingle();
-            var partner = breeders.RandomSingle();
+            GenomeType partner = null;
+
+            if (Random.NextDouble() <= InterSpeciesMatingRate)
+            {
+                partner = SelectBreeders(Population).RandomSingle();
+            }
 
             return new GASteadyStateSelectionResult<GenomeType, GType, PType>(parent, partner,
                                                                 individualsToReplace[0], individualsToReplace[1]);
@@ -208,9 +213,19 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                         break;
                     }
 
-                    result.ParentPairs.Add(Tuple.Create(speciesBreeders.RandomSingle(),
-                                                        speciesBreeders.RandomSingle()
-                                                        ));
+                    var parent = speciesBreeders.RandomSingle();
+                    GenomeType partner = null;
+
+                    if(Random.NextDouble() <= InterSpeciesMatingRate) 
+                    {
+                        partner = populationBreeders.RandomSingle();
+                    } 
+                    else 
+                    { 
+                        partner = speciesBreeders.RandomSingle();
+                    }
+
+                    result.ParentPairs.Add(Tuple.Create(parent, partner));
                 }
 
                 AddMutants(populationBreeders, mutationAmount);
