@@ -153,12 +153,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         {
             get
             {
-                if (populationOrderCacheInvalidated)
-                {
-                    UpdateGenomes();
-                    population.Sort(new Comparison<GenomeType>((first, second) => second.Score.CompareTo(first.Score)));
-                    populationOrderCacheInvalidated = false;
-                }
+            	UpdateGenomes();
+           		population.Sort(new Comparison<GenomeType>((first, second) => second.Score.CompareTo(first.Score)));
 
                 return population.AsReadOnly();
             }
