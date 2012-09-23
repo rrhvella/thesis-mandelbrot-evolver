@@ -263,19 +263,5 @@ namespace NEATSpacesLibrary.CPPNNEAT
             DisableLinkGene(selectedLink);
             return true;
         }
-
-
-        public CPPNNEATGeneCollection Copy()
-        {
-            var result = new CPPNNEATGeneCollection();
-            result.Parent = this.Parent;
-
-            foreach (var gene in LinkGenes)
-            {
-                result.TryAddLinkGene(gene.Copy());
-            }
-
-            return result;
-        }
     }
 }

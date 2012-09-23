@@ -257,7 +257,14 @@ namespace NEATSpacesLibrary.CPPNNEAT
         public override Genome<CPPNNEATGeneCollection, CPPNNetwork> InnerCopy()
         {
             var result = (CPPNNEATGenome)this.MemberwiseClone();
-            result.GeneCollection = result.GeneCollection.Copy();
+
+            result.GeneCollection = new CPPNNEATGeneCollection();
+            result.GeneCollection.Parent = result;
+
+            foreach (var linkGene in GeneCollection.LinkGenes)
+            {
+                result.GeneCollection.TryAddLinkGene(linkGene.Copy());
+            }
 
             return result;
         }
