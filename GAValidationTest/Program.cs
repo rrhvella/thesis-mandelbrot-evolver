@@ -18,6 +18,7 @@ namespace GAValidationTest
         private const int NUMBER_OF_RUNS = 30;
 
         private const int MATING_EVENTS_PER_GENERATION = 2000;
+        private const int NUMBER_OF_TICKS_TO_UPDATE_IMAGE = 10;
 
         private const int POPULATION_SIZE = 120;
         private const double MUTATION_RATE = 0.01;
@@ -50,10 +51,11 @@ namespace GAValidationTest
         }
 
 
-        private void PrintInfo(int i)
+        private void PrintInfo(int i, int j)
         {
             Console.Clear();
             Console.WriteLine(String.Format("{0} out of {1} generations completed.", i, NUMBER_OF_GENERATIONS));
+            Console.WriteLine(String.Format("{0} out of {1} mating events completed for current generation.", j, MATING_EVENTS_PER_GENERATION));
         }
 
         private void RunGA()
@@ -63,10 +65,18 @@ namespace GAValidationTest
 
             foreach (var i in Enumerable.Range(0, NUMBER_OF_GENERATIONS))
             {
-                PrintInfo(i);
+                var j = 0;
+                while (j + NUMBER_OF_TICKS_TO_UPDATE_IMAGE < MATING_EVENTS_PER_GENERATION)
+                {
+                    PrintInfo(i, j);
 
-                algorithmList.PerformIterations(MATING_EVENTS_PER_GENERATION);
+                    algorithmList.PerformIterations(NUMBER_OF_TICKS_TO_UPDATE_IMAGE);
+                    j += NUMBER_OF_TICKS_TO_UPDATE_IMAGE;
 
+                    imageDisplay.Image = algorithmList.Best.Best.GeneCollection.Image;
+                }
+
+                algorithmList.PerformIterations(MATING_EVENTS_PER_GENERATION - j);
                 imageDisplay.Image = algorithmList.Best.Best.GeneCollection.Image;
 
                 foreach (var k in Enumerable.Range(0, NUMBER_OF_RUNS))
