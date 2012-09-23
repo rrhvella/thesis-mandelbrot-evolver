@@ -173,6 +173,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 {
                     UpdateGenomes();
                     best = Population.MaxBy(genome => genome.Score);
+
+                    bestCacheExpired = false;
                 }
 
                 return best;
