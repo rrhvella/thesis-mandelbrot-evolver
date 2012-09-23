@@ -63,6 +63,8 @@ namespace XORValidationTest
 
         private const string DEBUG_FILE = "debug.txt";
         private const double CROSSOVER_RATE = 0.75;
+
+        private static double ELITISM_RATE = 0.33;
         
         public static void Main(string[] args)
         {
@@ -107,6 +109,8 @@ namespace XORValidationTest
                 testGA.WeightPertubationRate = WEIGHT_PERTUBATION_RATE;
                 testGA.MaxPerturbation = MAX_PERTURBATION;
                 testGA.MaxWeight = MAX_WEIGHT;
+
+                testGA.ElitismRate = ELITISM_RATE;
 
                 testGA.ExcessGenesWeight = EXCESS_GENES_WEIGHT;
                 testGA.DisjointGenesWeight = DISJOINT_GENES_WEIGHT;

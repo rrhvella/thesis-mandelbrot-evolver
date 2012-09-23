@@ -15,6 +15,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public double InterSpeciesMatingRate { get; set; }
         public double CompatibilityDistanceThreshold { get; set; }
         public int NoInnovationThreshold { get; set; }
+        public double ElitismRate { get; set; }
+
         private List<Species<GType, PType>> populationSpecies;
         private int SPECIES_CHAMPION_THRESHOLD = 5;
 
@@ -154,7 +156,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             Action<IEnumerable<GenomeType>, int> AddToResult = 
                 delegate(IEnumerable<GenomeType> candidates, int amount) {
-                    var genomeList = candidates.Take((int)Math.Ceiling(candidates.Count() * 0.3))
+                    var genomeList = candidates.Take((int)Math.Ceiling(candidates.Count() * ElitismRate))
                                         .ToList();
 
                     var crossoverAmount = (int)Math.Floor(amount * CrossoverRate);
