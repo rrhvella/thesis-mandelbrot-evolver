@@ -86,14 +86,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         public Genome<GType, PType>[] Crossover(Genome<GType, PType> partner)
         {
-            var children = InnerCrossover(partner);
-
-            foreach (var child in children)
-            {
-                child.Update();
-            }
-
-            return children;
+            return InnerCrossover(partner);
         }
 
         public void Mutate()
