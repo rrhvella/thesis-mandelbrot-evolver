@@ -99,6 +99,12 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
+        public void UpdateNeuronActivationFunction(int neuronIndex, Func<double, double> activationFunction)
+        {
+            neuronGenes[neuronIndex].ActivationFunction = activationFunction;
+            Parent.Update();
+        }
+
         public bool TryAddLinkGene(CPPNNEATLinkGene gene)
         {
             if (linkGeneMap.ContainsKey(gene.InnovationNumber) && linkGeneMap[gene.InnovationNumber].Enabled)

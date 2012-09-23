@@ -167,7 +167,6 @@ namespace NEATSpacesTests.CPPNNEAT
             Assert.AreEqual(excessSecond, differenceAnalysis.SecondCollection.Excess.Count);
         }
 
-        /*
         [TestCase(0, 0, 1)]
         [TestCase(1, 0, 0)]
         [TestCase(0, 1, 0)]
@@ -178,27 +177,33 @@ namespace NEATSpacesTests.CPPNNEAT
             var func2 = new Func<double,double>(x => x);
             var func3 = new Func<double,double>(x => x);
             
-            var ga = new CPPNNEATGA(1, 1, null, new List<Func<double, double>>() {func1, func2, func3});
+            var ga = new CPPNNEATGA(CPPNNEATConstants.NUMBER_OF_INPUTS, 1, x => 0, 
+                                new List<Func<double, double>>() { func1, func2, func3 }, false);
             ga.Initialise();
 
             var genome = ga.Population[0];
 
             var geneCollection = ga.Population[0].GeneCollection;
-            geneCollection.UpdateNeuronActivationFunction(2, null);
+            geneCollection.UpdateNeuronActivationFunction(CPPNNEATConstants.OUTPUT_NEURON_INDEX, null);
+
+            int neuronIndex = CPPNNEATConstants.HIDDEN_NEURON_INDEX;
 
             foreach (var i in Enumerable.Range(0, function1Count))
             {
-                geneCollection.AddNeuronGene(new CPPNNEATNeuronGene(CPPNNeuronType.Hidden, func1));
+                geneCollection.TryCreateNeuronGene();
+                geneCollection.UpdateNeuronActivationFunction(neuronIndex++, func1);
             }
 
             foreach (var i in Enumerable.Range(0, function2Count))
             {
-                geneCollection.AddNeuronGene(new CPPNNEATNeuronGene(CPPNNeuronType.Hidden, func2));
+                geneCollection.TryCreateNeuronGene();
+                geneCollection.UpdateNeuronActivationFunction(neuronIndex++, func2);
             }
 
             foreach (var i in Enumerable.Range(0, function3Count))
             {
-                geneCollection.AddNeuronGene(new CPPNNEATNeuronGene(CPPNNeuronType.Hidden, func3));
+                geneCollection.TryCreateNeuronGene();
+                geneCollection.UpdateNeuronActivationFunction(neuronIndex++, func3);
             }
 
             var functionAnalysis = genome.GetFunctionAnalysis();
@@ -207,6 +212,5 @@ namespace NEATSpacesTests.CPPNNEAT
             Assert.AreEqual(function2Count, functionAnalysis[func2]);
             Assert.AreEqual(function3Count, functionAnalysis[func3]);
         }
-        */
     }
 }

@@ -43,7 +43,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         public Func<double, double> ActivationFunction
         {
             get;
-            private set;
+            internal set;
         }
 
         public void Update()
