@@ -155,25 +155,9 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             var result = new GAGenerationalSelectionResult<GenomeType, GType, PType>();
             var currentPopulationSize = Population.Count;
 
-            Action<IEnumerable<GenomeType>, int> AddToResult = 
-                delegate(IEnumerable<GenomeType> candidates, int amount) {
-                    var genomeList = SelectBreeders(candidates);
-
-                    var crossoverAmount = (int)Math.Floor(amount * CrossoverRate);
-                    var mutationAmount = (int)Math.Ceiling(amount * (1 - CrossoverRate));
-
-                    foreach (var i in Enumerable.Range(0, crossoverAmount))
-                    {
-                        if(result.Count == currentPopulationSize) 
-                        {
-                            break;
-                        }
-
-                        result.ParentPairs.Add(Tuple.Create(genomeList.RandomSingle(),
-                                                            genomeList.RandomSingle()
-                                                            ));
-                    }
-
+            Action<IList<GenomeType>, int> AddMutants = 
+                delegate(IList<GenomeType> breeders, int mutationAmount) 
+                {
                     foreach (var i in Enumerable.Range(0, mutationAmount))
                     {
                         if(result.Count == currentPopulationSize) 
@@ -181,7 +165,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                             break;
                         }
 
-                        result.ToMutate.Add((GenomeType)genomeList.RandomSingle().Copy());
+                        result.ToMutate.Add((GenomeType)breeders.RandomSingle().Copy());
                     }
                 };
             
@@ -199,6 +183,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
 
             var populationSizeAfterChampions = currentPopulationSize - result.ToRetain.Count;
+            var populationBreeders = SelectBreeders(Population);
 
             //Add parent pairs and to mutate.
             foreach (var species in populationSpecies.Where(species => species.CanBreed))
@@ -211,14 +196,29 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 var breedingLimit = (int)Math.Ceiling(species.AverageFitness / 
                                                         totalAverageFitness * populationSizeAfterChampions);
 
-                AddToResult(species.Members.Cast<GenomeType>(), breedingLimit);
+                var speciesBreeders = SelectBreeders(species.Members.Cast<GenomeType>());
+
+                var crossoverAmount = (int)Math.Floor(breedingLimit * CrossoverRate);
+                var mutationAmount = (int)Math.Ceiling(breedingLimit * (1 - CrossoverRate));
+
+                foreach (var i in Enumerable.Range(0, crossoverAmount))
+                {
+                    if(result.Count == currentPopulationSize) 
+                    {
+                        break;
+                    }
+
+                    result.ParentPairs.Add(Tuple.Create(speciesBreeders.RandomSingle(),
+                                                        speciesBreeders.RandomSingle()
+                                                        ));
+                }
+
+                AddMutants(populationBreeders, mutationAmount);
             }
 
             if (currentPopulationSize > result.Count)
             {
-                var amount = currentPopulationSize - result.Count;
-
-                AddToResult(Population, amount);
+                AddMutants(populationBreeders, currentPopulationSize - result.Count);
             }
 
             return result;
