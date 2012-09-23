@@ -58,7 +58,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                     listCacheInvalidated = false;
                 }
 
-                return members;
+                return members.AsReadOnly();
             }
         }
 

@@ -149,7 +149,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         private int populationSize;
         private bool populationOrderCacheInvalidated;
         private List<GenomeType> population;
-        public List<GenomeType> Population
+        public IList<GenomeType> Population
         {
             get
             {
@@ -160,11 +160,11 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                     populationOrderCacheInvalidated = false;
                 }
 
-                return population;
+                return population.AsReadOnly();
             }
             private set
             {
-                population = value;
+                population = (List<GenomeType>)value;
             }
         }
 
@@ -211,7 +211,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         private void AddGenome(GenomeType genome) 
         {
-            Population.Add(genome);
+            population.Add(genome);
             UpdateGenome(genome);
 
             if (GenomeAdded != null)
@@ -231,7 +231,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             previousChildren = new List<Genome<GType, PType>>();
             var generationalSelect = PerformGenerationalSelection();
 
-            Population.Clear();
+            population.Clear();
 
             if (SelectionComplete != null)
             {
@@ -280,7 +280,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             foreach (var i in Enumerable.Range(0, selection.IndividualsToReplace.Length))
             {
-                Population.Remove(selection.IndividualsToReplace[i]);
+                population.Remove(selection.IndividualsToReplace[i]);
 
                 if (GenomeRemoved != null)
                 {

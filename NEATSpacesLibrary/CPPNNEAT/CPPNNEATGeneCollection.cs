@@ -55,15 +55,23 @@ namespace NEATSpacesLibrary.CPPNNEAT
                     sortedLinkGenesCacheExpired = false;
                 }
 
-                return sortedLinkGenes;
+                return sortedLinkGenes.AsReadOnly();
             }
         }
 
         private ISet<CPPNNEATNeuronGene> neuronGeneSet;
+
+        private List<CPPNNEATNeuronGene> neuronGenes;
         public IList<CPPNNEATNeuronGene> NeuronGenes
         {
-            get;
-            private set;
+            get
+            {
+                return neuronGenes.AsReadOnly();
+            }
+            private set
+            {
+                neuronGenes = (List<CPPNNEATNeuronGene>)value;
+            }
         }
 
         public CPPNNetwork Phenome
@@ -119,7 +127,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             if (!neuronGeneSet.Contains(neuron))
             {
-                NeuronGenes.Add(neuron);
+                neuronGenes.Add(neuron);
                 neuronGeneSet.Add(neuron);
 
                 foreach (var toNeuron in NeuronGenes.Where(gene => gene.Type != CPPNNeuronType.Input &&

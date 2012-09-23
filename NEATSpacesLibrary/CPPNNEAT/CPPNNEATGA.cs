@@ -36,27 +36,27 @@ namespace NEATSpacesLibrary.CPPNNEAT
             this.hiddenNeuronMap = new Dictionary<int, CPPNNEATNeuronGene>();
             this.edgeMap = new Dictionary<int, Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>>();
 
-            this.DefaultNeuronGenes = new List<CPPNNEATNeuronGene>();
-            this.DefaultLinkGenes = new List<CPPNNEATLinkGene>();
+            this.defaultNeuronGenes = new List<CPPNNEATNeuronGene>();
+            this.defaultLinkGenes = new List<CPPNNEATLinkGene>();
 
             var outputGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, 1, CPPNNeuronType.Output, 
                                                     canonicalFunctionList.RandomSingle());
 
             var currentGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, 0, CPPNNeuronType.Bias, null);
-            DefaultNeuronGenes.Add(currentGene);
-            DefaultLinkGenes.Add(new CPPNNEATLinkGene(GetEdgeInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
+            defaultNeuronGenes.Add(currentGene);
+            defaultLinkGenes.Add(new CPPNNEATLinkGene(GetEdgeInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
 
             foreach (var i in Enumerable.Range(0, numberOfInputs))
             {
                 currentGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, 0, CPPNNeuronType.Input, null);
 
-                DefaultNeuronGenes.Add(currentGene);
-                DefaultLinkGenes.Add(new CPPNNEATLinkGene(GetEdgeInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
+                defaultNeuronGenes.Add(currentGene);
+                defaultLinkGenes.Add(new CPPNNEATLinkGene(GetEdgeInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
             }
 
             this.FeedForwardOnly = feedForwardOnly;
 
-            DefaultNeuronGenes.Add(outputGene);
+            defaultNeuronGenes.Add(outputGene);
         }
         public int NumberOfInputs
         {
@@ -130,16 +130,30 @@ namespace NEATSpacesLibrary.CPPNNEAT
             set;
         }
 
+        private List<CPPNNEATNeuronGene> defaultNeuronGenes;
         public IList<CPPNNEATNeuronGene> DefaultNeuronGenes
         {
-            get;
-            private set;
+            get
+            {
+                return defaultNeuronGenes.AsReadOnly();
+            }
+            private set
+            {
+                defaultNeuronGenes = (List<CPPNNEATNeuronGene>)value;
+            }
         }
 
+        private List<CPPNNEATLinkGene> defaultLinkGenes;
         public IList<CPPNNEATLinkGene> DefaultLinkGenes
         {
-            get;
-            private set;
+            get
+            {
+                return defaultLinkGenes.AsReadOnly();
+            }
+            private set
+            {
+                defaultLinkGenes = (List<CPPNNEATLinkGene>)value;
+            }
         }
 
         public double GetRandomWeight()
