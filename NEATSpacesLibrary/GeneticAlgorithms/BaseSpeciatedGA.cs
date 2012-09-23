@@ -128,6 +128,10 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             {
                 partner = SelectBreeders(Population).RandomSingle();
             }
+            else
+            {
+                partner = breeders.RandomSingle();
+            }
 
             return new GASteadyStateSelectionResult<GenomeType, GType, PType>(parent, partner,
                                                                 individualsToReplace[0], individualsToReplace[1]);
