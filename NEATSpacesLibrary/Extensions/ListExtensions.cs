@@ -56,7 +56,7 @@ namespace NEATSpacesLibrary.Extensions
                                      .OrderByDescending(tuple => tuple.Item2))
 
             {
-                if (tuple.Item2 == 0)
+                if (tuple.Item2 <= 0)
                 {
                     continue;
                 }
