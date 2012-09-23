@@ -113,23 +113,24 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             var individualsToReplace = Population.OrderBy(member => member.AdjustedScore).Take(2).ToArray();
             var totalFitness = populationSpecies.Select(species => species.AverageFitness).Sum();
 
-            var parents = populationSpecies
+            var selectedSpecies = populationSpecies
                                         .Where(species => species.CanBreed)
                                         .RouletteWheelSingle(species => species.AverageFitness / totalFitness)
                                         .Members
-                                        .Cast<GenomeType>()
-                                        .ToArray();
-            var parent = parents[0];
-            var partner = parent;
+                                        .Cast<GenomeType>();
 
-            if (parents.Length > 1)
-            {
-                partner = parents[1];
-            }
+            var breeders = SelectBreeders(selectedSpecies);
 
+            var parent = breeders.RandomSingle();
+            var partner = breeders.RandomSingle();
 
             return new GASteadyStateSelectionResult<GenomeType, GType, PType>(parent, partner,
                                                                 individualsToReplace[0], individualsToReplace[1]);
+        }
+
+        private IList<GenomeType> SelectBreeders(IEnumerable<GenomeType> candidates)
+        {
+            return candidates.Take((int)Math.Ceiling(candidates.Count() * ElitismRate)).ToList();
         }
 
         protected override string InnerDebugInformation()
@@ -156,8 +157,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             Action<IEnumerable<GenomeType>, int> AddToResult = 
                 delegate(IEnumerable<GenomeType> candidates, int amount) {
-                    var genomeList = candidates.Take((int)Math.Ceiling(candidates.Count() * ElitismRate))
-                                        .ToList();
+                    var genomeList = SelectBreeders(candidates);
 
                     var crossoverAmount = (int)Math.Floor(amount * CrossoverRate);
                     var mutationAmount = (int)Math.Ceiling(amount * (1 - CrossoverRate));
