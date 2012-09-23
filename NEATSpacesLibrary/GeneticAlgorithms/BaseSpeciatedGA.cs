@@ -231,11 +231,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 AddMutants(speciesBreeders, mutationAmount);
             }
 
-            if (currentPopulationSize > result.Count)
-            {
-                AddMutants(populationBreeders, currentPopulationSize - result.Count);
-            }
-
             return result;
         }
 
