@@ -136,6 +136,12 @@ namespace XORValidationTest
                     if(matingEvents % MATING_EVENTS_PER_GENERATION == 0) 
                     {
                         Console.Clear();
+#if GENERATIONAL_GA
+                        Console.WriteLine("Generational");
+#else
+                        Console.WriteLine("Steady-State");
+#endif
+                        Console.WriteLine();
                         Console.WriteLine(String.Format("{0} out of {1} runs completed.", i, NUMBER_OF_RUNS));
 
                         Console.Write(matingEvents / MATING_EVENTS_PER_GENERATION);
