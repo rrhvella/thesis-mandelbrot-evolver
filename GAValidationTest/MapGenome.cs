@@ -10,31 +10,22 @@ namespace GAValidationTest
     public class MapGenome: Genome<Map, Map>
     {
         private const double FILL = 0.05;
-        private const int MANDATORY_CHECKPOINT_LEVEL = 3;
-        private static readonly MapNode[] CHECKPOINTS = new[] { new MapNode(6, 24), new MapNode(12, 18), 
-                                                        new MapNode(18, 12), new MapNode(24, 6) };
-        private static readonly MapNode START_NODE = new MapNode(0, 0);
-        private static readonly MapNode END_NODE = new MapNode(29, 29);
-
-        private double FILL_PARAMETER = 0.05;
-
-        private const int MAP_SIZE = 30;
 
         private const double MUTATION_RATE = 0.01;
         private const double CROSSOVER_RATE = 0.05;
 
         public MapGenome()
         {
-            this.GeneCollection = new Map(MAP_SIZE, MAP_SIZE, START_NODE, END_NODE, CHECKPOINTS, MANDATORY_CHECKPOINT_LEVEL);
+            this.GeneCollection = MapConstants.CreateMap();
         }
 
         public override void Initialise()
         {
-            foreach (var x in Enumerable.Range(0, MAP_SIZE))
+            foreach (var x in Enumerable.Range(0, MapConstants.MAP_SIZE))
             {
-                foreach (var y in Enumerable.Range(0, MAP_SIZE))
+                foreach (var y in Enumerable.Range(0, MapConstants.MAP_SIZE))
                 {
-                    if (Parent.Random.NextDouble() <= FILL_PARAMETER)
+                    if (Parent.Random.NextDouble() <= FILL)
                     {
                         GeneCollection[x, y] = true;
                     }

@@ -69,6 +69,7 @@
     <Compile Include="CPPNNEAT\CPPNNetwork.cs" />
     <Compile Include="CPPNNEAT\CPPNNetworkNeuron.cs" />
     <Compile Include="NEATSpaces\Map.cs" />
+    <Compile Include="NEATSpaces\MapConstants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GeneticAlgorithms\BaseSpeciatedGA.cs" />
   </ItemGroup>
