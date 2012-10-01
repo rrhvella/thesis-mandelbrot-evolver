@@ -6,6 +6,7 @@ using QuickGraph;
 using QuickGraph.Algorithms.ShortestPath;
 using System.Drawing;
 using System.Drawing.Imaging;
+using NEATSpacesLibrary.Extensions;
 
 namespace NEATSpacesLibrary.NEATSpaces
 {
@@ -22,7 +23,7 @@ namespace NEATSpacesLibrary.NEATSpaces
 
         public override bool Equals(object obj)
         {
-            if(obj.GetType() != this.GetType()) 
+            if(!(obj is MapNode))
             {
                 return false;
             }
@@ -50,12 +51,20 @@ namespace NEATSpacesLibrary.NEATSpaces
 
         public override int GetHashCode()
         {
-            return ToString().GetHashCode();
+            return X<<16>>16 | Y<<16;
         }
 
         public override string ToString()
         {
             return X + "," + Y;
+        }
+
+        public double EuclideanDistance
+        {
+            get
+            {
+                return MathExtensions.EuclideanDistance(new double[] { X, Y });
+            }
         }
 
         public double Magnitude
@@ -89,23 +98,48 @@ namespace NEATSpacesLibrary.NEATSpaces
 
         private bool[,] collisionMap;
         private DelegateVertexAndEdgeListGraph<MapNode, SEquatableEdge<MapNode>> graph;
-        private int width;
-        private int height;
-        private IEnumerable<MapNode> checkpoints;
+
+        public int Width
+        {
+            get;
+            private set;
+        }
+
+        public int Height
+        {
+            get;
+            private set;
+        }
+
+        public IEnumerable<MapNode> Checkpoints 
+        { 
+            get; 
+            private set;
+        }
+
         private int mandatoryCheckPointLevel;
-        private MapNode end;
-        private MapNode start;
+        public MapNode EndNode
+        {
+            get;
+            private set;
+        }
+
+        public MapNode StartNode
+        {
+            get;
+            private set;
+        }
 
         public Map(int width, int height, MapNode start, MapNode end, IEnumerable<MapNode> checkpoints, 
                                 int mandatoryCheckPointLevel)
         {
-            this.width = width;
-            this.height = height;
+            this.Width = width;
+            this.Height = height;
 
-            this.start = start;
-            this.end = end;
+            this.StartNode = start;
+            this.EndNode = end;
 
-            this.checkpoints = checkpoints;
+            this.Checkpoints = checkpoints;
             this.mandatoryCheckPointLevel = mandatoryCheckPointLevel;
 
             this.collisionMap = new bool[width, height];
@@ -166,11 +200,11 @@ namespace NEATSpacesLibrary.NEATSpaces
         {
             get
             {
-                return collisionMap[i % width, i / width];
+                return collisionMap[i % Width, i / Width];
             }
             set
             {
-                collisionMap[i % width, i / width] = value;
+                collisionMap[i % Width, i / Width] = value;
             }
         }
 
@@ -178,19 +212,33 @@ namespace NEATSpacesLibrary.NEATSpaces
         {
             get 
             {
-                var distanceFromStartToEnd = DistanceBetween(start, end);
+                var distanceFromStartToEnd = DistanceBetween(StartNode, EndNode);
 
                 if (distanceFromStartToEnd == null)
                 {
                     return 0;
                 }
 
-                var membersOfE = (from checkpoint in checkpoints.AsParallel()
-                                  where DistanceBetween(start, checkpoint) != null &&
-                                      DistanceBetween(checkpoint, end) != null
-                                  select checkpoint).Count();
+                var missLimit = Checkpoints.Count() - mandatoryCheckPointLevel;
+                var checkPointLevel = 0;
+                var checkpointsIterator = Checkpoints.GetEnumerator();
 
-                if (membersOfE < mandatoryCheckPointLevel)
+                while (missLimit >= 0 && checkPointLevel < mandatoryCheckPointLevel)
+                {
+                    checkpointsIterator.MoveNext();
+                    var checkpoint = checkpointsIterator.Current;
+
+                    if (DistanceBetween(StartNode, checkpoint) != null && DistanceBetween(checkpoint, EndNode) != null)
+                    {
+                        checkPointLevel++;
+                    }
+                    else
+                    {
+                        missLimit--;
+                    }
+                }
+
+                if (missLimit < 0)
                 {
                     return 0;
                 }
@@ -231,20 +279,20 @@ namespace NEATSpacesLibrary.NEATSpaces
         {
             get 
             {
-                var result = new Bitmap(width, height);
+                var result = new Bitmap(Width, Height);
 
-                foreach(var x in Enumerable.Range(0, width)) 
+                foreach(var x in Enumerable.Range(0, Width)) 
                 {
-                    foreach(var y in Enumerable.Range(0, height)) 
+                    foreach(var y in Enumerable.Range(0, Height)) 
                     {
                         result.SetPixel(x, y, (collisionMap[x, y]) ? WALL_COLOUR : TILE_COLOUR);
                     }
                 }
 
-                result.SetPixel(start.X, start.Y, START_COLOUR);
-                result.SetPixel(end.X, end.Y, END_COLOUR);
+                result.SetPixel(StartNode.X, StartNode.Y, START_COLOUR);
+                result.SetPixel(EndNode.X, EndNode.Y, END_COLOUR);
 
-                foreach (var node in checkpoints)
+                foreach (var node in Checkpoints)
                 {
                     result.SetPixel(node.X, node.Y, CHECKPOINT_COLOUR);
                 }
@@ -263,7 +311,7 @@ namespace NEATSpacesLibrary.NEATSpaces
 
         public Map Copy()
         {
-            var result = new Map(width, height, start, end, checkpoints, mandatoryCheckPointLevel);
+            var result = new Map(Width, Height, StartNode, EndNode, Checkpoints, mandatoryCheckPointLevel);
             result.collisionMap = (bool[,])collisionMap.Clone();
 
             return result;

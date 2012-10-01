@@ -12,6 +12,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             get;
         }
 
+        void Initialise();
+
         void SteadyStateIterate();
         void Update();
 

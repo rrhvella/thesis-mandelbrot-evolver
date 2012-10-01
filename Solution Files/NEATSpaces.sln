@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GAValidationTest", "..\GAVa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XORValidationTest", "..\XORValidationTest\XORValidationTest.csproj", "{859D2D75-3A70-48DA-97F0-0C987BA19FF9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NEATSpaces", "NEATSpaces\NEATSpaces.csproj", "{64757E08-6C99-4AF3-94E2-2ED503050F6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,16 @@ Global
 		{859D2D75-3A70-48DA-97F0-0C987BA19FF9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{859D2D75-3A70-48DA-97F0-0C987BA19FF9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{859D2D75-3A70-48DA-97F0-0C987BA19FF9}.Release|x86.ActiveCfg = Release|Any CPU
+		{64757E08-6C99-4AF3-94E2-2ED503050F6C}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{64757E08-6C99-4AF3-94E2-2ED503050F6C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{64757E08-6C99-4AF3-94E2-2ED503050F6C}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{64757E08-6C99-4AF3-94E2-2ED503050F6C}.Debug|x86.ActiveCfg = Debug|x86
+		{64757E08-6C99-4AF3-94E2-2ED503050F6C}.Debug|x86.Build.0 = Debug|x86
+		{64757E08-6C99-4AF3-94E2-2ED503050F6C}.Release|Any CPU.ActiveCfg = Release|x86
+		{64757E08-6C99-4AF3-94E2-2ED503050F6C}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{64757E08-6C99-4AF3-94E2-2ED503050F6C}.Release|Mixed Platforms.Build.0 = Release|x86
+		{64757E08-6C99-4AF3-94E2-2ED503050F6C}.Release|x86.ActiveCfg = Release|x86
+		{64757E08-6C99-4AF3-94E2-2ED503050F6C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

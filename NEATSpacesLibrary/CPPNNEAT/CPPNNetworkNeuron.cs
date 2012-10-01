@@ -15,6 +15,14 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
+        public static Func<double, double> ClippedLinearActivationFunction 
+        {
+            get
+            {
+                return x => (x > 1)? 1 : (x < -1)? -1 : x;
+            }
+        }
+
         public static Func<double, double> TanHActivationFunction 
         {
             get

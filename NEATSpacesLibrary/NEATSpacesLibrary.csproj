@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,6 +58,7 @@
     <Compile Include="CPPNNEAT\CPPNNEATLinkGene.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATNeuronGene.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="GeneticAlgorithms\BaseGA.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGeneCollection.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGenome.cs" />
@@ -68,8 +70,12 @@
     <Compile Include="GeneticAlgorithms\Genome.cs" />
     <Compile Include="CPPNNEAT\CPPNNetwork.cs" />
     <Compile Include="CPPNNEAT\CPPNNetworkNeuron.cs" />
+    <Compile Include="NEATSpaces\GAList.cs" />
     <Compile Include="NEATSpaces\Map.cs" />
     <Compile Include="NEATSpaces\MapConstants.cs" />
+    <Compile Include="NEATSpaces\MapForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GeneticAlgorithms\BaseSpeciatedGA.cs" />
   </ItemGroup>
