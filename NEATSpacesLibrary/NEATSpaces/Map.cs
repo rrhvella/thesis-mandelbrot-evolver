@@ -10,7 +10,7 @@ using NEATSpacesLibrary.Extensions;
 
 namespace NEATSpacesLibrary.NEATSpaces
 {
-    public struct MapNode : IComparable
+    public struct MapNode 
     {
         public int X;
         public int Y;
@@ -74,18 +74,6 @@ namespace NEATSpacesLibrary.NEATSpaces
                 return Math.Abs(X) + Math.Abs(Y);
             }
         }
-
-        public int CompareTo(object obj)
-        {
-            if (this.Equals(obj))
-            {
-                return 0;
-            }
-            else
-            {
-                return 1;
-            }
-        }
     }
 
     public class Map
@@ -97,7 +85,6 @@ namespace NEATSpacesLibrary.NEATSpaces
         public static readonly Color CHECKPOINT_COLOUR = Color.FromArgb(255, 0, 255, 0);
 
         private bool[,] collisionMap;
-        private DelegateVertexAndEdgeListGraph<MapNode, SEquatableEdge<MapNode>> graph;
 
         public int Width
         {
@@ -143,45 +130,6 @@ namespace NEATSpacesLibrary.NEATSpaces
             this.mandatoryCheckPointLevel = mandatoryCheckPointLevel;
 
             this.collisionMap = new bool[width, height];
-            var vertexList = from x in Enumerable.Range(0, width)
-                             from y in Enumerable.Range(0, height)
-                             select new MapNode(x, y);
-
-            this.graph = new DelegateVertexAndEdgeListGraph<MapNode, SEquatableEdge<MapNode>>(
-                                        vertexList,
-                                        new TryFunc<MapNode, IEnumerable<SEquatableEdge<MapNode>>>(
-                                                delegate(MapNode currentNode, out IEnumerable<SEquatableEdge<MapNode>> adjacentEdges)
-                                                {
-                                                    var neighbors = new List<MapNode>();
-
-                                                    if (currentNode.X > 0)
-                                                    {
-                                                        neighbors.Add(new MapNode(currentNode.X - 1, currentNode.Y));
-                                                    }
-
-                                                    if(currentNode.X < width - 1) 
-                                                    {
-                                                        neighbors.Add(new MapNode(currentNode.X + 1, currentNode.Y));
-                                                    }
-
-                                                    if (currentNode.Y > 0)
-                                                    {
-                                                        neighbors.Add(new MapNode(currentNode.X, currentNode.Y - 1));
-                                                    }
-
-                                                    if(currentNode.Y < height - 1) 
-                                                    {
-                                                        neighbors.Add(new MapNode(currentNode.X, currentNode.Y + 1));
-                                                    }
-
-                                                    adjacentEdges = from adjacentNode in neighbors 
-                                                                        where !collisionMap[adjacentNode.X, adjacentNode.Y]
-                                                                        select new SEquatableEdge<MapNode>(currentNode, adjacentNode);
-
-                                                    return neighbors.Count > 0;
-                                                }
-                                            ));
-
         }
 
         public bool this[int x, int y]
@@ -208,71 +156,183 @@ namespace NEATSpacesLibrary.NEATSpaces
             }
         }
 
+        private class StartToEndRecord
+        {
+            public StartToEndRecord Parent;
+            public bool IsEnd;
+            public int Distance;
+
+            private int checkpointMembershipCount;
+
+            public int CheckpointMembershipCount
+            {
+                get
+                {
+                    return checkpointMembershipCount;
+                }
+            }
+
+            public bool[] CheckpointMembership;
+            public MapNode MapNode;
+
+            public StartToEndRecord(int numberOfCheckpoints)
+            {
+                CheckpointMembership = new bool[numberOfCheckpoints];
+            }        
+
+            public void UpdateDistance()
+            {
+                Distance = Parent.Distance + 1;
+            }
+
+            public void UpdateCheckpoints(StartToEndRecord pathParent)
+            {
+                checkpointMembershipCount = 0;
+
+                for (int i = 0; i < CheckpointMembership.Length; i++)
+                {
+                    if (pathParent.CheckpointMembership[i])
+                    {
+                        CheckpointMembership[i] = pathParent.CheckpointMembership[i];
+                    }
+
+                    if (CheckpointMembership[i])
+                    {
+                        checkpointMembershipCount++;
+                    }
+                }
+            }
+        }
+
         public double DistanceFromStartToEnd 
         {
             get 
             {
-                var distanceFromStartToEnd = DistanceBetween(StartNode, EndNode);
+                var numberOfCheckpoints = Checkpoints.Count();
 
-                if (distanceFromStartToEnd == null)
+                //Initialise map.
+                var record = new StartToEndRecord[Width, Height];
+
+                //Initialise critical point.
+                //Start record.
+                var startRecord = new StartToEndRecord(numberOfCheckpoints);
+                
+                startRecord.MapNode = StartNode;
+                startRecord.Distance = 0;
+                startRecord.Parent = new StartToEndRecord(numberOfCheckpoints);
+
+                record[StartNode.X, StartNode.Y] = startRecord;
+
+                //End record.
+                var endRecord = new StartToEndRecord(numberOfCheckpoints);
+
+                endRecord.MapNode = EndNode;
+                endRecord.IsEnd = true;
+
+                record[EndNode.X, EndNode.Y] = endRecord;
+
+                //Checkpoints.
+                var checkpointIndex = 0;
+
+                foreach (var checkpoint in Checkpoints)
                 {
-                    return 0;
+                    var checkpointRecord = new StartToEndRecord(numberOfCheckpoints);
+
+                    checkpointRecord.MapNode = checkpoint;
+                    record[checkpoint.X, checkpoint.Y] = checkpointRecord;
+
+                    checkpointRecord.CheckpointMembership[checkpointIndex++] = true;
                 }
 
-                var missLimit = Checkpoints.Count() - mandatoryCheckPointLevel;
-                var checkPointLevel = 0;
-                var checkpointsIterator = Checkpoints.GetEnumerator();
+                //Begin algorithm.
+                var openQueue = new Queue<StartToEndRecord>();
+                openQueue.Enqueue(startRecord);
 
-                while (missLimit >= 0 && checkPointLevel < mandatoryCheckPointLevel)
+                bool endFound = false;
+
+                while (openQueue.Count > 0)
                 {
-                    checkpointsIterator.MoveNext();
-                    var checkpoint = checkpointsIterator.Current;
+                    var current = openQueue.Dequeue();
 
-                    if (DistanceBetween(StartNode, checkpoint) != null && DistanceBetween(checkpoint, EndNode) != null)
+                    if (current.IsEnd)
                     {
-                        checkPointLevel++;
+                        endFound = true;
+                        break;
+                    }
+                    
+                    //Get children.
+                    var possibleCandidates = GetChildren(current.MapNode);
+
+                    foreach (var child in possibleCandidates)
+                    {
+                        StartToEndRecord childRecord = null;
+
+                        if (record[child.X, child.Y] == null)
+                        {
+                            childRecord = new StartToEndRecord(Checkpoints.Count());
+                            childRecord.MapNode = child;
+
+                            record[child.X, child.Y] = childRecord;
+                        }
+                        else
+                        {
+                            childRecord = record[child.X, child.Y];
+                        }
+
+                        if (childRecord.Parent == null || childRecord.Parent.Distance > current.Distance)
+                        {
+                            if (childRecord.Parent == null)
+                            {
+                                openQueue.Enqueue(childRecord);
+                            }
+
+                            childRecord.Parent = current;
+                            childRecord.UpdateDistance();
+                        }
+
+                        childRecord.UpdateCheckpoints(current);
+                    }
+                }
+
+                if (endFound)
+                {
+                    if (endRecord.CheckpointMembershipCount >= mandatoryCheckPointLevel)
+                    {
+                        return endRecord.Distance;
                     }
                     else
                     {
-                        missLimit--;
+                        return 0;
                     }
                 }
-
-                if (missLimit < 0)
+                else
                 {
-                    return 0;
+                    return -1;
                 }
-
-                return (double)distanceFromStartToEnd;
             }
         }
 
-        public double? DistanceBetween(MapNode from, MapNode to)
+        private IEnumerable<MapNode> GetChildren(MapNode mapNode)
         {
-            var algorithm = new AStarShortestPathAlgorithm<MapNode, SEquatableEdge<MapNode>>(this.graph, 
-                new Func<SEquatableEdge<MapNode>,double>(
-                    delegate(SEquatableEdge<MapNode> edge) 
-                    {
-                        return (edge.Target - edge.Source).Magnitude;
-                    }
-                ), new Func<MapNode,double>(
-                    delegate(MapNode currentNode) {
-                        return (to - currentNode).Magnitude;
-                    }
-                ));
-
-            algorithm.FinishVertex += new VertexAction<MapNode>(delegate(MapNode currentNode)
+            if (mapNode.X > 0 && !this[mapNode.X - 1, mapNode.Y])
             {
-                if (currentNode == to)
-                {
-                    algorithm.Abort();
-                }
-            });
+                yield return new MapNode(mapNode.X - 1, mapNode.Y);
+            }
 
-            algorithm.Compute(from);
+            if (mapNode.Y > 0 && !this[mapNode.X, mapNode.Y - 1])
+            {
+                yield return new MapNode(mapNode.X, mapNode.Y - 1);
+            }
 
-            return (algorithm.Distances.ContainsKey(to) && algorithm.Distances[to] < double.MaxValue) ? 
-                        (double?)algorithm.Distances[to] : null;
+            if (mapNode.X < Width - 1 && !this[mapNode.X + 1, mapNode.Y])
+            {
+                yield return new MapNode(mapNode.X + 1, mapNode.Y);
+            }
+
+            if (mapNode.Y < Height - 1&& !this[mapNode.X, mapNode.Y + 1])
+            {
+                yield return new MapNode(mapNode.X, mapNode.Y + 1);
+            }
         }
 
         public Bitmap Image

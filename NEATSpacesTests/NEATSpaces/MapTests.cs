@@ -132,7 +132,7 @@ namespace NEATSpacesTests.NEATSpaces
 
     public class MapTestData 
     {
-        //A normal map with a valid distance to end.
+        //A normal map with a valid distance to end. But without the valid number of checkpoints.
         public Map TestMap1;
 
         //A map with no path through a mandatory checkpoint.
@@ -140,6 +140,15 @@ namespace NEATSpacesTests.NEATSpaces
         
         //A map with no path to the end.
         public Map TestMap3;
+
+        //A map with a valid path from start to end.
+        public Map TestMap4;
+        
+        //A map with a valid path from start to end but with multiple checkpoints on the same path.
+        public Map TestMap5;
+
+        //A map with a valid path from start to end but with multiple checkpoints from divergent paths.
+        public Map TestMap6;
 
         public static MapTestData Instance
         {
@@ -154,29 +163,50 @@ namespace NEATSpacesTests.NEATSpaces
 
         private MapTestData()
         {
-            var defaultMapFactory = new Func<Map>(delegate() {
-                return new Map(3, 3, new MapNode(0, 0), new MapNode(2, 2), new[] { new MapNode(0, 2) }, 1);
-            });
+            var defaultCheckpoints = new[] { new MapNode(2, 0) };
+
+            var defaultMapFactory = new Func<MapNode[], Map>(
+                delegate(MapNode[] checkpoints) {
+                    return new Map(3, 3, new MapNode(0, 0), new MapNode(2, 2), checkpoints, checkpoints.Count());
+                }
+            );
 
             //Map 1.
-            TestMap1 = defaultMapFactory();
+            TestMap1 = defaultMapFactory(defaultCheckpoints);
 
             TestMap1[0, 1] = true;
             TestMap1[2, 1] = true;
 
             //Map 2.
-            TestMap2 = defaultMapFactory();
+            TestMap2 = defaultMapFactory(defaultCheckpoints);
 
-            TestMap2[0, 1] = true;
+            TestMap2[1, 0] = true;
             TestMap2[1, 1] = true;
-            TestMap2[1, 2] = true;
+            TestMap2[2, 1] = true;
 
             //Map 3.
-            TestMap3 = defaultMapFactory();
+            TestMap3 = defaultMapFactory(defaultCheckpoints);
 
             TestMap3[0, 1] = true;
             TestMap3[1, 1] = true;
             TestMap3[2, 1] = true;
+            
+            //Map 4.
+            TestMap4 = defaultMapFactory(defaultCheckpoints);
+
+            TestMap4[0, 1] = true;
+            TestMap4[1, 1] = true;
+
+            //Map 5.
+            TestMap5 = defaultMapFactory(new[] { new MapNode(1, 0), new MapNode(2, 1) });
+
+            TestMap5[0, 1] = true;
+            TestMap5[1, 1] = true;
+
+            //Map 6.
+            TestMap6 = defaultMapFactory(new[] { new MapNode(1, 0), new MapNode(0, 1) });
+
+            TestMap6[1, 1] = true;
         }
     }
 
@@ -201,9 +231,12 @@ namespace NEATSpacesTests.NEATSpaces
         {
             get
             {
-                yield return new TestCaseData(MapTestData.Instance.TestMap1).Returns(4);
+                yield return new TestCaseData(MapTestData.Instance.TestMap1).Returns(0);
                 yield return new TestCaseData(MapTestData.Instance.TestMap2).Returns(0);
-                yield return new TestCaseData(MapTestData.Instance.TestMap3).Returns(0);
+                yield return new TestCaseData(MapTestData.Instance.TestMap3).Returns(-1);
+                yield return new TestCaseData(MapTestData.Instance.TestMap4).Returns(4);
+                yield return new TestCaseData(MapTestData.Instance.TestMap5).Returns(4);
+                yield return new TestCaseData(MapTestData.Instance.TestMap6).Returns(4);
             }
         }
 
@@ -211,25 +244,6 @@ namespace NEATSpacesTests.NEATSpaces
         public double TestDistanceFromStartToEnd(Map map)
         {
             return map.DistanceFromStartToEnd;
-        }
-
-        public static IEnumerable<TestCaseData> DistanceBetweenTestCases {
-            get
-            {
-                yield return new TestCaseData(MapTestData.Instance.TestMap1, new MapNode(), new MapNode()).Returns(0);
-                yield return new TestCaseData(MapTestData.Instance.TestMap1, new MapNode(), new MapNode(1, 0)).Returns(1);
-                yield return new TestCaseData(MapTestData.Instance.TestMap1, new MapNode(), new MapNode(0, 1)).Returns(null);
-                yield return new TestCaseData(MapTestData.Instance.TestMap1, new MapNode(), new MapNode(-2, -2)).Returns(null);
-                yield return new TestCaseData(MapTestData.Instance.TestMap1, new MapNode(), new MapNode(2, 2)).Returns(4);
-                yield return new TestCaseData(MapTestData.Instance.TestMap2, new MapNode(), new MapNode(2, 2)).Returns(4);
-                yield return new TestCaseData(MapTestData.Instance.TestMap3, new MapNode(), new MapNode(2, 2)).Returns(null);
-            }
-        }
-
-        [TestCaseSource(typeof(MapTests), "DistanceBetweenTestCases")]
-        public double? TestDistanceBetween(Map map, MapNode from, MapNode to)
-        {
-            return map.DistanceBetween(from, to);
         }
 
         public static IEnumerable<TestCaseData> ImageTestCases 
