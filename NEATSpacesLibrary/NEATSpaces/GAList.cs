@@ -68,13 +68,13 @@ namespace NEATSpacesLibrary.NEATSpaces
 
         public void PerformIterations(int numberOfIterations)
         {
-            foreach (GAType ga in algorithmList)
+            Parallel.ForEach(algorithmList, delegate(GAType ga)
             {
                 foreach (var i in Enumerable.Range(0, numberOfIterations))
                 {
                     ga.SteadyStateIterate();
                 }
-            }
+            });
 
             bestCacheInvalidated = true;
         }

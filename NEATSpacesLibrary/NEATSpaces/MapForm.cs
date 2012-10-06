@@ -18,7 +18,7 @@ namespace NEATSpacesLibrary.NEATSpaces
         where GenomeType : Genome<GType, PType>, new()
     {
         private const int NUMBER_OF_GENERATIONS = 250;
-        private const int NUMBER_OF_RUNS = 1;
+        private const int NUMBER_OF_RUNS = 30;
 
         private const int MATING_EVENTS_PER_GENERATION = 2000;
         private const int TOTAL_TICKS = MATING_EVENTS_PER_GENERATION * NUMBER_OF_GENERATIONS;
