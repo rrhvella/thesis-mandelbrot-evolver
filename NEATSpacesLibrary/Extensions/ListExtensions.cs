@@ -7,18 +7,11 @@ namespace NEATSpacesLibrary.Extensions
 {
     public static class ListExtensions
     {
-        private static Random random;
-
-        static ListExtensions()
-        {
-            random = new Random();
-        }
-
         public static void Shuffle<T>(this IList<T> self)
         {
             foreach(var i in Enumerable.Range(0, self.Count - 1)) 
             {
-                var j = random.Next(i + 1, self.Count);
+                var j = MathExtensions.RandomInteger(i + 1, self.Count);
 
                 var temp = self[i];
                 self[i] = self[j];
@@ -28,7 +21,7 @@ namespace NEATSpacesLibrary.Extensions
 
         public static T RandomSingle<T>(this IList<T> self)
         {
-            return (self.Count == 0)? default(T) : self[random.Next(self.Count)];
+            return (self.Count == 0)? default(T) : self[MathExtensions.RandomInteger(self.Count)];
         }
 
         public static IEnumerable<T> RandomTake<T>(this IList<T> self, int size)
@@ -74,7 +67,7 @@ namespace NEATSpacesLibrary.Extensions
                 foreach(var spin in Enumerable.Range(0, count)) 
                 {
                     //Make selection.
-                    var selection = random.NextDouble() * total;
+                    var selection = MathExtensions.RandomNumber() * total;
 
                     var i = 0;
                     while (rouletteWheel[i].Item2 < selection)
