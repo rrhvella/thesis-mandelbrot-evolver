@@ -9,6 +9,7 @@ using NEATSpacesLibrary.GeneticAlgorithms;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Threading;
+using System.Diagnostics;
 
 namespace NEATSpacesLibrary.NEATSpaces
 {
@@ -20,9 +21,14 @@ namespace NEATSpacesLibrary.NEATSpaces
         private const int NUMBER_OF_RUNS = 1;
 
         private const int MATING_EVENTS_PER_GENERATION = 2000;
+        private const int TOTAL_TICKS = MATING_EVENTS_PER_GENERATION * NUMBER_OF_GENERATIONS;
+
         private const int NUMBER_OF_TICKS_TO_UPDATE_IMAGE = 100;
 
         private const int POPULATION_SIZE = 120;
+        private double MILLISECONDS_TO_HOUR_RATIO = 1.0 / (1000.0 * 60.0 * 60.0);
+
+        private Stopwatch stopWatch;
 
         private class InnerGAList: GAList<GAType, GenomeType, GType, PType>
         {
@@ -55,7 +61,6 @@ namespace NEATSpacesLibrary.NEATSpaces
             imageDisplay.SizeMode = PictureBoxSizeMode.StretchImage;
 
             Controls.Add(imageDisplay);
-
         }
 
         public void Run()
@@ -69,18 +74,28 @@ namespace NEATSpacesLibrary.NEATSpaces
         protected abstract Map TransformPhenome(PType phenome);
         protected abstract GAType CreateGAListGA(int populationSize, Func<GenomeType, double> scoreFunction);
 
-        private void PrintInfo(int i, int j, InnerGAList algorithmList)
+        private void PrintInfo(int generationIndex, int matingIndex, InnerGAList algorithmList)
         {
             Console.Clear();
-            Console.WriteLine(String.Format("{0} out of {1} generations completed.", i, NUMBER_OF_GENERATIONS));
-            Console.WriteLine(String.Format("{0} out of {1} mating events completed for current generation.", j, MATING_EVENTS_PER_GENERATION));
+
+            Console.WriteLine(String.Format("{0} out of {1} generations completed.", generationIndex, NUMBER_OF_GENERATIONS));
+            Console.WriteLine(String.Format("{0} out of {1} mating events completed for current generation.", matingIndex, MATING_EVENTS_PER_GENERATION));
+
             Console.Write("Average fitness: ");
             Console.WriteLine(algorithmList.AlgorithmList.Select(algorithm => algorithm.Best.Score).Average());
+
+            var elapsedTime = stopWatch.ElapsedMilliseconds;
+            var totalTime = elapsedTime *  TOTAL_TICKS / 
+                                            ((double)generationIndex * MATING_EVENTS_PER_GENERATION + matingIndex);
+
+            Console.WriteLine(String.Format("Estimated time remaining: {0:f2} hours", 
+                                        (totalTime - elapsedTime) * MILLISECONDS_TO_HOUR_RATIO));
         }
 
         private void RunGA()
         {
             Console.WriteLine("Initialising...");
+            stopWatch = Stopwatch.StartNew();
 
             var algorithmList = new InnerGAList(
                                         this,
@@ -92,28 +107,28 @@ namespace NEATSpacesLibrary.NEATSpaces
             algorithmList.Initialise();
             var data = new double[NUMBER_OF_RUNS, NUMBER_OF_GENERATIONS];
 
-            foreach (var i in Enumerable.Range(0, NUMBER_OF_GENERATIONS))
+            foreach (var generationIndex in Enumerable.Range(0, NUMBER_OF_GENERATIONS))
             {
-                var j = 0;
-                PrintInfo(i, j, algorithmList);
+                var matingEventIndex = 0;
+                PrintInfo(generationIndex, matingEventIndex, algorithmList);
 
-                while (j + NUMBER_OF_TICKS_TO_UPDATE_IMAGE < MATING_EVENTS_PER_GENERATION)
+                while (matingEventIndex + NUMBER_OF_TICKS_TO_UPDATE_IMAGE < MATING_EVENTS_PER_GENERATION)
                 {
                     algorithmList.PerformIterations(NUMBER_OF_TICKS_TO_UPDATE_IMAGE);
-                    j += NUMBER_OF_TICKS_TO_UPDATE_IMAGE;
+                    matingEventIndex += NUMBER_OF_TICKS_TO_UPDATE_IMAGE;
 
                     var map = TransformPhenome(algorithmList.Best.Best.Phenome);
 
-                    PrintInfo(i, j, algorithmList);
+                    PrintInfo(generationIndex, matingEventIndex, algorithmList);
 
                     imageDisplay.Image = map.Image;
                 }
 
-                algorithmList.PerformIterations(MATING_EVENTS_PER_GENERATION - j);
+                algorithmList.PerformIterations(MATING_EVENTS_PER_GENERATION - matingEventIndex);
 
                 foreach (var k in Enumerable.Range(0, NUMBER_OF_RUNS))
                 {
-                    data[k, i] = algorithmList.AlgorithmList[k].Best.Score;
+                    data[k, generationIndex] = algorithmList.AlgorithmList[k].Best.Score;
                 }
             }
 
