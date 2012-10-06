@@ -82,7 +82,7 @@ namespace NEATSpacesLibrary.NEATSpaces
             Console.WriteLine(String.Format("{0} out of {1} mating events completed for current generation.", matingIndex, MATING_EVENTS_PER_GENERATION));
 
             Console.Write("Average fitness: ");
-            Console.WriteLine(algorithmList.AlgorithmList.Select(algorithm => algorithm.Best.Score).Average());
+            Console.WriteLine(algorithmList.AlgorithmList.Select(algorithm => algorithm.AverageScore).Average());
 
             var elapsedTime = stopWatch.ElapsedMilliseconds;
             var totalTime = elapsedTime *  TOTAL_TICKS / 
@@ -128,7 +128,7 @@ namespace NEATSpacesLibrary.NEATSpaces
 
                 foreach (var k in Enumerable.Range(0, NUMBER_OF_RUNS))
                 {
-                    data[k, generationIndex] = algorithmList.AlgorithmList[k].Best.Score;
+                    data[k, generationIndex] = algorithmList.AlgorithmList[k].AverageScore;
                 }
             }
 

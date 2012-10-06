@@ -183,6 +183,14 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
         }
 
+        public double AverageScore
+        {
+            get
+            {
+                return Population.Select(genome => genome.Score).Average();
+            }
+        }
+
         public BaseGA(int populationSize, Func<GenomeType, double> scoreFunction)
         {
             this.populationSize = populationSize;
