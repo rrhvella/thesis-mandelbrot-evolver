@@ -7,9 +7,9 @@ namespace NEATSpacesLibrary.Extensions
 {
     public static class MathExtensions
     {
-        public static double EuclideanDistance(double[] input)
+        public static double EuclideanDistance(double x, double y)
         {
-            return Math.Sqrt((from x in input select x*x).Sum());
+            return Math.Sqrt(x*x + y*y);
         }
     }
 }

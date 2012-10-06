@@ -63,7 +63,7 @@ namespace NEATSpacesLibrary.NEATSpaces
         {
             get
             {
-                return MathExtensions.EuclideanDistance(new double[] { X, Y });
+                return MathExtensions.EuclideanDistance(X, Y);
             }
         }
 
