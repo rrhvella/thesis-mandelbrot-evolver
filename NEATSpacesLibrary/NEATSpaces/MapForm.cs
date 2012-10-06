@@ -69,13 +69,13 @@ namespace NEATSpacesLibrary.NEATSpaces
         protected abstract Map TransformPhenome(PType phenome);
         protected abstract GAType CreateGAListGA(int populationSize, Func<GenomeType, double> scoreFunction);
 
-        private void PrintInfo(int i, int j, double bestScore)
+        private void PrintInfo(int i, int j, InnerGAList algorithmList)
         {
             Console.Clear();
             Console.WriteLine(String.Format("{0} out of {1} generations completed.", i, NUMBER_OF_GENERATIONS));
             Console.WriteLine(String.Format("{0} out of {1} mating events completed for current generation.", j, MATING_EVENTS_PER_GENERATION));
-            Console.Write("Best score: ");
-            Console.WriteLine(bestScore);
+            Console.Write("Average fitness: ");
+            Console.WriteLine(algorithmList.AlgorithmList.Select(algorithm => algorithm.Best.Score).Average());
         }
 
         private void RunGA()
@@ -95,7 +95,7 @@ namespace NEATSpacesLibrary.NEATSpaces
             foreach (var i in Enumerable.Range(0, NUMBER_OF_GENERATIONS))
             {
                 var j = 0;
-                PrintInfo(i, j, algorithmList.Best.Best.Score);
+                PrintInfo(i, j, algorithmList);
 
                 while (j + NUMBER_OF_TICKS_TO_UPDATE_IMAGE < MATING_EVENTS_PER_GENERATION)
                 {
@@ -104,7 +104,7 @@ namespace NEATSpacesLibrary.NEATSpaces
 
                     var map = TransformPhenome(algorithmList.Best.Best.Phenome);
 
-                    PrintInfo(i, j, algorithmList.Best.Best.Score);
+                    PrintInfo(i, j, algorithmList);
 
                     imageDisplay.Image = map.Image;
                 }
@@ -117,7 +117,7 @@ namespace NEATSpacesLibrary.NEATSpaces
                 }
             }
 
-            PrintInfo(NUMBER_OF_GENERATIONS, MATING_EVENTS_PER_GENERATION, algorithmList.Best.Best.Score);
+            PrintInfo(NUMBER_OF_GENERATIONS, MATING_EVENTS_PER_GENERATION, algorithmList);
 
             var finalMap = TransformPhenome(algorithmList.Best.Best.Phenome);
             finalMap.Image.Save("output.png", ImageFormat.Png);
