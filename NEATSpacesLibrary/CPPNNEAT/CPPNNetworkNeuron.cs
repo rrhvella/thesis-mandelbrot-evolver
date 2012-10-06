@@ -132,8 +132,12 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
                 isCalculating = true;
 
-                var net = (from synapse in synapsis
-                           select synapse.Neuron.Activation * synapse.Weight).Sum();
+                var net = 0.0;
+
+                foreach (var synapse in synapsis)
+                {
+                    net += synapse.Weight * synapse.Neuron.Activation;
+                }
 
                 var activation = activationFunction(net);
 
