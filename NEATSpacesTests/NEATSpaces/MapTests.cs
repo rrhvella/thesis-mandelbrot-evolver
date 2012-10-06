@@ -150,6 +150,9 @@ namespace NEATSpacesTests.NEATSpaces
         //A map with a valid path from start to end but with multiple checkpoints from divergent paths.
         public Map TestMap6;
 
+        //A map with a valid path from start to end but with a long path present with a short path.
+        public Map TestMap7;
+
         public static MapTestData Instance
         {
             get;
@@ -207,6 +210,11 @@ namespace NEATSpacesTests.NEATSpaces
             TestMap6 = defaultMapFactory(new[] { new MapNode(1, 0), new MapNode(0, 1) });
 
             TestMap6[1, 1] = true;
+
+            //Map 7.
+            TestMap7 = new Map(3, 3, new MapNode(0, 0), new MapNode(2, 0), new[] { new MapNode(1, 0), new MapNode(0, 1) }, 1);
+            TestMap7[1, 1] = true;
+            
         }
     }
 
@@ -237,6 +245,7 @@ namespace NEATSpacesTests.NEATSpaces
                 yield return new TestCaseData(MapTestData.Instance.TestMap4).Returns(4);
                 yield return new TestCaseData(MapTestData.Instance.TestMap5).Returns(4);
                 yield return new TestCaseData(MapTestData.Instance.TestMap6).Returns(4);
+                yield return new TestCaseData(MapTestData.Instance.TestMap7).Returns(2);
             }
         }
 
