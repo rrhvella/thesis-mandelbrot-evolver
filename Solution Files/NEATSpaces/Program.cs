@@ -51,7 +51,7 @@ namespace NEATSpaces
         protected override Map TransformPhenome(CPPNNetwork phenome)
         {
             var result = MapConstants.CreateMap();
-            var maxDistance = MathExtensions.EuclideanDistance(new double[] { result.Width, result.Height });
+            var maxDistance = MathExtensions.EuclideanDistance(result.Width, result.Height);
 
             foreach (var x in Enumerable.Range(0, MapConstants.MAP_SIZE))
             {
