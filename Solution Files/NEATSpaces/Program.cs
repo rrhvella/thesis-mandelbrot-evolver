@@ -11,27 +11,28 @@ namespace NEATSpaces
 {
     class Program: MapForm<CPPNNEATGA, CPPNNEATGenome, CPPNNEATGeneCollection, CPPNNetwork>
     {
-        private static double COMPATIBILITY_DISTANCE_THRESHOLD = 1;
+        private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
 
         private static int NO_INNOVATION_THRESHOLD = 1500;
 
-        private static double WEIGHT_MUTATION_RATE = 1;
-        private static double NEW_NEURON_RATE = 0.05;
+        private static double WEIGHT_MUTATION_RATE = 0.8;
+        private static double NEW_NEURON_RATE = 0.03;
         private static double NEW_LINK_RATE = 0.05;
 
         private static double WEIGHT_PERTUBATION_RATE = 0.9;
 
         private static double DISABLE_GENE_RATE = 0.75;
 
-        private static double MAX_PERTURBATION = 2.5;
-        private static double MAX_WEIGHT = 5;
+        private static double MAX_PERTURBATION = 1.25;
+        private static double MAX_WEIGHT = 2.5;
 
-        private const double EXCESS_GENES_WEIGHT = 1;
-        private const double DISJOINT_GENES_WEIGHT = 1;
-        private const double MATCHING_GENES_WEIGHT = 1;
-        private const double FUNCTION_DIFFERENCE_WEIGHT = 1;
+        private const double EXCESS_GENES_WEIGHT = 1.0;
+        private const double DISJOINT_GENES_WEIGHT = 1.0;
+        private const double MATCHING_GENES_WEIGHT = 0.4;
+        private const double FUNCTION_DIFFERENCE_WEIGHT = 1.0;
 
         private const int NUMBER_OF_INPUTS = 2;
+
         private static readonly List<Func<double, double>> CANONICAL_FUNCTION_LIST = new List<Func<double, double>>
         {
             CPPNActivationFunctions.TanHActivationFunction,
