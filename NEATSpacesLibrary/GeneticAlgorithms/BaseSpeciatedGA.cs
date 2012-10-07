@@ -47,7 +47,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
         }
 
-        public new void SteadyStateIterate()
+        public override void SteadyStateIterate()
         {
             if (Failed)
             {
@@ -55,6 +55,16 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
 
             base.SteadyStateIterate();
+        }
+
+        public override void GenerationalIterate()
+        {
+            if (Failed)
+            {
+                return;
+            }
+
+            base.GenerationalIterate();
         }
 
         private void BaseSpeciatedGA_IterationComplete(object sender, EventArgs e)

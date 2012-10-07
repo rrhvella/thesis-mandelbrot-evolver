@@ -240,7 +240,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
         }
 
-        public void GenerationalIterate()
+        public virtual void GenerationalIterate()
         {
 
             if (IterationBegin != null)
@@ -293,7 +293,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         protected abstract GAGenerationalSelectionResult<GenomeType, GType, PType> PerformGenerationalSelection();
 
-        public void SteadyStateIterate()
+        public virtual void SteadyStateIterate()
         {
             var selection = PerformSteadyStateSelection();
             previousChildren = selection.Parent.Crossover(selection.Partner);
