@@ -147,15 +147,11 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public event EventHandler<EventArgs> IterationComplete;
 
         private int populationSize;
-        private bool populationOrderCacheInvalidated;
         private List<GenomeType> population;
         public IList<GenomeType> Population
         {
             get
             {
-            	UpdateGenomes();
-           		population.Sort(new Comparison<GenomeType>((first, second) => second.Score.CompareTo(first.Score)));
-
                 return population.AsReadOnly();
             }
             private set
@@ -175,19 +171,39 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         private IDebugabble previousSelection;
         private IList<Genome<GType, PType>> previousChildren;
 
+        private GenomeType best;
+        private bool bestCacheInvalidated;
         public GenomeType Best
         {
             get
             {
-                return Population[0];
+                if (bestCacheInvalidated)
+                {
+                	UpdateGenomes();
+                    best = Population.MaxBy(genome => genome.Score);
+
+                    bestCacheInvalidated = false;
+                }
+
+                return best;
             }
         }
 
+        private double average;
+        private bool averageCacheInvalidated;
         public double AverageScore
         {
             get
             {
-                return Population.Select(genome => genome.Score).Average();
+                if (averageCacheInvalidated)
+                {
+                	UpdateGenomes();
+                    average =  Population.Select(genome => genome.Score).Average();
+
+                    averageCacheInvalidated = false;
+                }
+
+                return average; 
             }
         }
 
@@ -309,7 +325,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         public void Update()
         {
-            populationOrderCacheInvalidated = true;
+            bestCacheInvalidated = true;
+            averageCacheInvalidated = true;
         }
 
         protected abstract GASteadyStateSelectionResult<GenomeType, GType, PType> PerformSteadyStateSelection();
@@ -358,6 +375,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             {
                 genome.UpdatePhenome();
                 genome.Score = scoreFunction(genome);
+
+                Update();
             }
         }
     }
