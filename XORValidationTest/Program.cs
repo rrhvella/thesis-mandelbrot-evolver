@@ -1,5 +1,5 @@
 ﻿//#define DEBUG_GA
-//#define GENERATIONAL_GA
+#define GENERATIONAL_GA
 
 using System;
 using System.Collections.Generic;
@@ -49,10 +49,10 @@ namespace XORValidationTest
 
         private static double WEIGHT_PERTUBATION_RATE = 0.9;
 
-        private static double DISABLE_GENE_RATE = 0.75;
+        private static double ENABLE_GENE_RATE = 0.75;
 
-        private static double MAX_PERTURBATION = 10;
-        private static double MAX_WEIGHT = 20;
+        private static double MAX_PERTURBATION = 2.5;
+        private static double MAX_WEIGHT = 5;
 
         private const double EXCESS_GENES_WEIGHT = 1.0;
         private const double DISJOINT_GENES_WEIGHT = 1.0;
@@ -101,7 +101,7 @@ namespace XORValidationTest
                 testGA.NewNeuronRate = NEW_NEURON_RATE;
                 testGA.NewLinkRate = NEW_LINK_RATE;
                 
-                testGA.DisableGeneRate = DISABLE_GENE_RATE;
+                testGA.EnableGeneRate = ENABLE_GENE_RATE;
 
                 testGA.WeightPertubationRate = WEIGHT_PERTUBATION_RATE;
                 testGA.MaxPerturbation = MAX_PERTURBATION;

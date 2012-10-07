@@ -210,9 +210,22 @@ namespace NEATSpacesLibrary.CPPNNEAT
             Parent.Update();
         }
 
+        private void EnableLinkGene(CPPNNEATLinkGene selectedLink)
+        {
+            selectedLink.Enabled = true;
+            possibleConnections.Remove(Tuple.Create(selectedLink.From, selectedLink.To));
+
+            Parent.Update();
+        }
+
         public void DisableLinkGene(int innovationNumber)
         {
             DisableLinkGene(linkGeneMap[innovationNumber]);
+        }
+
+        public void EnableLinkGene(int innovationNumber)
+        {
+            EnableLinkGene(linkGeneMap[innovationNumber]);
         }
 
         public void Update()

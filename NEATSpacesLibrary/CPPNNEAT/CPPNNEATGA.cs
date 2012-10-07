@@ -82,7 +82,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             set;
         }
 
-        public double DisableGeneRate
+        public double EnableGeneRate
         {
             get;
             set;

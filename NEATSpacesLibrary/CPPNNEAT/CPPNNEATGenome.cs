@@ -124,10 +124,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 var newGene = geneToCopy.Copy();
                 GeneCollection.TryAddLinkGene(newGene);
 
-                if (geneToCopy.Enabled && (!match.FirstCollection.Enabled || !match.SecondCollection.Enabled) &&
-                    Parent.Random.NextDouble() <= (Parent as CPPNNEATGA).DisableGeneRate)
+                if (!geneToCopy.Enabled && Parent.Random.NextDouble() <= (Parent as CPPNNEATGA).EnableGeneRate)
                 {
-                    GeneCollection.DisableLinkGene(newGene.InnovationNumber);
+                    GeneCollection.EnableLinkGene(newGene.InnovationNumber);
                 }
             }
 

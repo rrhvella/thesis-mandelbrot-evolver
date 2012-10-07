@@ -91,7 +91,7 @@ namespace NEATSpaces
             result.NewNeuronRate = NEW_NEURON_RATE;
             result.NewLinkRate = NEW_LINK_RATE;
             
-            result.DisableGeneRate = DISABLE_GENE_RATE;
+            result.EnableGeneRate = DISABLE_GENE_RATE;
 
             result.WeightPertubationRate = WEIGHT_PERTUBATION_RATE;
             result.MaxPerturbation = MAX_PERTURBATION;
