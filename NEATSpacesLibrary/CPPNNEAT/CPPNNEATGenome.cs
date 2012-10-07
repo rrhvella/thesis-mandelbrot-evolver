@@ -231,22 +231,24 @@ namespace NEATSpacesLibrary.CPPNNEAT
                  GeneCollection.TryCreateLinkGene();
             }
 
-            if (parent.Random.NextDouble() <= parent.NewNeuronRate)
+            else if (parent.Random.NextDouble() <= parent.NewNeuronRate)
             {
-                 GeneCollection.TryCreateNeuronGene();
+                GeneCollection.TryCreateNeuronGene();
             }
-
-            foreach (var link in GeneCollection.LinkGenes)
+            else
             {
-                if (parent.Random.NextDouble() <= parent.WeightMutationRate)
+                foreach (var link in GeneCollection.LinkGenes)
                 {
-                    if (Parent.Random.NextDouble() <= parent.WeightPertubationRate)
+                    if (parent.Random.NextDouble() <= parent.WeightMutationRate)
                     {
-                        link.Weight += (Parent.Random.NextDouble() - 0.5) * 2 * parent.MaxPerturbation;
-                    }
-                    else
-                    {
-                        link.Weight = parent.GetRandomWeight();
+                        if (Parent.Random.NextDouble() <= parent.WeightPertubationRate)
+                        {
+                            link.Weight += (Parent.Random.NextDouble() - 0.5) * 2 * parent.MaxPerturbation;
+                        }
+                        else
+                        {
+                            link.Weight = parent.GetRandomWeight();
+                        }
                     }
                 }
             }
