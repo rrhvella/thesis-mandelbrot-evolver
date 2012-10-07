@@ -84,7 +84,7 @@ namespace NEATSpacesLibrary.NEATSpaces
         public static readonly Color END_COLOUR = Color.FromArgb(255, 0, 0, 255);
         public static readonly Color CHECKPOINT_COLOUR = Color.FromArgb(255, 0, 255, 0);
 
-        private bool[,] collisionMap;
+        private bool[] collisionMap;
 
         public int Width
         {
@@ -129,18 +129,18 @@ namespace NEATSpacesLibrary.NEATSpaces
             this.Checkpoints = checkpoints;
             this.mandatoryCheckPointLevel = mandatoryCheckPointLevel;
 
-            this.collisionMap = new bool[width, height];
+            this.collisionMap = new bool[width * height];
         }
 
         public bool this[int x, int y]
         {
             get
             {
-                return collisionMap[x, y];
+                return collisionMap[x + y * Width];
             }
             set
             {
-                collisionMap[x, y] = value;
+                collisionMap[x + y * Width] = value;
             }
         }
 
@@ -148,11 +148,11 @@ namespace NEATSpacesLibrary.NEATSpaces
         {
             get
             {
-                return collisionMap[i % Width, i / Width];
+                return collisionMap[i];
             }
             set
             {
-                collisionMap[i % Width, i / Width] = value;
+                collisionMap[i] = value;
             }
         }
 
@@ -345,7 +345,7 @@ namespace NEATSpacesLibrary.NEATSpaces
                 {
                     foreach(var y in Enumerable.Range(0, Height)) 
                     {
-                        result.SetPixel(x, y, (collisionMap[x, y]) ? WALL_COLOUR : TILE_COLOUR);
+                        result.SetPixel(x, y, (this[x, y]) ? WALL_COLOUR : TILE_COLOUR);
                     }
                 }
 
@@ -372,7 +372,7 @@ namespace NEATSpacesLibrary.NEATSpaces
         public Map Copy()
         {
             var result = new Map(Width, Height, StartNode, EndNode, Checkpoints, mandatoryCheckPointLevel);
-            result.collisionMap = (bool[,])collisionMap.Clone();
+            result.collisionMap = (bool[])collisionMap.Clone();
 
             return result;
         }

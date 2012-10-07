@@ -21,14 +21,11 @@ namespace GAValidationTest
 
         public override void Initialise()
         {
-            foreach (var x in Enumerable.Range(0, MapConstants.MAP_SIZE))
+            foreach (var i in Enumerable.Range(0, MapConstants.MAP_SIZE * MapConstants.MAP_SIZE))
             {
-                foreach (var y in Enumerable.Range(0, MapConstants.MAP_SIZE))
+                if (Parent.Random.NextDouble() <= FILL)
                 {
-                    if (Parent.Random.NextDouble() <= FILL)
-                    {
-                        GeneCollection[x, y] = true;
-                    }
+                    GeneCollection[i] = true;
                 }
             }
         }
