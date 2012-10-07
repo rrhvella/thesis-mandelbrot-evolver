@@ -63,6 +63,7 @@ namespace XORValidationTest
 
         private const string DEBUG_FILE = "debug.txt";
         private const double CROSSOVER_RATE = 0.75;
+        private const double MATE_BY_AVERAGING_RATE = 0.4;
         
         public static void Main(string[] args)
         {
@@ -102,6 +103,7 @@ namespace XORValidationTest
                 testGA.NewLinkRate = NEW_LINK_RATE;
                 
                 testGA.EnableGeneRate = ENABLE_GENE_RATE;
+                testGA.MateByAveragingRate = MATE_BY_AVERAGING_RATE;
 
                 testGA.WeightPertubationRate = WEIGHT_PERTUBATION_RATE;
                 testGA.MaxPerturbation = MAX_PERTURBATION;

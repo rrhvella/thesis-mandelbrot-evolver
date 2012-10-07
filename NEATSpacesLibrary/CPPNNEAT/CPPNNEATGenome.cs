@@ -98,6 +98,8 @@ namespace NEATSpacesLibrary.CPPNNEAT
         public CPPNNEATGenome(CPPNNEATGenome parent, CPPNNEATGenome partner): this()
         {
             this.Parent = parent.Parent;
+
+            var parentGA = Parent as CPPNNEATGA;
             var differences = new DifferenceAnalysis(parent.GeneCollection, partner.GeneCollection);
 
             var disjointAndExcessSource = differences.FirstCollection;
@@ -108,23 +110,31 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
             else if (partner.Score == parent.Score)
             {
-                disjointAndExcessSource = (Parent.Random.NextDouble() <= 0.5) ? differences.FirstCollection : 
+                disjointAndExcessSource = (parentGA.Random.NextDouble() <= 0.5) ? differences.FirstCollection : 
                                                                     differences.SecondCollection;
+            }
+
+            Func<CPPNNEATLinkGene, CPPNNEATLinkGene, double> weightSelector = null;
+
+            if (parentGA.Random.NextDouble() <= parentGA.MateByAveragingRate)
+            {
+                weightSelector = (first, second) => (first.Weight + second.Weight) / 2;
+            }
+            else
+            {
+                weightSelector = (first, second) => (parentGA.Random.NextDouble() <= 0.5)? first.Weight : second.Weight;
             }
 
             foreach (var match in differences.Matches)
             {
                 var geneToCopy = match.FirstCollection;
 
-                if (Parent.Random.NextDouble() <= 0.5)
-                {
-                    geneToCopy = match.SecondCollection;
-                }
-
                 var newGene = geneToCopy.Copy();
+                newGene.Weight = weightSelector(match.FirstCollection, match.SecondCollection);
+
                 GeneCollection.TryAddLinkGene(newGene);
 
-                if (!geneToCopy.Enabled && Parent.Random.NextDouble() <= (Parent as CPPNNEATGA).EnableGeneRate)
+                if (!newGene.Enabled && Parent.Random.NextDouble() <= parentGA.EnableGeneRate)
                 {
                     GeneCollection.EnableLinkGene(newGene.InnovationNumber);
                 }

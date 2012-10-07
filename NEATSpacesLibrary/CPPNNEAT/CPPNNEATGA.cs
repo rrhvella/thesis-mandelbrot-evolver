@@ -94,6 +94,13 @@ namespace NEATSpacesLibrary.CPPNNEAT
             set;
         }
 
+        public double MateByAveragingRate
+        {
+            get;
+            set;
+        }
+
+
         public double MaxPerturbation
         {
             get;
@@ -129,7 +136,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             get;
             set;
         }
-
+        
         private List<CPPNNEATNeuronGene> defaultNeuronGenes;
         public IList<CPPNNEATNeuronGene> DefaultNeuronGenes
         {
