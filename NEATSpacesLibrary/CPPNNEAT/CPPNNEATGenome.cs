@@ -181,20 +181,19 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         public Dictionary<Func<double, double>, int> GetFunctionAnalysis()
         {
-            var result = (Parent as CPPNNEATGA).CanonicalFunctionList.ToDictionary(elem => elem, elem => 0);
+            var result = new Dictionary<Func<double, double>, int>();
 
-            var groupedActivationFunctions = (from neuronGene in GeneCollection.NeuronGenes
-                                             where neuronGene.ActivationFunction != null
-                                             group neuronGene by neuronGene.ActivationFunction into neuronsByActivationFunction
-                                             select new
-                                             {
-                                                 ActivationFunction = neuronsByActivationFunction.Key,
-                                                 Count = neuronsByActivationFunction.Count()
-                                             });
-
-            foreach (var groupedActivationFunction in groupedActivationFunctions)
+            foreach (var function in (Parent as CPPNNEATGA).CanonicalFunctionList)
             {
-                result[groupedActivationFunction.ActivationFunction] = groupedActivationFunction.Count;
+                result[function] = 0;
+            }
+
+            foreach (var neuronGene in GeneCollection.NeuronGenes)
+            {
+                if (neuronGene.ActivationFunction != null)
+                {
+                    result[neuronGene.ActivationFunction] += 1;
+                }
             }
 
             return result;
