@@ -227,8 +227,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
                     if(Random.NextDouble() <= InterSpeciesMatingRate) 
                     {
-                        var populationBreeders = SelectBreeders(Population.OrderByDescending(genome => genome.AdjustedScore));
-                        partner = populationBreeders.RandomSingle();
+                        partner = Population.RandomSingle();
                     } 
                     else 
                     { 
