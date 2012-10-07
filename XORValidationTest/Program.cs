@@ -28,7 +28,6 @@ namespace XORValidationTest
         private static int MATING_LIMIT = -1;
 #endif
 
-        private static double OPTIMAL_SCORE = 16;
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
         
 #if GENERATIONAL_GA 
@@ -57,9 +56,6 @@ namespace XORValidationTest
         private const double EXCESS_GENES_WEIGHT = 1.0;
         private const double DISJOINT_GENES_WEIGHT = 1.0;
         private const double MATCHING_GENES_WEIGHT = 0.4;
-
-        private const int OUTPUT_ACTIVATION_PRECISION = 2;
-        private const int DEBUG_PRECISION = 8;
 
         private const string DEBUG_FILE = "debug.txt";
         private const double CROSSOVER_RATE = 0.75;
@@ -123,7 +119,7 @@ namespace XORValidationTest
 
                 var matingEvents = 0;
 
-                while (Math.Round(testGA.Best.Score, OUTPUT_ACTIVATION_PRECISION) < OPTIMAL_SCORE && !testGA.Failed)
+                while (!testGA.Failed && !OptimalNetworkFound(testGA.Best))
                 {
 #if GENERATIONAL_GA
                     testGA.GenerationalIterate();
@@ -214,14 +210,26 @@ namespace XORValidationTest
 
             debugFile.Close();
         }
+
+        private static bool OptimalNetworkFound(CPPNNEATGenome genome)
+        {
+            var truthTable = GetTruthTable(genome);
+
+            return truthTable.Zip(CORRECT_RESULT, (a, t) => Math.Round(a) == t).All(result => result);
+        }
         
         public static double FitnessFunction(CPPNNEATGenome genome) {
-            var result = (from num in Enumerable.Range(0, 4) 
-                    select genome.Phenome.GetActivation(new double[] {num / 2, num % 2})).ToArray();
+            var truthTable = GetTruthTable(genome);
 
-            return Math.Pow(4 - result.Zip(CORRECT_RESULT, 
+            return Math.Pow(4 - truthTable.Zip(CORRECT_RESULT, 
                                         (a, t) => Math.Abs(t - a))
                                       .Sum(), 2);
+        }
+
+        private static double[] GetTruthTable(CPPNNEATGenome genome)
+        {
+            return (from num in Enumerable.Range(0, 4)
+                    select genome.Phenome.GetActivation(new double[] { num / 2, num % 2 })).ToArray();
         }
     }
 }
