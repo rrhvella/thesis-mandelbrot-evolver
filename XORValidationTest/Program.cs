@@ -35,7 +35,7 @@ namespace XORValidationTest
         private static double INTERSPECIES_MATING_RATE = 0.001;
         private static int MATING_EVENTS_PER_GENERATION = 1;
         private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
-        private static double ELITISM_RATE = 0.33;
+        private static double ELITISM_RATE = 0.2;
 #else
         private static int MATING_EVENTS_PER_GENERATION = 75;
         private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
