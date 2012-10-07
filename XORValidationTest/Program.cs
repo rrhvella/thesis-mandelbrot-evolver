@@ -49,7 +49,7 @@ namespace XORValidationTest
 
         private static double WEIGHT_PERTUBATION_RATE = 0.9;
 
-        private static double ENABLE_GENE_RATE = 0.75;
+        private static double DISABLE_GENE_RATE = 0.75;
 
         private static double MAX_PERTURBATION = 2.5;
         private static double MAX_WEIGHT = 5;
@@ -102,7 +102,7 @@ namespace XORValidationTest
                 testGA.NewNeuronRate = NEW_NEURON_RATE;
                 testGA.NewLinkRate = NEW_LINK_RATE;
                 
-                testGA.EnableGeneRate = ENABLE_GENE_RATE;
+                testGA.DisableGeneRate = DISABLE_GENE_RATE;
                 testGA.MateByAveragingRate = MATE_BY_AVERAGING_RATE;
 
                 testGA.WeightPertubationRate = WEIGHT_PERTUBATION_RATE;

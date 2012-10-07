@@ -130,13 +130,15 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 var geneToCopy = match.FirstCollection;
 
                 var newGene = geneToCopy.Copy();
+                newGene.Enabled = true;
                 newGene.Weight = weightSelector(match.FirstCollection, match.SecondCollection);
 
                 GeneCollection.TryAddLinkGene(newGene);
 
-                if (!newGene.Enabled && Parent.Random.NextDouble() <= parentGA.EnableGeneRate)
+                if ((!match.FirstCollection.Enabled || !match.SecondCollection.Enabled) &&
+                    Parent.Random.NextDouble() <= parentGA.DisableGeneRate)
                 {
-                    GeneCollection.EnableLinkGene(newGene.InnovationNumber);
+                    GeneCollection.DisableLinkGene(newGene.InnovationNumber);
                 }
             }
 
