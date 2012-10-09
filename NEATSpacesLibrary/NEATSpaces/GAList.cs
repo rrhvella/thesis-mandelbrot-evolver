@@ -43,6 +43,20 @@ namespace NEATSpacesLibrary.NEATSpaces
             }
         }
 
+        public int NumberOfFailures
+        {
+            get;
+            private set;
+        }
+
+        public bool Failed
+        {
+            get 
+            {
+                return numberOfReplicants == NumberOfFailures;
+            }
+        }
+
         public GAList(int numberOfReplicants, int populationSize, Func<GenomeType, double> scoreFunction)
         {
             this.numberOfReplicants = numberOfReplicants;
@@ -68,10 +82,18 @@ namespace NEATSpacesLibrary.NEATSpaces
 
         public void PerformIterations(int numberOfIterations)
         {
-            Parallel.ForEach(algorithmList, delegate(GAType ga)
+            var succesfulAlgorithms = algorithmList.Where(algo => !algo.Failed).ToArray();
+            NumberOfFailures = numberOfReplicants - succesfulAlgorithms.Length;
+
+            Parallel.ForEach(succesfulAlgorithms, delegate(GAType ga)
             {
                 foreach (var i in Enumerable.Range(0, numberOfIterations))
                 {
+                    if (ga.Failed)
+                    {
+                        break;
+                    }
+
                     ga.SteadyStateIterate();
                 }
             });

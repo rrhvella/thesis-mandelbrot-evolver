@@ -78,11 +78,20 @@ namespace NEATSpacesLibrary.NEATSpaces
         {
             Console.Clear();
 
+            if (algorithmList.Failed)
+            {
+                Console.WriteLine("The algorithm has failed completely, please change the parameters and try again.");
+                return;
+            }
+
             Console.WriteLine(String.Format("{0} out of {1} generations completed.", generationIndex, NUMBER_OF_GENERATIONS));
             Console.WriteLine(String.Format("{0} out of {1} mating events completed for current generation.", matingIndex, MATING_EVENTS_PER_GENERATION));
 
             Console.Write("Average fitness: ");
             Console.WriteLine(algorithmList.AlgorithmList.Select(algorithm => algorithm.AverageScore).Average());
+
+            Console.Write("Number of failures: ");
+            Console.WriteLine(algorithmList.NumberOfFailures);
 
             var elapsedTime = stopWatch.ElapsedMilliseconds;
             var totalTime = elapsedTime *  TOTAL_TICKS / 
@@ -117,6 +126,11 @@ namespace NEATSpacesLibrary.NEATSpaces
                     algorithmList.PerformIterations(NUMBER_OF_TICKS_TO_UPDATE_IMAGE);
                     matingEventIndex += NUMBER_OF_TICKS_TO_UPDATE_IMAGE;
 
+                    if (algorithmList.Failed)
+                    {
+                        break;
+                    }
+
                     var map = TransformPhenome(algorithmList.Best.Best.Phenome);
 
                     PrintInfo(generationIndex, matingEventIndex, algorithmList);
@@ -125,6 +139,11 @@ namespace NEATSpacesLibrary.NEATSpaces
                 }
 
                 algorithmList.PerformIterations(MATING_EVENTS_PER_GENERATION - matingEventIndex);
+
+                if (algorithmList.Failed)
+                {
+                    break;
+                }
 
                 foreach (var k in Enumerable.Range(0, NUMBER_OF_RUNS))
                 {

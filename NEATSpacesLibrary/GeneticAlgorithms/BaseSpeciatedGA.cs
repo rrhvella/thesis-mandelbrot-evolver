@@ -20,11 +20,11 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         private List<Species<GType, PType>> populationSpecies;
         private int SPECIES_CHAMPION_THRESHOLD = 5;
 
-        public bool Failed
+        public override bool Failed
         {
             get
             {
-                return !populationSpecies.Any(species => species.CanBreed);
+                return !populationSpecies.Any(species => species.CanBreed && species.AverageFitness > 0);
             }
         }
 
@@ -45,26 +45,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             {
                 species.Clear();
             }
-        }
-
-        public override void SteadyStateIterate()
-        {
-            if (Failed)
-            {
-                return;
-            }
-
-            base.SteadyStateIterate();
-        }
-
-        public override void GenerationalIterate()
-        {
-            if (Failed)
-            {
-                return;
-            }
-
-            base.GenerationalIterate();
         }
 
         private void BaseSpeciatedGA_IterationComplete(object sender, EventArgs e)

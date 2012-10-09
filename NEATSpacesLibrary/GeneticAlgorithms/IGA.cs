@@ -7,6 +7,11 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 {
     public interface IGA : IDebugabble
     {
+        bool Failed 
+        { 
+            get; 
+        }
+
         Random Random
         {
             get;

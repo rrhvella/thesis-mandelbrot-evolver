@@ -160,6 +160,14 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
         }
 
+        public virtual bool Failed
+        {
+            get 
+            { 
+                return false;  
+            }
+        }
+
         public Random Random
         {
             get;
@@ -195,6 +203,11 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         {
             get
             {
+                if (Failed)
+                {
+                    return 0;
+                }
+
                 if (averageCacheInvalidated)
                 {
                 	UpdateGenomes();
@@ -240,8 +253,12 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
         }
 
-        public virtual void GenerationalIterate()
+        public void GenerationalIterate()
         {
+            if (Failed)
+            {
+                return;
+            }
 
             if (IterationBegin != null)
             {
@@ -293,8 +310,13 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         protected abstract GAGenerationalSelectionResult<GenomeType, GType, PType> PerformGenerationalSelection();
 
-        public virtual void SteadyStateIterate()
+        public void SteadyStateIterate()
         {
+            if (Failed)
+            {
+                return;
+            }
+
             var selection = PerformSteadyStateSelection();
             previousChildren = selection.Parent.Crossover(selection.Partner);
 
