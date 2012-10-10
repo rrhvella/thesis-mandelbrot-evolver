@@ -10,16 +10,38 @@ namespace NEATSpacesTests.CPPNNEAT
     public class CPPNNEATGenomeTests
     {
         private const int NUMBER_OF_MATING_EVENTS = 10;
-        private readonly double[] INPUT = new double[] { 0.0, 0.0 };
+        private const int NUMBER_OF_GENERATIONAL_MATING_EVENTS = 100;
+        private const int NUMBER_OF_GENERATIONAL_RUNS = 100;
+
+        private readonly double[] INPUT = new[] { 0.0, 0.0 };
+        private readonly double[,] XOR_TRUTH_TABLE = new double[,] { {0, 0, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0} };
 
         private int NUMBER_OF_INPUTS = 2;
         private int NUMBER_OF_GENOMES = 2;
-        private double NEW_LINK_RATE = 1;
-        private double NEW_NEURON_RATE = 1;
-        private double MAX_PERTURBATION_RATE = 2;
-        private double MAX_WEIGHT = 5;
-        private double WEIGHT_MUTATION_RATE = 1;
-        private double WEIGHT_PERTURBATION_RATE = 1;
+        private const int POPULATION = 100;
+
+        private static int NO_INNOVATION_THRESHOLD = 15;
+        private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
+        private static double MAX_PERTURBATION = 2.5;
+        private const double MATCHING_GENES_WEIGHT = 0.4;
+        private static double ELITISM_RATE = 0.2;
+
+        private static double WEIGHT_MUTATION_RATE = 0.8;
+        private static double NEW_NEURON_RATE = 0.03;
+        private static double NEW_LINK_RATE = 0.05;
+
+        private static double WEIGHT_PERTUBATION_RATE = 0.9;
+
+        private static double DISABLE_GENE_RATE = 0.75;
+        private static double MAX_WEIGHT = 5;
+
+        private const double EXCESS_GENES_WEIGHT = 1.0;
+        private const double DISJOINT_GENES_WEIGHT = 1.0;
+
+        private static double INTERSPECIES_MATING_RATE = 0.001;
+
+        private const double CROSSOVER_RATE = 0.75;
+        private const double MATE_BY_AVERAGING_RATE = 0.4;
 
         [TestCase]
         public void TestMatingAndMutationStability()
@@ -74,10 +96,10 @@ namespace NEATSpacesTests.CPPNNEAT
 
             ga.NewLinkRate = NEW_LINK_RATE;
             ga.NewNeuronRate = NEW_NEURON_RATE;
-            ga.MaxPerturbation = MAX_PERTURBATION_RATE;
+            ga.MaxPerturbation = MAX_PERTURBATION;
             ga.MaxWeight = MAX_WEIGHT;
             ga.WeightMutationRate = WEIGHT_MUTATION_RATE;
-            ga.WeightPertubationRate = WEIGHT_PERTURBATION_RATE;
+            ga.WeightPertubationRate = WEIGHT_PERTUBATION_RATE;
 
             var parent = ga.Population[0];
             var partner = ga.Population[1];
@@ -241,5 +263,62 @@ namespace NEATSpacesTests.CPPNNEAT
                         testGenomeCopy.GeneCollection.LinkGenes.Union(testGenome.GeneCollection.LinkGenes).Count());
 
         }
+
+        [TestCase]
+        public void TestGenerationalIterationStability()
+        {
+            var testGA = new CPPNNEATGA(NUMBER_OF_INPUTS, POPULATION, genome => TestScoreFunction(genome), 
+                                        new List<Func<double, double>>() { CPPNActivationFunctions.TanHActivationFunction },
+                                        false);
+
+            testGA.CompatibilityDistanceThreshold = COMPATIBILITY_DISTANCE_THRESHOLD;
+            testGA.NoInnovationThreshold = NO_INNOVATION_THRESHOLD;
+
+            testGA.WeightMutationRate = WEIGHT_MUTATION_RATE;
+            testGA.NewNeuronRate = NEW_NEURON_RATE;
+            testGA.NewLinkRate = NEW_LINK_RATE;
+
+            testGA.DisableGeneRate = DISABLE_GENE_RATE;
+            testGA.MateByAveragingRate = MATE_BY_AVERAGING_RATE;
+
+            testGA.WeightPertubationRate = WEIGHT_PERTUBATION_RATE;
+            testGA.MaxPerturbation = MAX_PERTURBATION;
+            testGA.MaxWeight = MAX_WEIGHT;
+
+            testGA.ExcessGenesWeight = EXCESS_GENES_WEIGHT;
+            testGA.DisjointGenesWeight = DISJOINT_GENES_WEIGHT;
+            testGA.MatchingGenesWeight = MATCHING_GENES_WEIGHT;
+
+            testGA.CrossoverRate = CROSSOVER_RATE;
+
+            testGA.ElitismRate = ELITISM_RATE;
+            testGA.InterSpeciesMatingRate = INTERSPECIES_MATING_RATE;
+
+            testGA.Initialise();
+
+            foreach (var i in Enumerable.Range(0, NUMBER_OF_GENERATIONAL_RUNS))
+            {
+                foreach (var j in Enumerable.Range(0, NUMBER_OF_GENERATIONAL_MATING_EVENTS))
+                {
+                    testGA.GenerationalIterate();
+                    Assert.AreEqual(POPULATION, testGA.Population.Count);
+                }
+            }
+        }
+
+        private double TestScoreFunction(CPPNNEATGenome genome)
+        {
+            var totalError = 0.0;
+
+            foreach (var i in Enumerable.Range(0, 4))
+            {
+                totalError += Math.Abs(XOR_TRUTH_TABLE[i, 2] -
+                                genome.Phenome.GetActivation(new double[] { XOR_TRUTH_TABLE[i, 0], XOR_TRUTH_TABLE[i, 1] })); 
+            }
+
+            totalError = 4 - totalError;
+
+            return totalError * totalError;
+        } 
     }
 }

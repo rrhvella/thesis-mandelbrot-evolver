@@ -177,7 +177,10 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                     result.ToRetain.Add((GenomeType)species.Best.Copy());
                 }
 
-                totalAverageFitness += species.AverageFitness;
+                if (species.CanBreed)
+                {
+                    totalAverageFitness += species.AverageFitness;
+                }
             }
 
             var populationSizeAfterChampions = currentPopulationSize - result.ToRetain.Count;
