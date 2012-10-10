@@ -28,14 +28,21 @@ namespace XORValidationTest
         private static int MATING_LIMIT = -1;
 #endif
 
-        private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
         
-#if GENERATIONAL_GA 
+#if GENERATIONAL_GA
         private static int MATING_EVENTS_PER_GENERATION = 1;
         private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
+        private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
+        private static double MAX_PERTURBATION = 2.5;
+        private const double MATCHING_GENES_WEIGHT = 0.4;
+        private static double ELITISM_RATE = 0.2;
 #else
         private static int MATING_EVENTS_PER_GENERATION = 75;
         private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
+        private static double COMPATIBILITY_DISTANCE_THRESHOLD = 4.0;
+        private static double MAX_PERTURBATION = 1.8;
+        private const double MATCHING_GENES_WEIGHT = 3.0;
+        private static double ELITISM_RATE = 0.4;
 #endif
 
         private static readonly double[] CORRECT_RESULT = new double[] {0, 1, 1, 0};
@@ -47,16 +54,12 @@ namespace XORValidationTest
         private static double WEIGHT_PERTUBATION_RATE = 0.9;
 
         private static double DISABLE_GENE_RATE = 0.75;
-
-        private static double MAX_PERTURBATION = 2.5;
         private static double MAX_WEIGHT = 5;
 
         private const double EXCESS_GENES_WEIGHT = 1.0;
         private const double DISJOINT_GENES_WEIGHT = 1.0;
-        private const double MATCHING_GENES_WEIGHT = 0.4;
 
         private static double INTERSPECIES_MATING_RATE = 0.001;
-        private static double ELITISM_RATE = 0.2;
 
         private const string DEBUG_FILE = "debug.txt";
         private const double CROSSOVER_RATE = 0.75;
