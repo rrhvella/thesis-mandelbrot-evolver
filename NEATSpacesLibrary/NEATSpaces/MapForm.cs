@@ -17,15 +17,15 @@ namespace NEATSpacesLibrary.NEATSpaces
         where GAType : BaseGA<GenomeType, GType, PType>
         where GenomeType : Genome<GType, PType>, new()
     {
-        private const int NUMBER_OF_GENERATIONS = 250;
-        private const int NUMBER_OF_RUNS = 30;
+        private const int NUMBER_OF_GENERATIONS = 80;
+        private const int NUMBER_OF_RUNS = 10;
 
-        private const int MATING_EVENTS_PER_GENERATION = 2000;
+        private const int MATING_EVENTS_PER_GENERATION = 600;
         private const int TOTAL_TICKS = MATING_EVENTS_PER_GENERATION * NUMBER_OF_GENERATIONS;
 
-        private const int NUMBER_OF_TICKS_TO_UPDATE_IMAGE = 100;
+        private const int NUMBER_OF_TICKS_TO_UPDATE_IMAGE = 30;
 
-        private const int POPULATION_SIZE = 120;
+        private const int POPULATION_SIZE = 40;
         private double MILLISECONDS_TO_HOUR_RATIO = 1.0 / (1000.0 * 60.0 * 60.0);
 
         private Stopwatch stopWatch;
