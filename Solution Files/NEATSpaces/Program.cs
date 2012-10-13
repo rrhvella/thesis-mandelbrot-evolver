@@ -46,6 +46,35 @@ namespace NEATSpaces
 
         private static readonly int NUMBER_OF_CRITICAL_POSITIONS = 2 + MapConstants.CHECKPOINTS.Count();
 
+        private double maxDistance;
+        private double[][] euclideanDistanceCache;
+
+        public Program() 
+        {
+            maxDistance = MathExtensions.EuclideanDistance(MapConstants.MAP_SIZE, MapConstants.MAP_SIZE);
+            euclideanDistanceCache = new double[MapConstants.MAP_SIZE * MapConstants.MAP_SIZE][];
+
+            foreach (var x in Enumerable.Range(0, MapConstants.MAP_SIZE))
+            {
+                foreach (var y in Enumerable.Range(0, MapConstants.MAP_SIZE))
+                {
+                    var current = new MapNode(x, y);
+                    var cacheRecord = new double[NUMBER_OF_CRITICAL_POSITIONS];
+
+                    cacheRecord[0] = (current - MapConstants.START_NODE).EuclideanDistance / maxDistance;
+                    cacheRecord[1] = (current - MapConstants.END_NODE).EuclideanDistance / maxDistance;
+
+                    var i = 2;
+                    foreach (var checkpoint in MapConstants.CHECKPOINTS)
+                    {
+                        cacheRecord[i++] = (current - checkpoint).EuclideanDistance / maxDistance;
+                    }
+
+                    euclideanDistanceCache[y * MapConstants.MAP_SIZE + x] = cacheRecord;
+                }
+            }
+        }
+
         public static void Main(string[] args)
         {
             Program program = new Program();
@@ -55,24 +84,22 @@ namespace NEATSpaces
         protected override Map TransformPhenome(CPPNNetwork phenome)
         {
             var result = MapConstants.CreateMap();
-            var maxDistance = MathExtensions.EuclideanDistance(result.Width, result.Height);
 
             foreach (var x in Enumerable.Range(0, MapConstants.MAP_SIZE))
             {
                 foreach (var y in Enumerable.Range(0, MapConstants.MAP_SIZE))
                 {
                     var current = new MapNode(x, y);
+                    var cacheRecord = euclideanDistanceCache[y * MapConstants.MAP_SIZE + x];
+
                     var input = new double[NUMBER_OF_INPUTS + NUMBER_OF_CRITICAL_POSITIONS];
 
                     input[0] = x / maxDistance;
                     input[1] = y / maxDistance;
-                    input[2] = (current - result.StartNode).EuclideanDistance / maxDistance;
-                    input[3] = (current - result.EndNode).EuclideanDistance / maxDistance;
 
-                    var i = 4;
-                    foreach (var checkpoint in result.Checkpoints)
+                    foreach(var i in Enumerable.Range(0, NUMBER_OF_CRITICAL_POSITIONS))
                     {
-                        input[i++] = (current - checkpoint).EuclideanDistance / maxDistance;
+                        input[i + NUMBER_OF_INPUTS] = cacheRecord[i];
                     }
 
                     result[x, y] = phenome.GetActivation(input) >= 0;
