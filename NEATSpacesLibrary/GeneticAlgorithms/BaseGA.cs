@@ -197,6 +197,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
         }
 
+        private int RandomSeed;
+
         private double average;
         private bool averageCacheInvalidated;
         public double AverageScore
@@ -225,7 +227,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             this.populationSize = populationSize;
             this.scoreFunction = scoreFunction;
 
-            this.Random = new Random();
+            this.RandomSeed = DateTime.Now.Millisecond;
+            this.Random = new Random(RandomSeed);
         }
 
         public void Initialise()
