@@ -175,7 +175,6 @@ namespace XORValidationTest
                 }
                 
                 var best = testGA.Best;
-                var runsCompleted = i + 1;
 
                 if (testGA.Failed)
                 {
@@ -195,6 +194,8 @@ namespace XORValidationTest
 
                     neuronCounts.Add(best.GeneCollection.Phenome.Neurons.Count());
                 }
+
+                var runsCompleted = i + 1 - numberOfFailures;
 
                 averageMatingEvents = totalMatingEvents / runsCompleted; 
                 averageHiddenNodes = totalHiddenNodes / runsCompleted; 
