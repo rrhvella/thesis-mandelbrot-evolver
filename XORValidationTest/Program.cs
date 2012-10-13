@@ -54,7 +54,7 @@ namespace XORValidationTest
         private static double WEIGHT_PERTUBATION_RATE = 0.9;
 
         private static double DISABLE_GENE_RATE = 0.75;
-        private static double MAX_WEIGHT = 5;
+        private static double MAX_WEIGHT = MAX_PERTURBATION;
 
         private const double EXCESS_GENES_WEIGHT = 1.0;
         private const double DISJOINT_GENES_WEIGHT = 1.0;
