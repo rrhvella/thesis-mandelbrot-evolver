@@ -39,10 +39,10 @@ namespace XORValidationTest
 #else
         private static int MATING_EVENTS_PER_GENERATION = 75;
         private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
-        private static double COMPATIBILITY_DISTANCE_THRESHOLD = 4.0;
-        private static double MAX_PERTURBATION = 1.8;
-        private const double MATCHING_GENES_WEIGHT = 3.0;
-        private static double ELITISM_RATE = 0.4;
+        private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
+        private static double MAX_PERTURBATION = 2.5;
+        private const double MATCHING_GENES_WEIGHT = 0.4;
+        private static double ELITISM_RATE = 0.2;
 #endif
 
         private static readonly double[] CORRECT_RESULT = new double[] {0, 1, 1, 0};
