@@ -69,15 +69,17 @@ namespace XORValidationTest
         {
             var numberOfFailures = 0;
 
-            var totalMatingEvents = 0.0;
-            var totalHiddenNodes = 0.0;
-            var totalEnabledGenes = 0.0;
+            var generations = new List<int>();
+
+            var averageGenerations = 0.0;
+            var STDDEVGenerations = 0.0;
+
+            var enabledLinkCounts = new List<int>();
+
+            var averageEnabledLinkCount = 0.0;
+            var STDDEVEnabledLinkCount = 0.0;
 
             var neuronCounts = new List<int>();
-            
-            var averageMatingEvents = 0.0; 
-            var averageHiddenNodes = 0.0; 
-            var averageEnabledGenes = 0.0; 
 
             var averageNeuronCount = 0.0;
             var STDDEVNeuronCount = 0.0;
@@ -152,13 +154,19 @@ namespace XORValidationTest
                         Console.WriteLine(String.Format("Current fitness: {0:f2}", testGA.Best.Score));
                         Console.WriteLine();
                         Console.Write("Average number of generations: ");
-                        Console.WriteLine(averageMatingEvents / MATING_EVENTS_PER_GENERATION);
-                        Console.Write("Average number of hidden nodes: ");
-                        Console.WriteLine(averageHiddenNodes);
-                        Console.Write("Average number of enabled genes: ");
-                        Console.WriteLine(averageEnabledGenes);
+                        Console.WriteLine(averageGenerations);
+                        Console.Write("Standard deviation of enabled genes: ");
+                        Console.WriteLine(STDDEVGenerations);
+                        Console.WriteLine();
+                        Console.Write("Average number of nodes: ");
+                        Console.WriteLine(averageNeuronCount);
                         Console.Write("Standard deviation of neuron count: ");
                         Console.WriteLine(STDDEVNeuronCount);
+                        Console.WriteLine();
+                        Console.Write("Average number of enabled genes: ");
+                        Console.WriteLine(averageEnabledLinkCount);
+                        Console.Write("Standard deviation of enabled genes: ");
+                        Console.WriteLine(STDDEVEnabledLinkCount);
                         Console.WriteLine();
                         Console.Write("Number of failures: ");
                         Console.WriteLine(numberOfFailures);
@@ -182,31 +190,32 @@ namespace XORValidationTest
                 }
                 else
                 {
-                    totalMatingEvents += matingEvents;
-
-                    totalHiddenNodes += (from hiddenNeuron in best.Phenome.Neurons 
-                                         where hiddenNeuron is CPPNHiddenNeuron 
-                                         select hiddenNeuron).Count();
-
-                    totalEnabledGenes += (from gene in best.GeneCollection.LinkGenes 
+                    generations.Add(matingEvents); 
+                    enabledLinkCounts.Add((from gene in best.GeneCollection.LinkGenes 
                                           where gene.Enabled 
-                                          select gene).Count();
-
+                                          select gene).Count()); 
                     neuronCounts.Add(best.GeneCollection.Phenome.Neurons.Count());
                 }
 
-                var runsCompleted = i + 1 - numberOfFailures;
-
-                averageMatingEvents = totalMatingEvents / runsCompleted; 
-                averageHiddenNodes = totalHiddenNodes / runsCompleted; 
-                averageEnabledGenes = totalEnabledGenes / runsCompleted; 
-
-                if (neuronCounts.Count > 0)
+                if (i >= numberOfFailures)
                 {
+                    var nMinus1 = (i - numberOfFailures);
+
                     averageNeuronCount = neuronCounts.Average();
                     STDDEVNeuronCount = Math.Sqrt(neuronCounts.Select(neuronCount =>
                                                     Math.Pow(neuronCount - averageNeuronCount, 2))
-                                                .Average());
+                                                .Sum() / nMinus1);
+
+                    averageEnabledLinkCount = enabledLinkCounts.Average();
+                    STDDEVEnabledLinkCount = Math.Sqrt(enabledLinkCounts.Select(enabledLinkCount =>
+                                                    Math.Pow(enabledLinkCount - averageEnabledLinkCount, 2))
+                                                .Sum() / nMinus1);
+
+                    averageGenerations = generations.Average() / MATING_EVENTS_PER_GENERATION;
+                    STDDEVGenerations = Math.Sqrt(generations.Select(generation =>
+                                                    Math.Pow(generation / MATING_EVENTS_PER_GENERATION 
+                                                                - averageGenerations, 2))
+                                                .Sum() / nMinus1);
                 }
             }
 
