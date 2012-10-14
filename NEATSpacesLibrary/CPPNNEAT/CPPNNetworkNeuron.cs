@@ -56,104 +56,53 @@ namespace NEATSpacesLibrary.CPPNNEAT
         }
     }
 
-    public abstract class CPPNNetworkNeuron
+    public class Synapse
     {
-        public abstract double Activation
+        public CPPNNetworkNeuron Neuron
         {
             get;
+            private set;
+        }
+
+        public double Weight
+        {
+            get;
+            private set;
+        }
+
+        public Synapse(CPPNNetworkNeuron neuron, double weight)
+        {
+            this.Neuron = neuron;
+            this.Weight = weight;
         }
     }
 
-    public class CPPNBiasNeuron: CPPNNetworkNeuron
+    public abstract class CPPNNetworkNeuron
     {
-        public override double Activation
+        public Func<double, double> ActivationFunction
         {
-            get 
-            {
-                return 1.0;
-            }
-        }
-    }
-
-    public class CPPNInputNeuron: CPPNNetworkNeuron
-    {
-        private double activation;
-        public override double Activation
-        {
-            get 
-            {
-                return activation;
-            }
+            get;
+            protected set;
         }
 
-        public void SetInput(double input)
+        public CPPNNeuronType NeuronType
         {
-            activation = input;
+            get;
+            protected set;
         }
-    }
 
-    public class CPPNOutputNeuron: CPPNNetworkNeuron
-    {
-        private class Synapse
+        protected List<Synapse> synapsis;
+        public IEnumerable<Synapse> Synapsis
         {
-            public CPPNNetworkNeuron Neuron
+            get
             {
-                get;
-                private set;
-            }
-
-            public double Weight
-            {
-                get;
-                private set;
-            }
-
-            public Synapse(CPPNNetworkNeuron neuron, double weight)
-            {
-                this.Neuron = neuron;
-                this.Weight = weight;
+                return synapsis.AsReadOnly();
             }
         }
 
-        private List<Synapse> synapsis;
-        private Func<double, double> activationFunction;
-
-        private bool isCalculating;
-        private double previousActivation;
-
-        public override double Activation
+        public CPPNNetworkNeuron()
         {
-            get 
-            {
-                if (isCalculating)
-                {
-                    return previousActivation;
-                }
-
-                isCalculating = true;
-
-                var net = 0.0;
-
-                foreach (var synapse in synapsis)
-                {
-                    net += synapse.Weight * synapse.Neuron.Activation;
-                }
-
-                var activation = activationFunction(net);
-
-                isCalculating = false;
-
-                previousActivation = activation;
-
-                return activation;
-            }
-        }
-
-        public CPPNOutputNeuron(Func<double, double> activationFunction)
-        {
-            this.activationFunction = activationFunction;
-            this.synapsis = new List<Synapse>();
-            this.isCalculating = false;
+            synapsis = new List<Synapse>();
         }
 
         public void AddChild(CPPNNetworkNeuron neuron, double weight)
@@ -162,10 +111,37 @@ namespace NEATSpacesLibrary.CPPNNEAT
         }
     }
 
+    public class CPPNBiasNeuron: CPPNNetworkNeuron
+    {
+        public CPPNBiasNeuron()
+        {
+            NeuronType = CPPNNeuronType.Bias;
+        }
+
+    }
+
+    public class CPPNInputNeuron: CPPNNetworkNeuron
+    {
+        public CPPNInputNeuron()
+        {
+            NeuronType = CPPNNeuronType.Input;
+        }
+    }
+
+    public class CPPNOutputNeuron: CPPNNetworkNeuron
+    {
+        public CPPNOutputNeuron(Func<double, double> activationFunction)
+        {
+            this.ActivationFunction = activationFunction;
+            this.NeuronType = CPPNNeuronType.Output;
+        }
+    }
+
     public class CPPNHiddenNeuron: CPPNOutputNeuron
     {
         public CPPNHiddenNeuron(Func<double, double> activationFunction): base(activationFunction)
         {
+            this.NeuronType = CPPNNeuronType.Hidden;
         }
     }
 }

@@ -7,66 +7,232 @@ namespace NEATSpacesLibrary.CPPNNEAT
 {
     public class CPPNNetwork
     {
-        public HashSet<CPPNNetworkNeuron> Neurons 
-        { 
-            get; 
-            private set; 
-        }
+        public Dictionary<CPPNNetworkNeuron, int> neuronToIndexDict;
+        private int lastIndex;
 
-        private List<CPPNInputNeuron> inputNeurons;
-        private CPPNOutputNeuron outputNeuron;
+        private List<int> inputNeuronIndexes;
+        private int outputNeuronIndex;
 
-        public IEnumerable<CPPNInputNeuron> InputNeurons
+        private bool adjacencyMatrixInvalidated;
+        private double[] adjacencyMatrix;
+
+        private List<ActivationRecord> activations;
+
+        private class ActivationRecord
         {
-            get
+            public double? Activation;
+            public double? PreviousActivation;
+            public bool IsCalculating;
+            public CPPNNetworkNeuron Neuron;
+
+            public ActivationRecord(CPPNNetworkNeuron neuron) 
             {
-                return inputNeurons;
+                Neuron = neuron;
             }
         }
 
+        private class NodeIndexRecord
+        {
+            public int I;
+            public int NodeIndex;
+            public double Net;
+
+            public NodeIndexRecord(int currentNodeIndex, int i, double net)
+            {
+                this.NodeIndex = currentNodeIndex;
+                this.I = i;
+                this.Net = net;
+            }
+        }
         public CPPNNetwork()
         {
-            this.Neurons = new HashSet<CPPNNetworkNeuron>();
-            this.inputNeurons = new List<CPPNInputNeuron>();
+            this.neuronToIndexDict = new Dictionary<CPPNNetworkNeuron, int>();
+            this.inputNeuronIndexes = new List<int>();
+
+            this.adjacencyMatrixInvalidated = true;
+
+            this.activations = new List<ActivationRecord>();
         }
 
         public double GetActivation(double[] input)
         {
-            if (input.Length != inputNeurons.Count)
+            if (input.Length != inputNeuronIndexes.Count)
             {
                 throw new ApplicationException(String.Format("There are {0} input neurons in this network," + 
                                                         " please specify an array with {0} elements",
-                                                        inputNeurons.Count));
+                                                        inputNeuronIndexes.Count));
             }
 
-            foreach (var i in Enumerable.Range(0, input.Length))
+            if (adjacencyMatrixInvalidated)
             {
-                inputNeurons[i].SetInput(input[i]);
+                adjacencyMatrix = BuildAdjacencyMatrix(); 
+                adjacencyMatrixInvalidated = false;
             }
 
-            return outputNeuron.Activation;
+            var totalNodes = neuronToIndexDict.Count;
+
+            foreach(var i in Enumerable.Range(0, totalNodes))
+            {
+                var activationRecord = activations[i];
+
+                if(activationRecord.Neuron.NeuronType == CPPNNeuronType.Bias) 
+                {
+                    continue;
+                }
+
+                activationRecord.Activation = null;
+                activationRecord.IsCalculating = false;
+            }
+
+            var inputIndex = 0;
+            foreach(var i in inputNeuronIndexes) 
+            {
+                activations[i].Activation = input[inputIndex++];
+            }
+
+            var outputActivationRecord = activations[outputNeuronIndex];
+            outputActivationRecord.IsCalculating = true;
+
+            var nodeIndexStack = new Stack<NodeIndexRecord>();
+            var currentNodeIndexRecord = new NodeIndexRecord(outputNeuronIndex, 0, 0);
+
+            while (outputActivationRecord.IsCalculating)
+            {
+                var currentNodeIndex = currentNodeIndexRecord.NodeIndex;
+                var currentActivationRecord = activations[currentNodeIndex];
+
+                var rowFirstCell = currentNodeIndex * totalNodes;
+                var skipWhileLoop = false;
+
+                currentActivationRecord.IsCalculating = true;
+                var net = currentNodeIndexRecord.Net;
+
+                for (int i = currentNodeIndexRecord.I; i < totalNodes; i++)
+                {
+                    var childActivationRecord = activations[i];
+
+                    if (childActivationRecord.Activation == null)
+                    {
+                        if (childActivationRecord.IsCalculating)
+                        {
+                            childActivationRecord.Activation = childActivationRecord.PreviousActivation;
+                        }
+                        else
+                        {
+                            nodeIndexStack.Push(new NodeIndexRecord(currentNodeIndex, i, net));
+
+                            currentNodeIndexRecord = new NodeIndexRecord(i, 0, 0);
+
+                            skipWhileLoop = true;
+                            break;
+                        }
+                    }
+
+                    net += adjacencyMatrix[rowFirstCell + i] * (double)childActivationRecord.Activation;
+                }
+
+                if (skipWhileLoop)
+                {
+                    continue;
+                }
+
+                currentActivationRecord.Activation = currentActivationRecord.Neuron.ActivationFunction(net);
+                currentActivationRecord.IsCalculating = false;
+
+                if (currentActivationRecord == outputActivationRecord)
+                {
+                    continue;
+                }
+
+                var nodeIndexRecord = nodeIndexStack.Pop();
+                currentNodeIndexRecord = nodeIndexRecord;
+            }
+
+            foreach (var activation in activations)
+            {
+                activation.PreviousActivation = activation.Activation;
+            }
+
+            return (double)activations[outputNeuronIndex].Activation;
+        }
+
+        private double[] BuildAdjacencyMatrix()
+        {
+            var result = new double[neuronToIndexDict.Count * neuronToIndexDict.Count];
+
+            foreach (var record in neuronToIndexDict)
+            {
+                var synapsis = record.Key.Synapsis;
+
+                foreach(var synapse in synapsis) 
+                {
+                    result[GetMatrixIndex(synapse.Neuron, record.Key)] = synapse.Weight;
+                }
+            }
+
+            return result;
         }
 
         public void AddLink(CPPNNetworkNeuron from, CPPNNetworkNeuron to, double weight)
         {
-            if (Neurons.Contains(from) && Neurons.Contains(to))
+            if (neuronToIndexDict.ContainsKey(from) && neuronToIndexDict.ContainsKey(to) &&
+                to.NeuronType != CPPNNeuronType.Bias && to.NeuronType != CPPNNeuronType.Input)
             {
-                (to as CPPNOutputNeuron).AddChild(from, weight);
+                to.AddChild(from, weight);
+
+                if (!adjacencyMatrixInvalidated)
+                {
+                    adjacencyMatrix[GetMatrixIndex(from, to)] = weight;
+                }
             }
+        }
+
+        private int GetMatrixIndex(CPPNNetworkNeuron from, CPPNNetworkNeuron to)
+        {
+            return neuronToIndexDict[to] * neuronToIndexDict.Count + neuronToIndexDict[from];
         }
 
         public void AddNeuron(CPPNNetworkNeuron neuron)
         {
-            Neurons.Add(neuron);
-
-            if (neuron is CPPNInputNeuron)
+            if (neuronToIndexDict.ContainsKey(neuron))
             {
-                inputNeurons.Add((CPPNInputNeuron)neuron);
+                return;
             }
 
-            if (neuron.GetType() == typeof(CPPNOutputNeuron))
+            var currentIndex = lastIndex;
+
+            adjacencyMatrixInvalidated = true;
+            neuronToIndexDict.Add(neuron, lastIndex++);
+
+            var currentActivation = new ActivationRecord(neuron);
+            activations.Add(currentActivation);
+
+            switch (neuron.NeuronType)
             {
-                outputNeuron = (CPPNOutputNeuron)neuron;
+                case CPPNNeuronType.Input:
+                    inputNeuronIndexes.Add(currentIndex);
+                    break;
+
+                case CPPNNeuronType.Output:
+                    outputNeuronIndex = currentIndex;
+                    currentActivation.PreviousActivation = 0;
+                    break;
+
+                case CPPNNeuronType.Hidden:
+                    currentActivation.PreviousActivation = 0;
+                    break;
+
+                case CPPNNeuronType.Bias:
+                    currentActivation.Activation = 1;
+                    break;
+            }
+        }
+
+        public int NeuronCount
+        {
+            get
+            {
+                return neuronToIndexDict.Count;
             }
         }
     }
