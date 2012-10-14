@@ -74,6 +74,8 @@ namespace NEATSpacesTests.CPPNNEAT
 
             Assert.AreEqual(CPPNNEATConstants.RecursiveActivation1(input1, input2), 
                         network.GetActivation(new double[] { input1, input2 }));
+            Assert.AreEqual(CPPNNEATConstants.RecursiveActivation1(input1, input2), 
+                        network.GetActivation(new double[] { input1, input2 }));
         }
 
         [TestCase(1.0, 0.0)]
