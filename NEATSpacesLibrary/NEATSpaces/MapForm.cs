@@ -20,7 +20,7 @@ namespace NEATSpacesLibrary.NEATSpaces
         private const int NUMBER_OF_GENERATIONS = 10;
         private const int NUMBER_OF_RUNS = 100;
 
-        private const int MATING_EVENTS_PER_GENERATION = 100;
+        private const int MATING_EVENTS_PER_GENERATION = 20;
         private const int TOTAL_TICKS = MATING_EVENTS_PER_GENERATION * NUMBER_OF_GENERATIONS;
 
         private const int NUMBER_OF_TICKS_TO_UPDATE_IMAGE = 10;
