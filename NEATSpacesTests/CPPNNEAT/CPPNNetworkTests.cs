@@ -18,6 +18,7 @@ namespace NEATSpacesTests.CPPNNEAT
         [TestCase(1.0, 0.0)]
         [TestCase(0.0, -1.0)]
         [TestCase(-1.0, 1.0)]
+        [TestCase(1.0, -1.0)]
         public void TestActivation(double input1, double input2)
         {
             var network = CreateNeuronNetwork();
@@ -27,11 +28,59 @@ namespace NEATSpacesTests.CPPNNEAT
             network.AddLink(inputNeuron2, outputNeuron, CPPNNEATConstants.WEIGHT_2);
 
             Assert.AreEqual(CPPNNEATConstants.DefaultActivation(input1, input2), network.GetActivation(new[] { input1, input2 }));
+            Assert.AreEqual(CPPNNEATConstants.DefaultActivation(input1, input2), network.GetActivation(new[] { input1, input2 }));
         }
 
         [TestCase(1.0, 0.0)]
         [TestCase(0.0, -1.0)]
         [TestCase(-1.0, 1.0)]
+        [TestCase(1.0, -1.0)]
+        public void TestActivationHidden(double input1, double input2)
+        {
+            var network = CreateHiddenNeuronNetwork();
+
+            Assert.AreEqual(CPPNNEATConstants.RecursiveActivation1(input1, input2), 
+                                network.GetActivation(new double[] { input1, input2 }));
+            Assert.AreEqual(CPPNNEATConstants.RecursiveActivation1(input1, input2), 
+                                network.GetActivation(new double[] { input1, input2 }));
+        }
+
+        [TestCase(1.0, 0.0)]
+        [TestCase(0.0, -1.0)]
+        [TestCase(-1.0, 1.0)]
+        [TestCase(1.0, -1.0)]
+        public void TestActivationHiddenTwoLayer(double input1, double input2)
+        {
+            var network = TwoHiddenLayerNetwork();
+            
+            Assert.AreEqual(CPPNNEATConstants.TwoHiddenLayer(input1, input2),
+                                network.GetActivation(new double[] { input1, input2 }));
+            Assert.AreEqual(CPPNNEATConstants.TwoHiddenLayer(input1, input2), 
+                                network.GetActivation(new double[] { input1, input2 }));
+        }
+
+        [TestCase(1.0, 0.0)]
+        [TestCase(0.0, -1.0)]
+        [TestCase(-1.0, 1.0)]
+        [TestCase(1.0, -1.0)]
+        public void TestActivationHiddenTwoLayerFull(double input1, double input2)
+        {
+            var network = TwoHiddenLayerNetwork();
+
+            network.AddLink(biasNeuron, outputNeuron, CPPNNEATConstants.BIAS);
+            network.AddLink(inputNeuron1, outputNeuron, CPPNNEATConstants.WEIGHT_1);
+            network.AddLink(inputNeuron2, outputNeuron, CPPNNEATConstants.WEIGHT_2);
+            
+            Assert.AreEqual(CPPNNEATConstants.TwoHiddenLayerFull(input1, input2),
+                                network.GetActivation(new double[] { input1, input2 }));
+            Assert.AreEqual(CPPNNEATConstants.TwoHiddenLayerFull(input1, input2), 
+                                network.GetActivation(new double[] { input1, input2 }));
+        }
+
+        [TestCase(1.0, 0.0)]
+        [TestCase(0.0, -1.0)]
+        [TestCase(-1.0, 1.0)]
+        [TestCase(1.0, -1.0)]
         public void TestActivationRecursive(double input1, double input2)
         {
             var network = CreateHiddenNeuronNetwork();
@@ -74,6 +123,23 @@ namespace NEATSpacesTests.CPPNNEAT
             network.AddNeuron(biasNeuron);
             network.AddNeuron(inputNeuron1);
             network.AddNeuron(inputNeuron2);
+
+            return network;
+        }
+
+        private CPPNNetwork TwoHiddenLayerNetwork()
+        {
+            var network = CreateHiddenNeuronNetwork();
+
+            var hiddenNeuron2 = new CPPNHiddenNeuron(CPPNNEATConstants.HIDDEN_ACTIVATION_FUNCTION);
+            network.AddNeuron(hiddenNeuron2);
+
+            network.AddLink(biasNeuron, hiddenNeuron2, CPPNNEATConstants.BIAS);
+            network.AddLink(inputNeuron1, hiddenNeuron2, CPPNNEATConstants.WEIGHT_1);
+            network.AddLink(inputNeuron2, hiddenNeuron2, CPPNNEATConstants.WEIGHT_2);
+
+            network.AddLink(hiddenNeuron2, outputNeuron, CPPNNEATConstants.WEIGHT_3);
+            network.AddLink(hiddenNeuron2, hiddenNeuron, CPPNNEATConstants.WEIGHT_4);
 
             return network;
         }
