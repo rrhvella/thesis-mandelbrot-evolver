@@ -194,7 +194,7 @@ namespace XORValidationTest
                     enabledLinkCounts.Add((from gene in best.GeneCollection.LinkGenes 
                                           where gene.Enabled 
                                           select gene).Count()); 
-                    neuronCounts.Add(best.GeneCollection.Phenome.Neurons.Count());
+                    neuronCounts.Add(best.GeneCollection.Phenome.NeuronCount);
                 }
 
                 if (i >= numberOfFailures)
