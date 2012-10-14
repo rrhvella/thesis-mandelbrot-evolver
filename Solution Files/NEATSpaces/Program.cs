@@ -13,6 +13,8 @@ namespace NEATSpaces
     {
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
 
+        private const double INPUT_DIVISOR = 100;
+
         private static int NO_INNOVATION_THRESHOLD = 1000;
         private static int ITERATIONS_TO_CLEAR_LINK_CACHE = 20;
 
@@ -49,12 +51,10 @@ namespace NEATSpaces
 
         private static readonly int NUMBER_OF_CRITICAL_POSITIONS = 2 + MapConstants.CHECKPOINTS.Count();
 
-        private double maxDistance;
         private double[][] euclideanDistanceCache;
 
         public Program() 
         {
-            maxDistance = 30;
             euclideanDistanceCache = new double[MapConstants.MAP_SIZE * MapConstants.MAP_SIZE][];
 
             foreach (var x in Enumerable.Range(0, MapConstants.MAP_SIZE))
@@ -64,13 +64,13 @@ namespace NEATSpaces
                     var current = new MapNode(x, y);
                     var cacheRecord = new double[NUMBER_OF_CRITICAL_POSITIONS];
 
-                    cacheRecord[0] = (current - MapConstants.START_NODE).EuclideanDistance / maxDistance;
-                    cacheRecord[1] = (current - MapConstants.END_NODE).EuclideanDistance / maxDistance;
+                    cacheRecord[0] = (current - MapConstants.START_NODE).EuclideanDistance / INPUT_DIVISOR;
+                    cacheRecord[1] = (current - MapConstants.END_NODE).EuclideanDistance / INPUT_DIVISOR;
 
                     var i = 2;
                     foreach (var checkpoint in MapConstants.CHECKPOINTS)
                     {
-                        cacheRecord[i++] = (current - checkpoint).EuclideanDistance / maxDistance;
+                        cacheRecord[i++] = (current - checkpoint).EuclideanDistance / INPUT_DIVISOR;
                     }
 
                     euclideanDistanceCache[y * MapConstants.MAP_SIZE + x] = cacheRecord;
@@ -97,8 +97,8 @@ namespace NEATSpaces
 
                     var input = new double[NUMBER_OF_INPUTS + NUMBER_OF_CRITICAL_POSITIONS];
 
-                    input[0] = x / maxDistance;
-                    input[1] = y / maxDistance;
+                    input[0] = x / INPUT_DIVISOR;
+                    input[1] = y / INPUT_DIVISOR;
 
                     foreach(var i in Enumerable.Range(0, NUMBER_OF_CRITICAL_POSITIONS))
                     {
