@@ -109,6 +109,13 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
                 for (int i = currentNodeIndexRecord.I; i < totalNodes; i++)
                 {
+                    var weight = adjacencyMatrix[rowFirstCell + i];
+
+                    if (weight == 0)
+                    {
+                        continue;
+                    }
+
                     var childActivationRecord = activations[i];
 
                     if (childActivationRecord.Activation == null)
