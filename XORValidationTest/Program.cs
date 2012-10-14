@@ -64,25 +64,39 @@ namespace XORValidationTest
         private const string DEBUG_FILE = "debug.txt";
         private const double CROSSOVER_RATE = 0.75;
         private const double MATE_BY_AVERAGING_RATE = 0.4;
+
+        private static List<int> Generations;
+        private static double AverageGenerations;
+        private static double STDDEVGenerations;
+
+        private static List<int> EnabledLinkCounts;
+        private static double AverageEnabledLinkCount;
+        private static double STDDEVEnabledLinkCount;
+
+        private static List<int> NeuronCounts;
+        private static double AverageNeuronCount;
+        private static double STDDEVNeuronCount;
+
+        private static int NumberOfFailures;
         
         public static void Main(string[] args)
         {
-            var numberOfFailures = 0;
+            NumberOfFailures = 0;
 
-            var generations = new List<int>();
+            Generations = new List<int>();
 
-            var averageGenerations = 0.0;
-            var STDDEVGenerations = 0.0;
+            AverageGenerations = 0.0;
+            STDDEVGenerations = 0.0;
 
-            var enabledLinkCounts = new List<int>();
+            EnabledLinkCounts = new List<int>();
 
-            var averageEnabledLinkCount = 0.0;
-            var STDDEVEnabledLinkCount = 0.0;
+            AverageEnabledLinkCount = 0.0;
+            STDDEVEnabledLinkCount = 0.0;
 
-            var neuronCounts = new List<int>();
+            NeuronCounts = new List<int>();
 
-            var averageNeuronCount = 0.0;
-            var STDDEVNeuronCount = 0.0;
+            AverageNeuronCount = 0.0;
+            STDDEVNeuronCount = 0.0;
 
             var debugFile = new StreamWriter(new FileStream(DEBUG_FILE, FileMode.Create));
 
@@ -139,37 +153,7 @@ namespace XORValidationTest
 
                     if(matingEvents % MATING_EVENTS_PER_GENERATION == 0) 
                     {
-                        Console.Clear();
-#if GENERATIONAL_GA
-                        Console.WriteLine("Generational");
-#else
-                        Console.WriteLine("Steady-State");
-#endif
-                        Console.WriteLine();
-                        Console.WriteLine(String.Format("{0} out of {1} runs completed.", i, NUMBER_OF_RUNS));
-
-                        Console.Write(matingEvents / MATING_EVENTS_PER_GENERATION);
-                        Console.WriteLine(" generations completed for current run.");
-                        Console.WriteLine();
-                        Console.WriteLine(String.Format("Current fitness: {0:f2}", testGA.Best.Score));
-                        Console.WriteLine();
-                        Console.Write("Average number of generations: ");
-                        Console.WriteLine(averageGenerations);
-                        Console.Write("Standard deviation of enabled genes: ");
-                        Console.WriteLine(STDDEVGenerations);
-                        Console.WriteLine();
-                        Console.Write("Average number of nodes: ");
-                        Console.WriteLine(averageNeuronCount);
-                        Console.Write("Standard deviation of neuron count: ");
-                        Console.WriteLine(STDDEVNeuronCount);
-                        Console.WriteLine();
-                        Console.Write("Average number of enabled genes: ");
-                        Console.WriteLine(averageEnabledLinkCount);
-                        Console.Write("Standard deviation of enabled genes: ");
-                        Console.WriteLine(STDDEVEnabledLinkCount);
-                        Console.WriteLine();
-                        Console.Write("Number of failures: ");
-                        Console.WriteLine(numberOfFailures);
+                        PrintInfo(i, matingEvents, testGA);
                     }
 
 #if DEBUG_GA
@@ -186,43 +170,80 @@ namespace XORValidationTest
 
                 if (testGA.Failed)
                 {
-                    numberOfFailures++;
+                    NumberOfFailures++;
                 }
                 else
                 {
-                    generations.Add(matingEvents); 
-                    enabledLinkCounts.Add((from gene in best.GeneCollection.LinkGenes 
+                    Generations.Add(matingEvents); 
+                    EnabledLinkCounts.Add((from gene in best.GeneCollection.LinkGenes 
                                           where gene.Enabled 
                                           select gene).Count()); 
-                    neuronCounts.Add(best.GeneCollection.Phenome.NeuronCount);
+                    NeuronCounts.Add(best.GeneCollection.Phenome.NeuronCount);
                 }
 
-                if (i >= numberOfFailures)
+                if (i >= NumberOfFailures)
                 {
-                    var nMinus1 = (i - numberOfFailures);
+                    var nMinus1 = (i - NumberOfFailures);
 
-                    averageNeuronCount = neuronCounts.Average();
-                    STDDEVNeuronCount = Math.Sqrt(neuronCounts.Select(neuronCount =>
-                                                    Math.Pow(neuronCount - averageNeuronCount, 2))
+                    AverageNeuronCount = NeuronCounts.Average();
+                    STDDEVNeuronCount = Math.Sqrt(NeuronCounts.Select(neuronCount =>
+                                                    Math.Pow(neuronCount - AverageNeuronCount, 2))
                                                 .Sum() / nMinus1);
 
-                    averageEnabledLinkCount = enabledLinkCounts.Average();
-                    STDDEVEnabledLinkCount = Math.Sqrt(enabledLinkCounts.Select(enabledLinkCount =>
-                                                    Math.Pow(enabledLinkCount - averageEnabledLinkCount, 2))
+                    AverageEnabledLinkCount = EnabledLinkCounts.Average();
+                    STDDEVEnabledLinkCount = Math.Sqrt(EnabledLinkCounts.Select(enabledLinkCount =>
+                                                    Math.Pow(enabledLinkCount - AverageEnabledLinkCount, 2))
                                                 .Sum() / nMinus1);
 
-                    averageGenerations = generations.Average() / MATING_EVENTS_PER_GENERATION;
-                    STDDEVGenerations = Math.Sqrt(generations.Select(generation =>
+                    AverageGenerations = Generations.Average() / MATING_EVENTS_PER_GENERATION;
+                    STDDEVGenerations = Math.Sqrt(Generations.Select(generation =>
                                                     Math.Pow(generation / MATING_EVENTS_PER_GENERATION 
-                                                                - averageGenerations, 2))
+                                                                - AverageGenerations, 2))
                                                 .Sum() / nMinus1);
                 }
+
+                PrintInfo(i + 1, matingEvents, testGA);
             }
 
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
 
             debugFile.Close();
+        }
+
+        private static void PrintInfo(int generationIndex, int matingEventsCompleted, CPPNNEATGA ga)
+        {
+            Console.Clear();
+#if GENERATIONAL_GA
+            Console.WriteLine("Generational");
+#else
+                        Console.WriteLine("Steady-State");
+#endif
+            Console.WriteLine();
+            Console.WriteLine(String.Format("{0} out of {1} runs completed.", generationIndex, NUMBER_OF_RUNS));
+
+            Console.Write(matingEventsCompleted / MATING_EVENTS_PER_GENERATION);
+            Console.WriteLine(" generations completed for current run.");
+            Console.WriteLine();
+            Console.WriteLine(String.Format("Current fitness: {0:f2}", ga.Best.Score));
+            Console.WriteLine();
+            Console.Write("Average number of generations: ");
+            Console.WriteLine(AverageGenerations);
+            Console.Write("Standard deviation of enabled genes: ");
+            Console.WriteLine(STDDEVGenerations);
+            Console.WriteLine();
+            Console.Write("Average number of nodes: ");
+            Console.WriteLine(AverageNeuronCount);
+            Console.Write("Standard deviation of neuron count: ");
+            Console.WriteLine(STDDEVNeuronCount);
+            Console.WriteLine();
+            Console.Write("Average number of enabled genes: ");
+            Console.WriteLine(AverageEnabledLinkCount);
+            Console.Write("Standard deviation of enabled genes: ");
+            Console.WriteLine(STDDEVEnabledLinkCount);
+            Console.WriteLine();
+            Console.Write("Number of failures: ");
+            Console.WriteLine(NumberOfFailures);
         }
 
         private static bool OptimalNetworkFound(CPPNNEATGenome genome)
