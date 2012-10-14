@@ -231,7 +231,7 @@ namespace XORValidationTest
             Console.WriteLine();
             Console.Write("Average number of generations: ");
             Console.WriteLine(AverageGenerations);
-            Console.Write("Standard deviation of enabled genes: ");
+            Console.Write("Standard deviation of generations: ");
             Console.WriteLine(STDDEVGenerations);
             Console.WriteLine();
             Console.Write("Average number of nodes: ");
