@@ -27,6 +27,20 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         }
     }
 
+    public class IterationEventArgs : EventArgs
+    {
+        public int IterationNumber 
+        {
+            get;
+            private set;
+        }
+
+        public IterationEventArgs(int iterationNumber) 
+        {
+            this.IterationNumber = iterationNumber;
+        }
+    }
+
     public class GASteadyStateSelectionResult<GenomeType, GType, PType> : IDebugabble where GenomeType: Genome<GType, PType>
     {
         public GenomeType Parent
@@ -143,8 +157,10 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public event EventHandler<GenomeEventArgs<GenomeType>> GenomeRemoved;
 
         public event EventHandler<EventArgs> SelectionComplete;
-        public event EventHandler<EventArgs> IterationBegin;
-        public event EventHandler<EventArgs> IterationComplete;
+        public event EventHandler<IterationEventArgs> IterationBegin;
+        public event EventHandler<IterationEventArgs> IterationComplete;
+
+        private int iterationNumber;
 
         private int populationSize;
         private List<GenomeType> population;
@@ -265,7 +281,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             if (IterationBegin != null)
             {
-                IterationBegin(this, new EventArgs());
+                IterationBegin(this, new IterationEventArgs(iterationNumber));
             }
 
             previousChildren = new List<Genome<GType, PType>>();
@@ -305,7 +321,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             if (IterationComplete != null)
             {
-                IterationComplete(this, new EventArgs());
+                IterationComplete(this, new IterationEventArgs(++iterationNumber));
             }
 
             previousSelection = generationalSelect;
@@ -318,6 +334,11 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             if (Failed)
             {
                 return;
+            }
+
+            if (IterationBegin != null)
+            {
+                IterationBegin(this, new IterationEventArgs(iterationNumber));
             }
 
             var selection = PerformSteadyStateSelection();
@@ -342,7 +363,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             if (IterationComplete != null)
             {
-                IterationComplete(this, new EventArgs());
+                IterationComplete(this, new IterationEventArgs(++iterationNumber));
             }
 
             previousSelection = selection;

@@ -30,14 +30,14 @@ namespace XORValidationTest
 
         
 #if GENERATIONAL_GA
-        private static int MATING_EVENTS_PER_GENERATION = 1;
+        private const int MATING_EVENTS_PER_GENERATION = 1;
         private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
         private static double MAX_PERTURBATION = 2.5;
         private const double MATCHING_GENES_WEIGHT = 0.4;
         private static double ELITISM_RATE = 0.2;
 #else
-        private static int MATING_EVENTS_PER_GENERATION = 75;
+        private const int MATING_EVENTS_PER_GENERATION = 75;
         private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
         private static double MAX_PERTURBATION = 2.5;
@@ -45,6 +45,7 @@ namespace XORValidationTest
         private static double ELITISM_RATE = 0.2;
 #endif
 
+        private const int ITERATIONS_TO_CLEAR_LINK_CACHE = MATING_EVENTS_PER_GENERATION;
         private static readonly double[] CORRECT_RESULT = new double[] {0, 1, 1, 0};
 
         private static double WEIGHT_MUTATION_RATE = 0.8;
@@ -113,6 +114,7 @@ namespace XORValidationTest
 
                 testGA.CompatibilityDistanceThreshold = COMPATIBILITY_DISTANCE_THRESHOLD;
                 testGA.NoInnovationThreshold = NO_INNOVATION_THRESHOLD;
+                testGA.IterationsToClearLinkCache = ITERATIONS_TO_CLEAR_LINK_CACHE;
 
                 testGA.WeightMutationRate = WEIGHT_MUTATION_RATE;
                 testGA.NewNeuronRate = NEW_NEURON_RATE;

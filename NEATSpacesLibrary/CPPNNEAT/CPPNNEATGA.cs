@@ -54,10 +54,13 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 defaultLinkGenes.Add(new CPPNNEATLinkGene(GetEdgeInnovationNumber(currentGene, outputGene), currentGene, outputGene, 0));
             }
 
+            this.IterationComplete += new EventHandler<IterationEventArgs>(CPPNNEATGA_IterationComplete); 
+
             this.FeedForwardOnly = feedForwardOnly;
 
             defaultNeuronGenes.Add(outputGene);
         }
+
         public int NumberOfInputs
         {
             get;
@@ -136,6 +139,12 @@ namespace NEATSpacesLibrary.CPPNNEAT
             get;
             set;
         }
+
+        public int IterationsToClearLinkCache
+        {
+            get;
+            set;
+        }
         
         private List<CPPNNEATNeuronGene> defaultNeuronGenes;
         public IList<CPPNNEATNeuronGene> DefaultNeuronGenes
@@ -175,6 +184,14 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             get;
             private set;
+        }
+
+        public void CPPNNEATGA_IterationComplete(object sender, IterationEventArgs e)
+        {
+            if (IterationsToClearLinkCache != 0 && e.IterationNumber % IterationsToClearLinkCache == 0)
+            {
+                edgeInnovationNumberMap.Clear();
+            }
         }
 
         public int GetEdgeInnovationNumber(CPPNNEATNeuronGene from, CPPNNEATNeuronGene to)

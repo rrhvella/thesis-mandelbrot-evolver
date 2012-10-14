@@ -34,7 +34,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             GenomeAdded += new EventHandler<GenomeEventArgs<GenomeType>>(BaseSpeciatedGA_GenomeAddedEventHandler);
             GenomeRemoved += new EventHandler<GenomeEventArgs<GenomeType>>(BaseSpeciatedGA_GenomeRemovedEventHandler);
             SelectionComplete += new EventHandler<EventArgs>(BaseSpeciatedGA_SelectionComplete);
-            IterationComplete += new EventHandler<EventArgs>(BaseSpeciatedGA_IterationComplete);
+            IterationComplete += new EventHandler<IterationEventArgs>(BaseSpeciatedGA_IterationComplete);
 
             populationSpecies = new List<Species<GType, PType>>();
         }
@@ -47,7 +47,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
         }
 
-        private void BaseSpeciatedGA_IterationComplete(object sender, EventArgs e)
+        private void BaseSpeciatedGA_IterationComplete(object sender, IterationEventArgs e)
         {
             foreach (var species in populationSpecies.ToArray())
             {

@@ -14,6 +14,7 @@ namespace NEATSpaces
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
 
         private static int NO_INNOVATION_THRESHOLD = 1000;
+        private static int ITERATIONS_TO_CLEAR_LINK_CACHE = 20;
 
         private static double WEIGHT_MUTATION_RATE = 0.9;
         private static double NEW_NEURON_RATE = 0.1;
@@ -116,6 +117,7 @@ namespace NEATSpaces
 
             result.CompatibilityDistanceThreshold = COMPATIBILITY_DISTANCE_THRESHOLD;
             result.NoInnovationThreshold = NO_INNOVATION_THRESHOLD;
+            result.IterationsToClearLinkCache = ITERATIONS_TO_CLEAR_LINK_CACHE;
 
             result.WeightMutationRate = WEIGHT_MUTATION_RATE;
             result.NewNeuronRate = NEW_NEURON_RATE;
