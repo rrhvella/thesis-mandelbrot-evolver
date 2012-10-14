@@ -168,7 +168,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             var analysis1 = GetFunctionAnalysis();
             var analysis2 = (genome as CPPNNEATGenome).GetFunctionAnalysis();
 
-            var averageFunctionDifference = (Parent as CPPNNEATGA).CanonicalFunctionList
+            var averageFunctionDifference = (Parent as CPPNNEATGA).AllFunctions
                                                     .Select(delegate(Func<double, double> function) {
                                                         return Math.Abs(analysis1[function] - analysis2[function]);
                                                     })
@@ -194,7 +194,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             var result = new Dictionary<Func<double, double>, int>();
 
-            foreach (var function in (Parent as CPPNNEATGA).CanonicalFunctionList)
+            foreach (var function in (Parent as CPPNNEATGA).AllFunctions)
             {
                 result[function] = 0;
             }

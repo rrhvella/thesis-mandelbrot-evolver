@@ -22,7 +22,15 @@ namespace NEATSpacesLibrary.CPPNNEAT
         }
 
         public CPPNNEATGA(int numberOfInputs, int populationSize, Func<CPPNNEATGenome, double> scoreFunction,
-                        List<Func<double, double>> canonicalFunctionList, bool feedForwardOnly): base(populationSize, scoreFunction)
+                        List<Func<double, double>> canonicalFunctionList, 
+                        bool feedForwardOnly)
+            : this(numberOfInputs, populationSize, scoreFunction, canonicalFunctionList, null, feedForwardOnly) 
+        {
+        }
+
+        public CPPNNEATGA(int numberOfInputs, int populationSize, Func<CPPNNEATGenome, double> scoreFunction,
+                        List<Func<double, double>> canonicalFunctionList, Func<double, double> outputActivationFunction,
+                        bool feedForwardOnly): base(populationSize, scoreFunction)
         {
             if (numberOfInputs == 0)
             {
@@ -40,7 +48,16 @@ namespace NEATSpacesLibrary.CPPNNEAT
             this.defaultLinkGenes = new List<CPPNNEATLinkGene>();
 
             var outputGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, 1, CPPNNeuronType.Output, 
-                                                    canonicalFunctionList.RandomSingle());
+                                                    (outputActivationFunction == null)? 
+                                                        canonicalFunctionList.RandomSingle() : outputActivationFunction);
+
+            this.allFunctions = new List<Func<double, double>>();
+            this.allFunctions.AddRange(canonicalFunctionList);
+
+            if (outputActivationFunction != null)
+            {
+                this.allFunctions.Add(outputActivationFunction);
+            }
 
             var currentGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, 0, CPPNNeuronType.Bias, null);
             defaultNeuronGenes.Add(currentGene);
@@ -59,6 +76,19 @@ namespace NEATSpacesLibrary.CPPNNEAT
             this.FeedForwardOnly = feedForwardOnly;
 
             defaultNeuronGenes.Add(outputGene);
+        }
+
+        private List<Func<double, double>> allFunctions;
+        public IEnumerable<Func<double, double>> AllFunctions 
+        {
+            get
+            {
+                return allFunctions.AsReadOnly();
+            }
+            private set
+            {
+                allFunctions = (List<Func<double, double>>)value;
+            }
         }
 
         public int NumberOfInputs
