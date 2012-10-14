@@ -294,21 +294,26 @@ namespace NEATSpacesLibrary.NEATSpaces
                     }
                 }
 
+                var b = 0.0;
+
                 if (endFound)
                 {
                     if (endRecord.CheckpointMembershipCount >= mandatoryCheckPointLevel)
                     {
-                        return endRecord.Distance;
+                        b = endRecord.Distance;
                     }
                     else
                     {
-                        return 0;
+                        b = endRecord.CheckpointMembershipCount / (double)mandatoryCheckPointLevel;
                     }
                 }
                 else
                 {
-                    return -1;
+                    b = 0;
                 }
+
+                b += collisionMap.Where(x => x).Count() / ((double)MapConstants.MAP_SIZE * MapConstants.MAP_SIZE);
+                return b;
             }
         }
 

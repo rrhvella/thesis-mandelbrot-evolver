@@ -17,15 +17,15 @@ namespace NEATSpacesLibrary.NEATSpaces
         where GAType : BaseGA<GenomeType, GType, PType>
         where GenomeType : Genome<GType, PType>, new()
     {
-        private const int NUMBER_OF_GENERATIONS = 80;
-        private const int NUMBER_OF_RUNS = 10;
+        private const int NUMBER_OF_GENERATIONS = 10;
+        private const int NUMBER_OF_RUNS = 100;
 
-        private const int MATING_EVENTS_PER_GENERATION = 600;
+        private const int MATING_EVENTS_PER_GENERATION = 100;
         private const int TOTAL_TICKS = MATING_EVENTS_PER_GENERATION * NUMBER_OF_GENERATIONS;
 
-        private const int NUMBER_OF_TICKS_TO_UPDATE_IMAGE = 30;
+        private const int NUMBER_OF_TICKS_TO_UPDATE_IMAGE = 10;
 
-        private const int POPULATION_SIZE = 40;
+        private const int POPULATION_SIZE = 10;
         private double MILLISECONDS_TO_HOUR_RATIO = 1.0 / (1000.0 * 60.0 * 60.0);
 
         private Stopwatch stopWatch;
@@ -88,7 +88,7 @@ namespace NEATSpacesLibrary.NEATSpaces
             Console.WriteLine(String.Format("{0} out of {1} mating events completed for current generation.", matingIndex, MATING_EVENTS_PER_GENERATION));
 
             Console.Write("Average fitness: ");
-            Console.WriteLine(algorithmList.AlgorithmList.Select(algorithm => algorithm.AverageScore).Average());
+            Console.WriteLine(algorithmList.AlgorithmList.Where(ga => !ga.Failed).Select(algorithm => algorithm.AverageScore).Average());
 
             Console.Write("Number of failures: ");
             Console.WriteLine(algorithmList.NumberOfFailures);

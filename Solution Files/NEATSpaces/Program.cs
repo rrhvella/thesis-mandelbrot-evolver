@@ -11,27 +11,27 @@ namespace NEATSpaces
 {
     class Program: MapForm<CPPNNEATGA, CPPNNEATGenome, CPPNNEATGeneCollection, CPPNNetwork>
     {
-        private static double COMPATIBILITY_DISTANCE_THRESHOLD = 2.0;
+        private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
 
-        private static int NO_INNOVATION_THRESHOLD = 1125;
+        private static int NO_INNOVATION_THRESHOLD = 1000;
 
-        private static double WEIGHT_MUTATION_RATE = 0.8;
-        private static double NEW_NEURON_RATE = 0.3;
-        private static double NEW_LINK_RATE = 0.3;
+        private static double WEIGHT_MUTATION_RATE = 0.9;
+        private static double NEW_NEURON_RATE = 0.1;
+        private static double NEW_LINK_RATE = 0.1;
 
         private static double WEIGHT_PERTUBATION_RATE = 0.9;
 
         private static double DISABLE_GENE_RATE = 0.75;
 
-        private static double MAX_PERTURBATION = 2.5;
+        private static double MAX_PERTURBATION = 1.8;
         private static double MAX_WEIGHT = MAX_PERTURBATION;
 
         private const double EXCESS_GENES_WEIGHT = 1.0;
         private const double DISJOINT_GENES_WEIGHT = 1.0;
-        private const double MATCHING_GENES_WEIGHT = 1.0;
+        private const double MATCHING_GENES_WEIGHT = 4.0;
         private const double FUNCTION_DIFFERENCE_WEIGHT = 1.0;
 
-        private const double ELITISM_RATE = 0.4;
+        private const double ELITISM_RATE = 0.3;
         private const double INTERSPECIES_MATING_RATE = 0.001;
 
         private const int NUMBER_OF_INPUTS = 2;
@@ -51,7 +51,7 @@ namespace NEATSpaces
 
         public Program() 
         {
-            maxDistance = MathExtensions.EuclideanDistance(MapConstants.MAP_SIZE, MapConstants.MAP_SIZE);
+            maxDistance = 30;
             euclideanDistanceCache = new double[MapConstants.MAP_SIZE * MapConstants.MAP_SIZE][];
 
             foreach (var x in Enumerable.Range(0, MapConstants.MAP_SIZE))
