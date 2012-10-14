@@ -11,6 +11,7 @@ namespace NEATSpacesTests.CPPNNEAT
     public class CPPNNEATGeneCollectionTests
     {
         private CPPNNEATGeneCollection testCollection;
+        private static readonly double[] INPUT = new double[] { 0.5, 0.5 };
 
         [SetUp]
         public void SetUp()
@@ -177,14 +178,30 @@ namespace NEATSpacesTests.CPPNNEAT
 
             while (testCollection.TryCreateLinkGene())
             {
-                var input = new double[] { 0.5, 0.5 };
                 testCollection.Update();
 
-                Assert.AreEqual(testCollection.Phenome.GetActivation(input),
-                                testCollection.Phenome.GetActivation(input));
+                Assert.AreEqual(testCollection.Phenome.GetActivation(INPUT),
+                                testCollection.Phenome.GetActivation(INPUT));
             }
 
             Assert.AreEqual(7, testCollection.LinkGenes.Count);
+        }
+
+        [TestCase]
+        public void TestTryCreateLinkGeneMultiLayerFeedForwardOnly()
+        {
+            this.testCollection = GetFeedForwardNetwork();
+            testCollection.CreateNeuronGene(CPPNNEATConstants.HIDDEN_TO_OUTPUT_INDEX);
+
+            while (testCollection.TryCreateLinkGene())
+            {
+                testCollection.Update();
+
+                Assert.AreEqual(testCollection.Phenome.GetActivation(INPUT),
+                                testCollection.Phenome.GetActivation(INPUT));
+            }
+
+            Assert.AreEqual(12, testCollection.LinkGenes.Count);
         }
 
         private CPPNNEATGeneCollection GetFeedForwardNetwork()

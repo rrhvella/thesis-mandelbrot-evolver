@@ -11,14 +11,14 @@ namespace NEATSpacesTests.CPPNNEAT
     {
         private const int NUMBER_OF_MATING_EVENTS = 10;
         private const int NUMBER_OF_GENERATIONAL_MATING_EVENTS = 10;
-        private const int NUMBER_OF_GENERATIONAL_RUNS = 100;
+        private const int NUMBER_OF_GENERATIONAL_RUNS = 10;
 
         private readonly double[] INPUT = new[] { 0.0, 0.0 };
         private readonly double[,] XOR_TRUTH_TABLE = new double[,] { {0, 0, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0} };
 
         private int NUMBER_OF_INPUTS = 2;
         private int NUMBER_OF_GENOMES = 2;
-        private const int POPULATION = 100;
+        private const int POPULATION = 10;
 
         private static int NO_INNOVATION_THRESHOLD = 15;
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
@@ -264,11 +264,11 @@ namespace NEATSpacesTests.CPPNNEAT
 
         }
 
-        private void GenerationalStabilityTest(Action<CPPNNEATGA> test)
+        private void GenerationalStabilityTest(Action<CPPNNEATGA> test, bool feedForwardOnly)
         {
-            var testGA = new CPPNNEATGA(NUMBER_OF_INPUTS, POPULATION, genome => TestScoreFunction(genome), 
+            var testGA = new CPPNNEATGA(NUMBER_OF_INPUTS, POPULATION, genome => TestScoreFunction(genome, !feedForwardOnly), 
                                         new List<Func<double, double>>() { CPPNActivationFunctions.TanHActivationFunction },
-                                        true);
+                                        feedForwardOnly);
 
             testGA.CompatibilityDistanceThreshold = COMPATIBILITY_DISTANCE_THRESHOLD;
             testGA.NoInnovationThreshold = NO_INNOVATION_THRESHOLD;
@@ -311,7 +311,7 @@ namespace NEATSpacesTests.CPPNNEAT
             GenerationalStabilityTest(delegate(CPPNNEATGA testGA)
             {
                 Assert.AreEqual(POPULATION, testGA.Population.Count);
-            });
+            }, false);
         }
 
         [TestCase]
@@ -319,13 +319,26 @@ namespace NEATSpacesTests.CPPNNEAT
         {
             GenerationalStabilityTest(delegate(CPPNNEATGA testGA)
             {
-                Assert.AreEqual(testGA.Best.Score, TestScoreFunction(testGA.Best));
-            });
+                Assert.AreEqual(testGA.Best.Score, TestScoreFunction(testGA.Best, true));
+            }, false);
         }
 
-        private double TestScoreFunction(CPPNNEATGenome genome)
+        [TestCase]
+        public void TestGenerationalFeedForwardOnlyStability()
         {
-            genome.Phenome.Reset();
+            GenerationalStabilityTest(delegate(CPPNNEATGA testGA)
+            {
+                Assert.AreEqual(testGA.Best.Score, TestScoreFunction(testGA.Best, false));
+            }, true);
+        }
+
+        private double TestScoreFunction(CPPNNEATGenome genome, bool reset)
+        {
+            if (reset)
+            {
+                genome.Phenome.Reset();
+            }
+
             var totalError = 0.0;
 
             foreach (var i in Enumerable.Range(0, 4))
