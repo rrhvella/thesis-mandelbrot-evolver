@@ -242,6 +242,7 @@ namespace XORValidationTest
 
         private static double[] GetTruthTable(CPPNNEATGenome genome)
         {
+            genome.Phenome.Reset();
             return (from num in Enumerable.Range(0, 4)
                     select genome.Phenome.GetActivation(new double[] { num / 2, num % 2 })).ToArray();
         }

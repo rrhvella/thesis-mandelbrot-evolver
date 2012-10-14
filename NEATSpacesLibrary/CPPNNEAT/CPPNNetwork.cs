@@ -235,5 +235,13 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 return neuronToIndexDict.Count;
             }
         }
+
+        public void Reset()
+        {
+            foreach (var activation in activations)
+            {
+                activation.PreviousActivation = 0;
+            }
+        }
     }
 }

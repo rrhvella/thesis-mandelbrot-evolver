@@ -10,7 +10,7 @@ namespace NEATSpacesTests.CPPNNEAT
     public class CPPNNEATGenomeTests
     {
         private const int NUMBER_OF_MATING_EVENTS = 10;
-        private const int NUMBER_OF_GENERATIONAL_MATING_EVENTS = 100;
+        private const int NUMBER_OF_GENERATIONAL_MATING_EVENTS = 10;
         private const int NUMBER_OF_GENERATIONAL_RUNS = 100;
 
         private readonly double[] INPUT = new[] { 0.0, 0.0 };
@@ -264,12 +264,11 @@ namespace NEATSpacesTests.CPPNNEAT
 
         }
 
-        [TestCase]
-        public void TestGenerationalIterationStability()
+        private void GenerationalStabilityTest(Action<CPPNNEATGA> test)
         {
             var testGA = new CPPNNEATGA(NUMBER_OF_INPUTS, POPULATION, genome => TestScoreFunction(genome), 
                                         new List<Func<double, double>>() { CPPNActivationFunctions.TanHActivationFunction },
-                                        false);
+                                        true);
 
             testGA.CompatibilityDistanceThreshold = COMPATIBILITY_DISTANCE_THRESHOLD;
             testGA.NoInnovationThreshold = NO_INNOVATION_THRESHOLD;
@@ -301,13 +300,32 @@ namespace NEATSpacesTests.CPPNNEAT
                 foreach (var j in Enumerable.Range(0, NUMBER_OF_GENERATIONAL_MATING_EVENTS))
                 {
                     testGA.GenerationalIterate();
-                    Assert.AreEqual(POPULATION, testGA.Population.Count);
+                    test(testGA);
                 }
             }
         }
 
+        [TestCase]
+        public void TestGenerationalPopulationStability()
+        {
+            GenerationalStabilityTest(delegate(CPPNNEATGA testGA)
+            {
+                Assert.AreEqual(POPULATION, testGA.Population.Count);
+            });
+        }
+
+        [TestCase]
+        public void TestGenerationalPhenomeActivationStability()
+        {
+            GenerationalStabilityTest(delegate(CPPNNEATGA testGA)
+            {
+                Assert.AreEqual(testGA.Best.Score, TestScoreFunction(testGA.Best));
+            });
+        }
+
         private double TestScoreFunction(CPPNNEATGenome genome)
         {
+            genome.Phenome.Reset();
             var totalError = 0.0;
 
             foreach (var i in Enumerable.Range(0, 4))
