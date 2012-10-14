@@ -298,16 +298,16 @@ namespace NEATSpacesLibrary.NEATSpaces
                 {
                     if (endRecord.CheckpointMembershipCount >= mandatoryCheckPointLevel)
                     {
-                        return endRecord.Distance;
+                        return endRecord.Distance + 2;
                     }
                     else
                     {
-                        return 0;
+                        return 2;
                     }
                 }
                 else
                 {
-                    return -1;
+                    return 1;
                 }
             }
         }
