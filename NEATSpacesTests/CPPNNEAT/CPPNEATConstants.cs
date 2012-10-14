@@ -61,9 +61,25 @@ namespace NEATSpacesTests.CPPNNEAT
         }
 
         public static double ParallelActivation(double input1, double input2) 
-       {
+        {
             return OUTPUT_ACTIVATION_FUNCTION(Level2(input1, input2) + 
                     HIDDEN_ACTIVATION_FUNCTION(Level1(input1, input2)) * WEIGHT_4);
+        }
+
+        public static double TwoHiddenLayer(double input1, double input2)
+        {
+            var level1Hidden = HIDDEN_ACTIVATION_FUNCTION(Level1(input1, input2));
+            return OUTPUT_ACTIVATION_FUNCTION(HIDDEN_ACTIVATION_FUNCTION(Level1(input1, input2) + 
+                             level1Hidden * WEIGHT_4) * WEIGHT_3 +
+                            level1Hidden * WEIGHT_3);
+        }
+
+        public static double TwoHiddenLayerFull(double input1, double input2)
+        {
+            var level1Hidden = HIDDEN_ACTIVATION_FUNCTION(Level1(input1, input2));
+            return OUTPUT_ACTIVATION_FUNCTION(HIDDEN_ACTIVATION_FUNCTION(Level1(input1, input2) + 
+                             level1Hidden * WEIGHT_4) * WEIGHT_3 +
+                            level1Hidden * WEIGHT_3 + Level1(input1, input2));
         }
     }
 }
