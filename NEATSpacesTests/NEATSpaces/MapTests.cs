@@ -153,6 +153,9 @@ namespace NEATSpacesTests.NEATSpaces
         //A map with a valid path from start to end but with a long path present with a short path.
         public Map TestMap7;
 
+        //A map without a valid vertical/horizontal path but with a valid diagonal path.
+        public Map TestMap8;
+
         public static MapTestData Instance
         {
             get;
@@ -215,6 +218,14 @@ namespace NEATSpacesTests.NEATSpaces
             TestMap7 = new Map(3, 3, new MapNode(0, 0), new MapNode(2, 0), new[] { new MapNode(1, 0), new MapNode(0, 1) }, 1);
             TestMap7[1, 1] = true;
             
+            //Map 8.
+            TestMap8 = defaultMapFactory(new[] { new MapNode(1, 1) });
+
+            TestMap8[0, 1] = true;
+            TestMap8[1, 0] = true;
+            TestMap8[0, 2] = true;
+            TestMap8[2, 0] = true;
+            
         }
     }
 
@@ -246,6 +257,7 @@ namespace NEATSpacesTests.NEATSpaces
                 yield return new TestCaseData(MapTestData.Instance.TestMap5).Returns(4);
                 yield return new TestCaseData(MapTestData.Instance.TestMap6).Returns(4);
                 yield return new TestCaseData(MapTestData.Instance.TestMap7).Returns(2);
+                yield return new TestCaseData(MapTestData.Instance.TestMap8).Returns(-1);
             }
         }
 
