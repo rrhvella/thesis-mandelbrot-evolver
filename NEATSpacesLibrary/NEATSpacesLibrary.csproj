@@ -86,10 +86,13 @@
     <Compile Include="GeneticAlgorithms\SteadyStateGA.cs" />
     <Compile Include="GeneticAlgorithms\Genome.cs" />
     <Compile Include="CPPNNEAT\CPPNNetwork.cs" />
+    <Compile Include="NEATSpaces\MapForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="NEATSpaces\GAList.cs" />
     <Compile Include="NEATSpaces\Map.cs" />
     <Compile Include="NEATSpaces\MapConstants.cs" />
-    <Compile Include="NEATSpaces\MapForm.cs">
+    <Compile Include="NEATSpaces\GAExperiment.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
