@@ -1,0 +1,27 @@
+Allow GA Experiment to run in generational fashion.
+
+Unit test failures.
+
+-----------------------------------------------------------
+
+Rename elitism to survival treshold.
+
+Fix prototype 1.
+
+Change calls to mapsize to Map.width and map.height
+
+Create constant for number of inputs in XOR.
+
+Use innovation numbers instead of indexes.
+
+Rename SteadyStateGA to GA
+
+Create test for compatibility.
+
+Split classes into seperate libraries.
+
+Rename CPPNNEAT gene collection update so that it is consistent with the others... also create a true update method, which calls the parent update.
+
+Add exception for when GA is not initialised
+
+No need to create debug file in normal mode.
