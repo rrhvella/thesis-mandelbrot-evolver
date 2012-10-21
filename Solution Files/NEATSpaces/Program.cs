@@ -13,7 +13,7 @@ namespace NEATSpaces
     {
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
 
-        private const double INPUT_DIVISOR = 100;
+        private const double INPUT_DIVISOR = 30;
 
         private static int NO_INNOVATION_THRESHOLD = 1000;
         private static int ITERATIONS_TO_CLEAR_LINK_CACHE = 20;
