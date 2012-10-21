@@ -21,6 +21,7 @@ using SharpNeat.Decoders.Neat;
 using SharpNeat.Decoders;
 using System.Threading.Tasks;
 using SharpNeat.Network;
+using SharpNeat.Decoders.HyperNeat;
 
 namespace SharpNEATSpaces
 {
@@ -32,12 +33,13 @@ namespace SharpNEATSpaces
         private const double INPUT_DIVISOR = 1;
         private const int NUMBER_OF_THREADS = 10;
         private const int POPULATION_SIZE = 120;
-        private const uint NUMBER_OF_GENERATIONS_BETWEEN_UPDATES = 10;
+        private const uint NUMBER_OF_GENERATIONS_BETWEEN_UPDATES = 1;
+        private const double NON_CRITICAL_POSITION_ACTIVATION = -0.5;
+        private const double CRITICAL_POSITION_ACTIVATION = 0.5;
 
         public class MapEvaluator : IPhenomeEvaluator<IBlackBox>
         {
             private ulong evaluationCount;
-            private double[][] euclideanDistanceCache;
 
             public ulong EvaluationCount
             {
@@ -59,76 +61,58 @@ namespace SharpNEATSpaces
             {
             }
 
-            public MapEvaluator(double[][] euclideanDistanceCache)
-            {
-                this.euclideanDistanceCache = euclideanDistanceCache;
-            }
-
             public FitnessInfo Evaluate(IBlackBox phenome)
             {
+                evaluationCount++;
+                var fitness = GetMap(phenome).DistanceFromStartToEnd;
+
+                return new FitnessInfo(fitness, fitness);
+            }
+
+            private static int GetIndex(int x, int y)
+            {
+                return x + y * MapConstants.MAP_SIZE;
+            }
+
+            public void Reset()
+            {
+                evaluationCount = 0;
+            }
+
+            public static Map GetMap(IBlackBox phenome)
+            {
                 var result = MapConstants.CreateMap();
+
+                foreach (var i in Enumerable.Range(0, MapConstants.AREA))
+                {
+                    phenome.InputSignalArray[i] = NON_CRITICAL_POSITION_ACTIVATION;
+                }
+
+                phenome.InputSignalArray[GetIndex(MapConstants.START_NODE.X, MapConstants.START_NODE.Y)] = CRITICAL_POSITION_ACTIVATION;
+                phenome.InputSignalArray[GetIndex(MapConstants.END_NODE.X, MapConstants.END_NODE.Y)] = CRITICAL_POSITION_ACTIVATION;
+
+                foreach (var checkPoints in MapConstants.CHECKPOINTS)
+                {
+                    phenome.InputSignalArray[GetIndex(checkPoints.X, checkPoints.Y)] = CRITICAL_POSITION_ACTIVATION;
+                }
+                
+                phenome.Activate();
 
                 foreach (var x in Enumerable.Range(0, MapConstants.MAP_SIZE))
                 {
                     foreach (var y in Enumerable.Range(0, MapConstants.MAP_SIZE))
                     {
-                        var current = new MapNode(x, y);
-                        var cacheRecord = euclideanDistanceCache[y * MapConstants.MAP_SIZE + x];
-
-                        var input = new double[NUMBER_OF_INPUTS + NUMBER_OF_CRITICAL_POSITIONS];
-
-                        phenome.InputSignalArray[0] = x / INPUT_DIVISOR;
-                        phenome.InputSignalArray[1] = y / INPUT_DIVISOR;
-
-                        foreach(var i in Enumerable.Range(0, NUMBER_OF_CRITICAL_POSITIONS))
-                        {
-                            phenome.InputSignalArray[i + NUMBER_OF_INPUTS] = cacheRecord[i];
-                        }
-
-                        phenome.Activate();
-                        result[x, y] = phenome.OutputSignalArray[0] > 0.5;
+                        result[x, y] = phenome.OutputSignalArray[x + y * result.Width] < 0;
                     }
                 }
-                
-                evaluationCount++;
-                var fitness = result.DistanceFromStartToEnd;
 
-                return new FitnessInfo(fitness, fitness);
-            }
-
-            public void Reset()
-            {
-                throw new NotImplementedException();
+                return result;
             }
         }
-
-        private double[][] euclideanDistanceCache;
 
         public NEATSpaces()
         {
             InitializeComponent();
-
-            euclideanDistanceCache = new double[MapConstants.MAP_SIZE * MapConstants.MAP_SIZE][];
-
-            foreach (var x in Enumerable.Range(0, MapConstants.MAP_SIZE))
-            {
-                foreach (var y in Enumerable.Range(0, MapConstants.MAP_SIZE))
-                {
-                    var current = new MapNode(x, y);
-                    var cacheRecord = new double[NUMBER_OF_CRITICAL_POSITIONS];
-
-                    cacheRecord[0] = (current - MapConstants.START_NODE).EuclideanDistance / INPUT_DIVISOR;
-                    cacheRecord[1] = (current - MapConstants.END_NODE).EuclideanDistance / INPUT_DIVISOR;
-
-                    var i = 2;
-                    foreach (var checkpoint in MapConstants.CHECKPOINTS)
-                    {
-                        cacheRecord[i++] = (current - checkpoint).EuclideanDistance / INPUT_DIVISOR;
-                    }
-
-                    euclideanDistanceCache[y * MapConstants.MAP_SIZE + x] = cacheRecord;
-                }
-            }
 
             Run();
         }
@@ -156,9 +140,9 @@ namespace SharpNEATSpaces
             var algorithm = new NeatEvolutionAlgorithm<NeatGenome>(parameters,
                                                                new KMeansClusteringStrategy<NeatGenome>(
                                                                        new ManhattanDistanceMetric(
+                                                                            4.0,
                                                                             2.0,
-                                                                            2.0,
-                                                                            10.0
+                                                                            0.0
                                                                         )
                                                                     ),
                                                                new NullComplexityRegulationStrategy());
@@ -166,15 +150,54 @@ namespace SharpNEATSpaces
             var parallelOptions = new ParallelOptions();
             parallelOptions.MaxDegreeOfParallelism = NUMBER_OF_THREADS;
 
+            var inputNodes = new SubstrateNodeSet();
+            var hiddenNodes = new SubstrateNodeSet();
+            var outputNodes = new SubstrateNodeSet();
+
+            uint inputID = 1;
+            uint hiddenID = (uint)MapConstants.AREA + inputID;
+            uint outputID = (uint)MapConstants.AREA + hiddenID;
+
+            var nodeWidth = 1.0 / MapConstants.MAP_SIZE;
+            var halfNodeWidth = nodeWidth / 2 - MapConstants.MAP_SIZE / 2.0;
+
+            foreach (var x in Enumerable.Range(0, MapConstants.MAP_SIZE))
+            {
+                foreach (var y in Enumerable.Range(0, MapConstants.MAP_SIZE))
+                {
+                    var nodeCoord = GetNodeCoord(halfNodeWidth, x, y, nodeWidth);
+
+                    inputNodes.NodeList.Add(new SubstrateNode(inputID++, nodeCoord)); 
+                    hiddenNodes.NodeList.Add(new SubstrateNode(hiddenID++, nodeCoord)); 
+                    outputNodes.NodeList.Add(new SubstrateNode(outputID++, nodeCoord)); 
+                }
+            }
+
             algorithm.Initialize(new ParallelGenomeListEvaluator<NeatGenome, IBlackBox>(
-                                            new NeatGenomeDecoder
-                                            (
-                                                    NetworkActivationScheme.CreateAcyclicScheme()
+                                            new HyperNeatDecoder (
+                                                new Substrate(
+                                                    new List<SubstrateNodeSet> { 
+                                                        inputNodes,
+                                                        hiddenNodes,
+                                                        outputNodes
+                                                    }, 
+                                                    DefaultActivationFunctionLibrary.CreateLibraryNeat(new BipolarSigmoid()),
+                                                    0,
+                                                    0.3,
+                                                    8,
+                                                    new List<NodeSetMapping> 
+                                                    { 
+                                                        new NodeSetMapping(0, 1, new DefaultNodeSetMappingFunction(null, false)),
+                                                        new NodeSetMapping(1, 2, new DefaultNodeSetMappingFunction(null, false))
+                                                    }
+                                                ),
+                                                NetworkActivationScheme.CreateAcyclicScheme(),
+                                                NetworkActivationScheme.CreateAcyclicScheme()
                                             ),
-                                            new MapEvaluator(euclideanDistanceCache),
+                                            new MapEvaluator(),
                                             parallelOptions,
                                             true),
-                                            new CppnGenomeFactory(NUMBER_OF_INPUTS + NUMBER_OF_CRITICAL_POSITIONS, 1,
+                                            new CppnGenomeFactory(NUMBER_OF_INPUTS * 2, 2,
                                                             DefaultActivationFunctionLibrary.CreateLibraryCppn(),
                                                             genomeParams),
                                             POPULATION_SIZE
@@ -192,5 +215,11 @@ namespace SharpNEATSpaces
 
             Console.WriteLine(evolutionaryAlgorithm.CurrentGeneration + ": " + evolutionaryAlgorithm.Statistics._maxFitness);
         }
+
+        private double[] GetNodeCoord(double halfNodeWidth, double x, double y, double nodeWidth) 
+        {
+            return new double[] { halfNodeWidth + x * nodeWidth, halfNodeWidth + y * nodeWidth}; 
+        }
+
     }
 }
