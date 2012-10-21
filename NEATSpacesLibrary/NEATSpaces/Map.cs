@@ -118,10 +118,16 @@ namespace NEATSpacesLibrary.NEATSpaces
         }
 
         public Map(int width, int height, MapNode start, MapNode end, IEnumerable<MapNode> checkpoints, 
+                        int mandatoryCheckPointLevel)
+                :this(new bool[width * height], width, start, end, checkpoints, mandatoryCheckPointLevel)
+        {
+        }
+
+        public Map(bool[] collisionMap, int width, MapNode start, MapNode end, IEnumerable<MapNode> checkpoints, 
                                 int mandatoryCheckPointLevel)
         {
             this.Width = width;
-            this.Height = height;
+            this.Height = collisionMap.Length / width;
 
             this.StartNode = start;
             this.EndNode = end;
@@ -129,7 +135,7 @@ namespace NEATSpacesLibrary.NEATSpaces
             this.Checkpoints = checkpoints;
             this.mandatoryCheckPointLevel = mandatoryCheckPointLevel;
 
-            this.collisionMap = new bool[width * height];
+            this.collisionMap = collisionMap;
         }
 
         public bool this[int x, int y]

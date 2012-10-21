@@ -12,11 +12,12 @@ using System.Threading;
 
 namespace GAValidationTest
 {
-    public class Program: MapForm<SteadyStateGA<MapGenome, Map, Map>, MapGenome, Map, Map>
+    public class Program: MapForm<SteadyStateGA<MapGenome, bool[], bool[]>, MapGenome, bool[], bool[]>
     {
-        protected override Map TransformPhenome(Map phenome)
+        protected override Map TransformPhenome(bool[] phenome)
         {
-            return phenome;
+            return new Map(phenome, MapConstants.MAP_SIZE, MapConstants.START_NODE, MapConstants.END_NODE,
+                        MapConstants.CHECKPOINTS, MapConstants.MANDATORY_CHECKPOINT_LEVEL);
         }
 
         public static void Main(string[] args)
@@ -25,9 +26,10 @@ namespace GAValidationTest
             program.Run();
         }
 
-        protected override SteadyStateGA<MapGenome, Map, Map> CreateGAListGA(int populationSize, Func<MapGenome, double> scoreFunction)
+        protected override SteadyStateGA<MapGenome, bool[], bool[]> CreateGAListGA(int populationSize, 
+                                                                            Func<MapGenome, double> scoreFunction)
         {
-            return new SteadyStateGA<MapGenome, Map, Map>(populationSize, scoreFunction);
+            return new SteadyStateGA<MapGenome, bool[], bool[]>(populationSize, scoreFunction);
         }
     }
 }
