@@ -108,8 +108,12 @@ namespace XORValidationTest
                 //Initialise the GA.
                 var testGA = new CPPNNEATGA(2, POPULATION_SIZE, FitnessFunction, 
                     new List<Func<double,double>>() {
-                        CPPNActivationFunctions.SteepenedSigmoidActivationFunction
+                        CPPNActivationFunctions.SteepenedSigmoidActivationFunction,
+                        CPPNActivationFunctions.GaussActivationFunction,
+                        CPPNActivationFunctions.LinearActivationFunction,
+                        CPPNActivationFunctions.SinActivationFunction,
                     },
+                    CPPNActivationFunctions.SteepenedSigmoidActivationFunction,
                     false);
 
                 testGA.CompatibilityDistanceThreshold = COMPATIBILITY_DISTANCE_THRESHOLD;
@@ -258,9 +262,11 @@ namespace XORValidationTest
         public static double FitnessFunction(CPPNNEATGenome genome) {
             var truthTable = GetTruthTable(genome);
 
-            return Math.Pow(4 - truthTable.Zip(CORRECT_RESULT, 
+            var result = Math.Pow(4 - truthTable.Zip(CORRECT_RESULT, 
                                         (a, t) => Math.Abs(t - a))
                                       .Sum(), 2);
+
+            return result;
         }
 
         private static double[] GetTruthTable(CPPNNEATGenome genome)
