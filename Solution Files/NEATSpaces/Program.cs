@@ -116,7 +116,7 @@ namespace NEATSpaces
         protected override CPPNNEATGA CreateGAListGA(int populationSize, Func<CPPNNEATGenome, double> scoreFunction)
         {
             var result = new CPPNNEATGA(NUMBER_OF_INPUTS + NUMBER_OF_CRITICAL_POSITIONS, populationSize, 
-                                        scoreFunction, CANONICAL_FUNCTION_LIST, OUTPUT_ACTIVATION_FUNCTION, true);
+                                        scoreFunction, CANONICAL_FUNCTION_LIST, OUTPUT_ACTIVATION_FUNCTION, false);
 
             result.CompatibilityDistanceThreshold = COMPATIBILITY_DISTANCE_THRESHOLD;
             result.NoInnovationThreshold = NO_INNOVATION_THRESHOLD;
