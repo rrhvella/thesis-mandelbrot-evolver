@@ -212,6 +212,7 @@ namespace SharpNEATSpaces
         void algorithm_UpdateEvent(object sender, EventArgs e)
         {
             var evolutionaryAlgorithm = (NeatEvolutionAlgorithm<NeatGenome>)sender;
+            pictureBox1.Image = MapEvaluator.GetMap((IBlackBox)evolutionaryAlgorithm.CurrentChampGenome.CachedPhenome).Image;
 
             Console.WriteLine(evolutionaryAlgorithm.CurrentGeneration + ": " + evolutionaryAlgorithm.Statistics._maxFitness);
         }
