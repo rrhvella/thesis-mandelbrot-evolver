@@ -35,7 +35,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             get
             {
-                return x => Math.Sin(Math.PI * x);
+                return x => Math.Sin(2 * x);
             }
         }
 
@@ -43,7 +43,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             get
             {
-                return x =>  Math.Exp(-Math.Pow(x, 2)/9.0) * 2 - 1;
+                return x => Math.Exp(-Math.Pow(x * 2.5, 2.0));
             }
         }
 
