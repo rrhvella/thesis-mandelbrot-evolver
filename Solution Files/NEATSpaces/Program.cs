@@ -39,7 +39,7 @@ namespace NEATSpaces
 
         private const int NUMBER_OF_INPUTS = 2;
 
-        private static readonly Func<double, double> OUTPUT_ACTIVATION_FUNCTION = CPPNActivationFunctions.LinearActivationFunction; 
+        private static readonly Func<double, double> OUTPUT_ACTIVATION_FUNCTION = CPPNActivationFunctions.StepActivationFunction; 
 
         private static readonly List<Func<double, double>> CANONICAL_FUNCTION_LIST = new List<Func<double, double>>
         {
@@ -106,7 +106,7 @@ namespace NEATSpaces
                         input[i + NUMBER_OF_INPUTS] = cacheRecord[i];
                     }
 
-                    result[x, y] = phenome.GetActivation(input) >= 0;
+                    result[x, y] = phenome.GetActivation(input) == 0;
                 }
             }
 

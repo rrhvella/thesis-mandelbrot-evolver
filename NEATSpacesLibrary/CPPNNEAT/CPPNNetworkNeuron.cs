@@ -47,6 +47,14 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
+        public static Func<double, double> StepActivationFunction 
+        {
+            get
+            {
+                return x => (x >= 0)? 1 : 0;
+            }
+        }
+
         public static Func<double, double> SteepenedSigmoidActivationFunction
         {
             get
