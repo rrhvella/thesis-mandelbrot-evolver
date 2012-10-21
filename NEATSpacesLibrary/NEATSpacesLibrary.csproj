@@ -76,6 +76,7 @@
     <Compile Include="CPPNNEAT\CPPNNetworkNeuron.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\MathExtensions.cs" />
+    <Compile Include="GeneticAlgorithms\ArrayGenome.cs" />
     <Compile Include="GeneticAlgorithms\BaseGA.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGeneCollection.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGenome.cs" />
@@ -86,6 +87,10 @@
     <Compile Include="GeneticAlgorithms\SteadyStateGA.cs" />
     <Compile Include="GeneticAlgorithms\Genome.cs" />
     <Compile Include="CPPNNEAT\CPPNNetwork.cs" />
+    <Compile Include="NEATSpaces\PatternMatchingConstants.cs" />
+    <Compile Include="NEATSpaces\PatternMatchingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="NEATSpaces\MapForm.cs">
       <SubType>Form</SubType>
     </Compile>
