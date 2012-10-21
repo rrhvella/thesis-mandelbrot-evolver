@@ -110,7 +110,7 @@ namespace XORValidationTest
                     new List<Func<double,double>>() {
                         CPPNActivationFunctions.SteepenedSigmoidActivationFunction
                     },
-                    true);
+                    false);
 
                 testGA.CompatibilityDistanceThreshold = COMPATIBILITY_DISTANCE_THRESHOLD;
                 testGA.NoInnovationThreshold = NO_INNOVATION_THRESHOLD;
