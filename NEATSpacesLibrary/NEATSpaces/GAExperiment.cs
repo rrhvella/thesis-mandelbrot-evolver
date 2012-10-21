@@ -169,7 +169,12 @@ namespace NEATSpacesLibrary.NEATSpaces
 
             PrintInfo(numberOfGenerations, matingEventsPerGenerations, algorithmList);
 
-            GenerateImage(algorithmList.Best.Best.Phenome).Save("output.png", ImageFormat.Png);
+            var image = GenerateImage(algorithmList.Best.Best.Phenome);
+            
+            if(image != null)
+            {
+                image.Save("output.png", ImageFormat.Png);
+            }
 
             FileStream file = new FileStream("output.csv", FileMode.Create);
             StreamWriter writer = new StreamWriter(file);
