@@ -15,6 +15,7 @@ namespace NEATSpacesLibrary.NEATSpaces
         public static readonly MapNode END_NODE = new MapNode(29, 29);
 
         public const int MAP_SIZE = 30;
+        public const int AREA = MAP_SIZE * MAP_SIZE;
 
         public static Map CreateMap()
         {
