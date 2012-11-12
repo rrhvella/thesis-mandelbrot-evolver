@@ -15,8 +15,8 @@ namespace NEATSpaces
 
         private const double INPUT_DIVISOR = 30;
 
-        private static int NO_INNOVATION_THRESHOLD = 1000;
-        private static int ITERATIONS_TO_CLEAR_LINK_CACHE = 20;
+        private static int NO_INNOVATION_THRESHOLD = 150;
+        private static int ITERATIONS_TO_CLEAR_LINK_CACHE = 10;
 
         private static double WEIGHT_MUTATION_RATE = 0.9;
         private static double NEW_NEURON_RATE = 0.1;

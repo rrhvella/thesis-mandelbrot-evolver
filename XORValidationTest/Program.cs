@@ -1,5 +1,5 @@
 ﻿//#define DEBUG_GA
-#define GENERATIONAL_GA
+//#define GENERATIONAL_GA
 
 using System;
 using System.Collections.Generic;

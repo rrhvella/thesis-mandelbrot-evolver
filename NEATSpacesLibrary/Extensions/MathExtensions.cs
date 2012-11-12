@@ -47,5 +47,17 @@ namespace NEATSpacesLibrary.Extensions
         {
             return Math.Sqrt(x*x + y*y);
         }
+
+        public static int AbsMod(int n, int b)
+        {
+            n %= b;
+
+            if(n < 0) 
+            {
+                n += b;     
+            }
+
+            return n;
+        }
     }
 }

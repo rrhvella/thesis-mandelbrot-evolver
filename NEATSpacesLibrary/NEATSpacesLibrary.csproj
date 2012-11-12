@@ -76,10 +76,10 @@
     <Compile Include="CPPNNEAT\CPPNNetworkNeuron.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\MathExtensions.cs" />
-    <Compile Include="GeneticAlgorithms\ArrayGenome.cs" />
     <Compile Include="GeneticAlgorithms\BaseGA.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGeneCollection.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGenome.cs" />
+    <Compile Include="GeneticAlgorithms\CollectionGenome.cs" />
     <Compile Include="GeneticAlgorithms\IGA.cs" />
     <Compile Include="GeneticAlgorithms\ISpeciatedGA.cs" />
     <Compile Include="GeneticAlgorithms\SpeciatedGenome.cs" />

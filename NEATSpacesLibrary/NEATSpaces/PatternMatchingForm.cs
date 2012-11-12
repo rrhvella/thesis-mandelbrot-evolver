@@ -10,6 +10,7 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
+using NEATSpacesLibrary.Extensions;
 
 namespace NEATSpacesLibrary.NEATSpaces
 {
@@ -19,9 +20,9 @@ namespace NEATSpacesLibrary.NEATSpaces
             where GenomeType : Genome<GType, PType>, new()
     {
         private const int NUMBER_OF_GENERATIONS = 50;
-        private const int NUMBER_OF_RUNS = 100;
+        private const int NUMBER_OF_RUNS = 10;
 
-        private const int MATING_EVENTS_PER_GENERATION = 100;
+        private const int MATING_EVENTS_PER_GENERATION = 1;
         private const int TOTAL_TICKS = MATING_EVENTS_PER_GENERATION * NUMBER_OF_GENERATIONS;
 
         private const int NUMBER_OF_TICKS_TO_UPDATE_IMAGE = 10;
@@ -43,8 +44,23 @@ namespace NEATSpacesLibrary.NEATSpaces
         protected override double ScoreFunction(GenomeType genome)
         {
             var generatedPattern = TransformPhenome(genome.Phenome);
-            return generatedPattern.Zip(PatternMatchingConstants.TARGET_PATTERN, 
-                                    (first, second) => (first == second) ? 1 : 0).Sum();
+            return Enumerable.Range(1, generatedPattern.Length - 1)
+                        .Select(i =>
+                                PatternShifted(generatedPattern, -i).Zip(PatternMatchingConstants.TARGET_PATTERN, 
+                                    (first, second) => (first == second) ? 1 : 0).Sum()
+                        ).Max();
+        }
+
+        private int[] PatternShifted(int[] generatedPattern, int shiftAmount)
+        {
+            var result = new int[generatedPattern.Length];
+
+            foreach (var i in Enumerable.Range(0, generatedPattern.Length))
+            {
+                result[i] = generatedPattern[MathExtensions.AbsMod(i - shiftAmount, generatedPattern.Length)];
+            }
+
+            return result;
         }
     }
 }
