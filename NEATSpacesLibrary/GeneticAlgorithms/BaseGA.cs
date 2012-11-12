@@ -369,6 +369,17 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             previousSelection = selection;
         }
 
+        public void ForceUpdateGenomes()
+        {
+            foreach (var genome in population)
+            {
+                genome.UpdatePhenome();
+                genome.Score = scoreFunction(genome);
+            }
+
+            Update();
+        }
+
         public void Update()
         {
             bestCacheInvalidated = true;
