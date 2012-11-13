@@ -373,8 +373,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         {
             foreach (var genome in population)
             {
-                genome.UpdatePhenome();
-                genome.Score = scoreFunction(genome);
+                genome.Update();
+                UpdateGenome(genome);
             }
 
             Update();
