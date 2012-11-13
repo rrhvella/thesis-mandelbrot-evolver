@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Numerics;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
@@ -62,6 +63,46 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 return x => 1 / (1 + Math.Exp(-4.9 * x));
             }
         }
+
+        public static Func<Complex, Complex> ComplexSteepenedSigmoidActivationFunction 
+        {
+            get
+            {
+                return x => 1 / (1 + Complex.Exp(-4.9 * x));
+            }
+        }
+
+        public static Func<Complex, Complex> ComplexLinearActivationFunction 
+        {
+            get
+            {
+                return x => x;
+            }
+        }
+
+        public static Func<Complex, Complex> ComplexGaussianActivationFunction 
+        {
+            get
+            {
+                return x => Complex.Exp(-Complex.Pow(x * 2.5, 2.0));
+            }
+        }
+
+        public static Func<Complex, Complex> ComplexTanHActivationFunction
+        {
+            get
+            {
+                return x => Complex.Tanh(x);
+            }
+        }
+
+        public static Func<Complex, Complex> ComplexSinActivationFunction
+        {
+            get
+            {
+                return x => Complex.Sin(x);
+            }
+        }
     }
 
     public class Synapse
@@ -87,7 +128,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
     public abstract class CPPNNetworkNeuron
     {
-        public Func<double, double> ActivationFunction
+        public Func<Complex, Complex> ActivationFunction
         {
             get;
             protected set;
@@ -138,7 +179,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
     public class CPPNOutputNeuron: CPPNNetworkNeuron
     {
-        public CPPNOutputNeuron(Func<double, double> activationFunction)
+        public CPPNOutputNeuron(Func<Complex, Complex> activationFunction)
         {
             this.ActivationFunction = activationFunction;
             this.NeuronType = CPPNNeuronType.Output;
@@ -147,7 +188,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
     public class CPPNHiddenNeuron: CPPNOutputNeuron
     {
-        public CPPNHiddenNeuron(Func<double, double> activationFunction): base(activationFunction)
+        public CPPNHiddenNeuron(Func<Complex, Complex> activationFunction): base(activationFunction)
         {
             this.NeuronType = CPPNNeuronType.Hidden;
         }

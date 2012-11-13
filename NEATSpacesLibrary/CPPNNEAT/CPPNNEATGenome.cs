@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NEATSpacesLibrary.Extensions;
 using NEATSpacesLibrary.GeneticAlgorithms;
+using System.Numerics;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
@@ -149,7 +150,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
-        public double GetActivation(double[] input)
+        public Complex GetActivation(Complex[] input)
         {
             return Phenome.GetActivation(input);
         }
@@ -169,7 +170,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             var analysis2 = (genome as CPPNNEATGenome).GetFunctionAnalysis();
 
             var averageFunctionDifference = (Parent as CPPNNEATGA).AllFunctions
-                                                    .Select(delegate(Func<double, double> function) {
+                                                    .Select(delegate(Func<Complex, Complex> function) {
                                                         return Math.Abs(analysis1[function] - analysis2[function]);
                                                     })
                                                 .Average();
@@ -190,9 +191,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
                  parent.FunctionDifferenceWeight * averageFunctionDifference;
         }
 
-        public Dictionary<Func<double, double>, int> GetFunctionAnalysis()
+        public Dictionary<Func<Complex, Complex>, int> GetFunctionAnalysis()
         {
-            var result = new Dictionary<Func<double, double>, int>();
+            var result = new Dictionary<Func<Complex, Complex>, int>();
 
             foreach (var function in (Parent as CPPNNEATGA).AllFunctions)
             {
