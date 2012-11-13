@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using NEATSpacesLibrary.Extensions;
 using NEATSpacesLibrary.GeneticAlgorithms;
-using System.Numerics;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
@@ -100,7 +99,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
-        public void UpdateNeuronActivationFunction(int neuronIndex, Func<Complex, Complex> activationFunction)
+        public void UpdateNeuronActivationFunction(int neuronIndex, Func<double, double> activationFunction)
         {
             neuronGenes[neuronIndex].ActivationFunction = activationFunction;
             Parent.Update();

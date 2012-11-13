@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NEATSpacesLibrary.GeneticAlgorithms;
-using System.Numerics;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
@@ -32,7 +31,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         }
 
         public CPPNNEATNeuronGene(int innovationNumber, double level, 
-                                CPPNNeuronType type, Func<Complex, Complex> activationFunction)
+                                CPPNNeuronType type, Func<double, double> activationFunction)
         {
             this.innovationNumber = innovationNumber;
             this.Level = level;
@@ -41,7 +40,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             this.ActivationFunction = activationFunction;
         }
 
-        public Func<Complex, Complex> ActivationFunction
+        public Func<double, double> ActivationFunction
         {
             get;
             internal set;

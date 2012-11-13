@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Numerics;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
@@ -15,14 +14,14 @@ namespace NEATSpacesLibrary.CPPNNEAT
         private int outputNeuronIndex;
 
         private bool adjacencyMatrixInvalidated;
-        private Complex[] adjacencyMatrix;
+        private double[] adjacencyMatrix;
 
         private List<ActivationRecord> activations;
 
         private class ActivationRecord
         {
-            public Complex? Activation;
-            public Complex? PreviousActivation;
+            public double? Activation;
+            public double? PreviousActivation;
             public bool IsCalculating;
             public CPPNNetworkNeuron Neuron;
 
@@ -36,9 +35,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             public int I;
             public int NodeIndex;
-            public Complex Net;
+            public double Net;
 
-            public NodeIndexRecord(int currentNodeIndex, int i, Complex net)
+            public NodeIndexRecord(int currentNodeIndex, int i, double net)
             {
                 this.NodeIndex = currentNodeIndex;
                 this.I = i;
@@ -55,7 +54,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             this.activations = new List<ActivationRecord>();
         }
 
-        public Complex GetActivation(Complex[] input)
+        public double GetActivation(double[] input)
         {
             if (input.Length != inputNeuronIndexes.Count)
             {
@@ -136,7 +135,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                         }
                     }
 
-                    net += adjacencyMatrix[rowFirstCell + i] * (Complex)childActivationRecord.Activation;
+                    net += adjacencyMatrix[rowFirstCell + i] * (double)childActivationRecord.Activation;
                 }
 
                 if (skipWhileLoop)
@@ -161,12 +160,12 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 activation.PreviousActivation = activation.Activation;
             }
 
-            return (Complex)activations[outputNeuronIndex].Activation;
+            return (double)activations[outputNeuronIndex].Activation;
         }
 
-        private Complex[] BuildAdjacencyMatrix()
+        private double[] BuildAdjacencyMatrix()
         {
-            var result = new Complex[neuronToIndexDict.Count * neuronToIndexDict.Count];
+            var result = new double[neuronToIndexDict.Count * neuronToIndexDict.Count];
 
             foreach (var record in neuronToIndexDict)
             {

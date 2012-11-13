@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using NEATSpacesLibrary.Extensions;
 using NEATSpacesLibrary.GeneticAlgorithms;
-using System.Numerics;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
@@ -16,21 +15,21 @@ namespace NEATSpacesLibrary.CPPNNEAT
         private Dictionary<int, Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>> edgeMap;
         private Dictionary<int, CPPNNEATNeuronGene> hiddenNeuronMap;
 
-        public IList<Func<Complex, Complex>> CanonicalFunctionList
+        public IList<Func<double, double>> CanonicalFunctionList
         {
             get;
             private set;
         }
 
         public CPPNNEATGA(int numberOfInputs, int populationSize, Func<CPPNNEATGenome, double> scoreFunction,
-                        List<Func<Complex, Complex>> canonicalFunctionList, 
+                        List<Func<double, double>> canonicalFunctionList, 
                         bool feedForwardOnly)
             : this(numberOfInputs, populationSize, scoreFunction, canonicalFunctionList, null, feedForwardOnly) 
         {
         }
 
         public CPPNNEATGA(int numberOfInputs, int populationSize, Func<CPPNNEATGenome, double> scoreFunction,
-                        List<Func<Complex, Complex>> canonicalFunctionList, Func<Complex, Complex> outputActivationFunction,
+                        List<Func<double, double>> canonicalFunctionList, Func<double, double> outputActivationFunction,
                         bool feedForwardOnly): base(populationSize, scoreFunction)
         {
             if (numberOfInputs == 0)
@@ -52,7 +51,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                                                     (outputActivationFunction == null)? 
                                                         canonicalFunctionList.RandomSingle() : outputActivationFunction);
 
-            this.allFunctions = new List<Func<Complex, Complex>>();
+            this.allFunctions = new List<Func<double, double>>();
             this.allFunctions.AddRange(canonicalFunctionList);
 
             if (outputActivationFunction != null)
@@ -79,8 +78,8 @@ namespace NEATSpacesLibrary.CPPNNEAT
             defaultNeuronGenes.Add(outputGene);
         }
 
-        private List<Func<Complex, Complex>> allFunctions;
-        public IEnumerable<Func<Complex, Complex>> AllFunctions 
+        private List<Func<double, double>> allFunctions;
+        public IEnumerable<Func<double, double>> AllFunctions 
         {
             get
             {
@@ -88,7 +87,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
             private set
             {
-                allFunctions = (List<Func<Complex, Complex>>)value;
+                allFunctions = (List<Func<double, double>>)value;
             }
         }
 

@@ -81,6 +81,10 @@
       <Project>{9A081F3C-3C49-4195-9132-B6F5E97B8935}</Project>
       <Name>NEATSpacesLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Third Party\SharpNeatLib\SharpNeatLib.csproj">
+      <Project>{ABC5C77A-DEBA-420C-926C-BD3E6F37AE15}</Project>
+      <Name>SharpNeatLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
