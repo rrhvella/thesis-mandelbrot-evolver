@@ -40,32 +40,47 @@ namespace NEATSpacesLibrary.NEATSpaces
         {
             if (Genome != null && Genome.Phenome != null)
             {
-                var image = new Bitmap(Width / zoomFactor, Height / zoomFactor);
+                var image = new Bitmap(Width, Height);
                 var network = Genome.Phenome;
                 network.Reset();
 
                 var graphics = e.Graphics;
+                var intensities = new double[Width, Height];
 
-                foreach (var x in Enumerable.Range(0, image.Width))
+                var maxMagnitude = 0.0;
+
+                foreach (var x in Enumerable.Range(0, Width))
                 {
-                    foreach (var y in Enumerable.Range(0, image.Height))
+                    foreach (var y in Enumerable.Range(0, Height))
                     {
-                        var complex = network.GetActivation(new Complex[] { new Complex((double)x / image.Width, 
-                                                                                (double)y / image.Height)});
-                        var currentMagnitude = complex.Magnitude; 
-                        int i = 0;
+                        var intensity = network.GetActivation(new Complex[] { new Complex((double)x / Width, 
+                                                                                    (double)y / Height)}).Magnitude;
 
-                        for(; i < ESCAPE && currentMagnitude < 4; i++) { 
-                            complex = network.GetActivation(new Complex[] { complex });
-                            currentMagnitude = complex.Magnitude; 
+                        if (double.IsInfinity(intensity) || double.IsNaN(intensity))
+                        {
+                            intensity = 0;
                         }
 
-                        var intensity = (int)((double)i / ESCAPE * 255);
-                        image.SetPixel(x, y, Color.FromArgb(intensity, intensity, intensity));
+                        if (intensity > maxMagnitude)
+                        {
+                            maxMagnitude = intensity;
+                        }
+
+
+                        intensities[x, y] = intensity;
                     }
                 }
 
-                graphics.DrawImage(image, new RectangleF(0, 0, Width, Height));
+                foreach (var x in Enumerable.Range(0, Width))
+                {
+                    foreach (var y in Enumerable.Range(0, Width))
+                    {
+                        var intensity = (int)(255 * intensities[x, y] / maxMagnitude);
+                        image.SetPixel(x, y, Color.FromArgb(intensity, intensity, intensity));
+                    }
+                }
+            
+                graphics.DrawImage(image, 0, 0);
             }
         }
 
