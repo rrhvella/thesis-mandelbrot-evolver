@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Numerics;
 
 namespace NEATSpacesLibrary.Extensions
 {
@@ -58,6 +59,20 @@ namespace NEATSpacesLibrary.Extensions
             }
 
             return n;
+        }
+
+        public static Complex ComplexRandom()
+        {
+            return ComplexRandom(0, 1);
+        }
+
+        public static Complex ComplexRandom(double from, double to)
+        {
+            var range = (to - from);
+            var r = from + range * RandomNumber();
+            var a = from + range * RandomNumber();
+
+            return Complex.FromPolarCoordinates(r, a * Math.PI);
         }
     }
 }

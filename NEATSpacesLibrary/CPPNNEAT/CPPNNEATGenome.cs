@@ -217,7 +217,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                     {
                         if (Parent.Random.NextDouble() <= parent.WeightPertubationRate)
                         {
-                            link.Weight += (Parent.Random.NextDouble() - 0.5) * 2 * parent.MaxPerturbation;
+                            link.Weight += MathExtensions.ComplexRandom(-parent.MaxPerturbation, parent.MaxPerturbation);
                         }
                         else
                         {

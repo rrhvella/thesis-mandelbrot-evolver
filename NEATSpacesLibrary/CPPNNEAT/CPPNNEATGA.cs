@@ -184,9 +184,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
-        public double GetRandomWeight()
+        public Complex GetRandomWeight()
         {
-            return (Random.NextDouble() - 0.5) * 2 * MaxWeight;
+            return MathExtensions.ComplexRandom(-MaxWeight, MaxWeight);
         }
 
 
