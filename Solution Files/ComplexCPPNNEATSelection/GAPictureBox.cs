@@ -50,13 +50,16 @@ namespace NEATSpacesLibrary.NEATSpaces
                 {
                     foreach (var y in Enumerable.Range(0, image.Height))
                     {
-                        var complex = network.GetActivation(new Complex[] { new Complex((double)x / image.Width, 
-                                                                                (double)y / image.Height)});
+                        var positionComplex = new Complex((double)x / image.Width,
+                                                                (double)y / image.Height);
+
+                        var complex = Complex.Zero;
                         var currentMagnitude = complex.Magnitude; 
+
                         int i = 0;
 
                         for(; i < ESCAPE && currentMagnitude < 4; i++) { 
-                            complex = network.GetActivation(new Complex[] { complex });
+                            complex = network.GetActivation(new Complex[] { positionComplex, complex });
                             currentMagnitude = complex.Magnitude; 
                         }
 

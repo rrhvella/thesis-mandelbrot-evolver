@@ -25,8 +25,8 @@ namespace NEATSpacesLibrary.NEATSpaces
         private static int ITERATIONS_TO_CLEAR_LINK_CACHE = 1;
 
         private static double WEIGHT_MUTATION_RATE = 0.9;
-        private static double NEW_NEURON_RATE = 0.1;
-        private static double NEW_LINK_RATE = 0.2;
+        private static double NEW_NEURON_RATE = 0.3;
+        private static double NEW_LINK_RATE = 0.4;
 
         private static double WEIGHT_PERTUBATION_RATE = 0.9;
 
@@ -40,17 +40,17 @@ namespace NEATSpacesLibrary.NEATSpaces
         private const double MATCHING_GENES_WEIGHT = 0.4;
         private const double FUNCTION_DIFFERENCE_WEIGHT = 1.0;
 
-        private const double ELITISM_RATE = 0.3;
+        private const double ELITISM_RATE = 0.8;
         private const double INTERSPECIES_MATING_RATE = 0.001;
         
         private const double CROSSOVER_RATE = 0.75;
 
-        private const int NUMBER_OF_INPUTS = 1;
+        private const int NUMBER_OF_INPUTS = 2;
 
-        private int imagesPerRow = 3;
-        private int imageWidth = 50;
-        private int populationSize = 9;
-        private int imageHeight = 50;
+        private int imagesPerRow = 4;
+        private int imageWidth = 25;
+        private int populationSize = 18;
+        private int imageHeight = 25;
         private int zoomFactor = 4;
 
         private GAPanel[] images;
@@ -88,7 +88,8 @@ namespace NEATSpacesLibrary.NEATSpaces
                                             return (pictureBox != null)? pictureBox.Score : 0;
                                         }, new List<Func<Func<Complex,Complex>>>  {
                                                 CPPNActivationFunctionFactories.ComplexLinearActivationFunctionFactory,
-                                                CPPNActivationFunctionFactories.ComplexPolynomialActivationFunctionFactory
+                                                CPPNActivationFunctionFactories.ComplexPolynomialActivationFunctionFactory,
+                                                CPPNActivationFunctionFactories.ComplexExponentialActivationFunctionFactory
                                                 },
                                                 CPPNActivationFunctionFactories.ComplexLinearActivationFunctionFactory,
                                         true);
