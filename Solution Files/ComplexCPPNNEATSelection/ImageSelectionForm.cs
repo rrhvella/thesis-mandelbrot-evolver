@@ -47,10 +47,10 @@ namespace NEATSpacesLibrary.NEATSpaces
 
         private const int NUMBER_OF_INPUTS = 2;
 
-        private int imagesPerRow = 4;
-        private int imageWidth = 25;
-        private int populationSize = 18;
-        private int imageHeight = 25;
+        private int imagesPerRow = 2;
+        private int imageWidth = 50;
+        private int populationSize = 4;
+        private int imageHeight = 50;
         private int zoomFactor = 4;
 
         private GAPanel[] images;

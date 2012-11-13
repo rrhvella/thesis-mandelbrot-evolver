@@ -33,25 +33,31 @@ namespace NEATSpacesLibrary.NEATSpaces
         }
 
 
-        private const int ESCAPE = 50;
+        private const int ESCAPE = 10;
         private int zoomFactor;
 
         void GAPanel_Paint(object sender, PaintEventArgs e)
         {
             if (Genome != null && Genome.Phenome != null)
             {
-                var image = new Bitmap(Width / zoomFactor, Height / zoomFactor);
+                var width = Width / zoomFactor;
+                var height = Height / zoomFactor;
+
+                var image = new Bitmap(width, height);
                 var network = Genome.Phenome;
                 network.Reset();
 
                 var graphics = e.Graphics;
+                var intensities = new double[width, height];
 
-                foreach (var x in Enumerable.Range(0, image.Width))
+                var maxMagnitude = 0.0;
+
+                foreach (var x in Enumerable.Range(0, width))
                 {
-                    foreach (var y in Enumerable.Range(0, image.Height))
+                    foreach (var y in Enumerable.Range(0, height))
                     {
-                        var positionComplex = new Complex((double)x / image.Width,
-                                                                (double)y / image.Height);
+                        var positionComplex = new Complex((double)x / width,
+                                                                (double)y / height);
 
                         var complex = Complex.Zero;
                         var currentMagnitude = complex.Magnitude; 
@@ -64,7 +70,41 @@ namespace NEATSpacesLibrary.NEATSpaces
                         }
 
                         var intensity = (int)((double)i / ESCAPE * 255);
-                        image.SetPixel(x, y, Color.FromArgb(intensity, intensity, intensity));
+                        //var intensity = currentMagnitude; 
+
+                        if (!(double.IsInfinity(intensity) || double.IsNaN(intensity)) && 
+                            intensity > maxMagnitude)
+                        {
+                            maxMagnitude = intensity;
+                        }
+
+
+                        intensities[x, y] = intensity;
+                    }
+                }
+
+                foreach (var x in Enumerable.Range(0, width))
+                {
+                    foreach (var y in Enumerable.Range(0, height))
+                    {
+                        var intensity = intensities[x, y];
+                        if (double.IsInfinity(intensity))
+                        {
+                            intensity = maxMagnitude;
+                        }
+                        else if(double.IsNaN(intensity))
+                        {
+                            intensity = 0;
+                        }
+
+                        var shadow = 0;
+
+                        if (maxMagnitude > 0)
+                        {
+                            shadow = (int)(255 * intensity / maxMagnitude);
+                        }
+
+                        image.SetPixel(x, y, Color.FromArgb(shadow, shadow, shadow));
                     }
                 }
 
