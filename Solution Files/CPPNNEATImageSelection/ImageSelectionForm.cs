@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
 using NEATSpacesLibrary.CPPNNEAT;
+using System.Numerics;
 
 namespace NEATSpacesLibrary.NEATSpaces
 {
@@ -82,12 +83,9 @@ namespace NEATSpacesLibrary.NEATSpaces
                                         {
                                             var pictureBox = images.Where(image => image.Genome == genome).FirstOrDefault();
                                             return (pictureBox != null)? pictureBox.Score : 0;
-                                        }, new List<Func<double,double>> 
-                                            { CPPNActivationFunctions.SteepenedSigmoidActivationFunction,
-                                                CPPNActivationFunctions.GaussActivationFunction,
-                                                CPPNActivationFunctions.SinActivationFunction,
-                                                CPPNActivationFunctions.TanHActivationFunction},
-                                                CPPNActivationFunctions.SteepenedSigmoidActivationFunction,
+                                        }, new List<Func<Complex,Complex>> 
+                                            { CPPNActivationFunctions.ComplexSteepenedSigmoidActivationFunction
+                                                },
                                         false);
 
             ga.CompatibilityDistanceThreshold = COMPATIBILITY_DISTANCE_THRESHOLD;
