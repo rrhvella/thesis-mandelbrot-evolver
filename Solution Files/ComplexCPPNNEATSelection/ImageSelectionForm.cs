@@ -47,11 +47,11 @@ namespace NEATSpacesLibrary.NEATSpaces
 
         private const int NUMBER_OF_INPUTS = 2;
 
-        private int imagesPerRow = 2;
-        private int imageWidth = 50;
-        private int populationSize = 4;
-        private int imageHeight = 50;
-        private int zoomFactor = 4;
+        private int imagesPerRow = 4;
+        private int imageWidth = 100;
+        private int populationSize = 8;
+        private int imageHeight = 100;
+        private int zoomFactor = 2;
 
         private GAPanel[] images;
         private CPPNNEATGA ga;
@@ -89,7 +89,10 @@ namespace NEATSpacesLibrary.NEATSpaces
                                         }, new List<Func<Func<Complex,Complex>>>  {
                                                 CPPNActivationFunctionFactories.ComplexLinearActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexPolynomialActivationFunctionFactory,
-                                                CPPNActivationFunctionFactories.ComplexExponentialActivationFunctionFactory
+                                                CPPNActivationFunctionFactories.ComplexExponentialActivationFunctionFactory,
+                                                CPPNActivationFunctionFactories.ComplexGaussianActivationFunctionFactory,
+                                                CPPNActivationFunctionFactories.ComplexSteepenedSigmoidActivationFunctionFactory,
+                                                CPPNActivationFunctionFactories.ComplexSinActivationFunctionFactory,
                                                 },
                                                 CPPNActivationFunctionFactories.ComplexLinearActivationFunctionFactory,
                                         true);

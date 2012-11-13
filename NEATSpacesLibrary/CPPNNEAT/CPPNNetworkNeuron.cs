@@ -45,6 +45,28 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 return delegate() { return x => Complex.Pow(power, x); };
             }
         }
+        public static Func<Func<Complex, Complex>> ComplexSteepenedSigmoidActivationFunctionFactory
+        {
+            get
+            {
+                return delegate() { return x => 1 / (1 + Complex.Exp(-4.9 * x)); };
+            }
+        }
+        public static Func<Func<Complex, Complex>> ComplexGaussianActivationFunctionFactory
+        {
+            get
+            {
+                return delegate() { return x => Complex.Exp(-Complex.Pow(x * 2.5, 2.0)); };
+            }
+        }
+
+        public static Func<Func<Complex, Complex>> ComplexSinActivationFunctionFactory
+        {
+            get
+            {
+                return delegate() { return x => Complex.Sin(x); };
+            }
+        }
     }
 
     public class Synapse
