@@ -86,13 +86,11 @@ namespace NEATSpacesLibrary.NEATSpaces
                                         {
                                             var pictureBox = images.Where(image => image.Genome == genome).FirstOrDefault();
                                             return (pictureBox != null)? pictureBox.Score : 0;
-                                        }, new List<Func<Complex,Complex>>  {
-                                                CPPNActivationFunctions.ComplexGaussianActivationFunction,
-                                                CPPNActivationFunctions.ComplexSteepenedSigmoidActivationFunction,
-                                                CPPNActivationFunctions.ComplexSinActivationFunction,
-                                                CPPNActivationFunctions.ComplexLinearActivationFunction,
+                                        }, new List<Func<Func<Complex,Complex>>>  {
+                                                CPPNActivationFunctionFactories.ComplexLinearActivationFunctionFactory,
+                                                CPPNActivationFunctionFactories.ComplexPolynomialActivationFunctionFactory
                                                 },
-                                                CPPNActivationFunctions.ComplexLinearActivationFunction,
+                                                CPPNActivationFunctionFactories.ComplexLinearActivationFunctionFactory,
                                         true);
 
             ga.CompatibilityDistanceThreshold = COMPATIBILITY_DISTANCE_THRESHOLD;

@@ -16,21 +16,22 @@ namespace NEATSpacesLibrary.CPPNNEAT
         private Dictionary<int, Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>> edgeMap;
         private Dictionary<int, CPPNNEATNeuronGene> hiddenNeuronMap;
 
-        public IList<Func<Complex, Complex>> CanonicalFunctionList
+        public IList<Func<Func<Complex, Complex>>> CanonicalFunctionList
         {
             get;
             private set;
         }
 
         public CPPNNEATGA(int numberOfInputs, int populationSize, Func<CPPNNEATGenome, double> scoreFunction,
-                        List<Func<Complex, Complex>> canonicalFunctionList, 
+                        List<Func<Func<Complex, Complex>>> canonicalFunctionList, 
                         bool feedForwardOnly)
             : this(numberOfInputs, populationSize, scoreFunction, canonicalFunctionList, null, feedForwardOnly) 
         {
         }
 
         public CPPNNEATGA(int numberOfInputs, int populationSize, Func<CPPNNEATGenome, double> scoreFunction,
-                        List<Func<Complex, Complex>> canonicalFunctionList, Func<Complex, Complex> outputActivationFunction,
+                        List<Func<Func<Complex, Complex>>> canonicalFunctionList, 
+                        Func<Func<Complex, Complex>> outputActivationFunction,
                         bool feedForwardOnly): base(populationSize, scoreFunction)
         {
             if (numberOfInputs == 0)
@@ -50,15 +51,8 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
             var outputGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, 1, CPPNNeuronType.Output, 
                                                     (outputActivationFunction == null)? 
-                                                        canonicalFunctionList.RandomSingle() : outputActivationFunction);
+                                                        canonicalFunctionList.RandomSingle()() : outputActivationFunction());
 
-            this.allFunctions = new List<Func<Complex, Complex>>();
-            this.allFunctions.AddRange(canonicalFunctionList);
-
-            if (outputActivationFunction != null)
-            {
-                this.allFunctions.Add(outputActivationFunction);
-            }
 
             var currentGene = new CPPNNEATNeuronGene(neuronInnovationNumber++, 0, CPPNNeuronType.Bias, null);
             defaultNeuronGenes.Add(currentGene);
@@ -77,19 +71,6 @@ namespace NEATSpacesLibrary.CPPNNEAT
             this.FeedForwardOnly = feedForwardOnly;
 
             defaultNeuronGenes.Add(outputGene);
-        }
-
-        private List<Func<Complex, Complex>> allFunctions;
-        public IEnumerable<Func<Complex, Complex>> AllFunctions 
-        {
-            get
-            {
-                return allFunctions.AsReadOnly();
-            }
-            private set
-            {
-                allFunctions = (List<Func<Complex, Complex>>)value;
-            }
         }
 
         public int NumberOfInputs
@@ -248,7 +229,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 var level = (edge.Item1.Level + edge.Item2.Level) / 2;
 
                 hiddenNeuronMap[innovationNumber] = new CPPNNEATNeuronGene(neuronInnovationNumber++, level, CPPNNeuronType.Hidden, 
-                                                                    CanonicalFunctionList.RandomSingle());
+                                                                    CanonicalFunctionList.RandomSingle()());
             }
 
             return hiddenNeuronMap[innovationNumber];

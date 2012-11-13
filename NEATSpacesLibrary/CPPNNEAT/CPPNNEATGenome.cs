@@ -115,7 +115,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                                                                     differences.SecondCollection;
             }
 
-            Func<CPPNNEATLinkGene, CPPNNEATLinkGene, double> weightSelector = null;
+            Func<CPPNNEATLinkGene, CPPNNEATLinkGene, Complex> weightSelector = null;
 
             if (parentGA.Random.NextDouble() <= parentGA.MateByAveragingRate)
             {
@@ -163,17 +163,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
             var totalDisjoint = differences.FirstCollection.Disjoint.Count + differences.SecondCollection.Disjoint.Count;
 
             var averageWeightDifference = differences.Matches
-                                                    .Select(match => Math.Abs(match.FirstCollection.Weight - match.SecondCollection.Weight))
+                                                    .Select(match => (match.FirstCollection.Weight - match.SecondCollection.Weight).Magnitude)
                                                     .Average();
 
-            var analysis1 = GetFunctionAnalysis();
-            var analysis2 = (genome as CPPNNEATGenome).GetFunctionAnalysis();
-
-            var averageFunctionDifference = (Parent as CPPNNEATGA).AllFunctions
-                                                    .Select(delegate(Func<Complex, Complex> function) {
-                                                        return Math.Abs(analysis1[function] - analysis2[function]);
-                                                    })
-                                                .Average();
 
             var n = (double)Math.Max(this.GeneCollection.LinkGenes.Count(),
                             genome.GeneCollection.LinkGenes.Count());
@@ -187,28 +179,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
             return parent.ExcessGenesWeight * (totalExcess / n) +
                  parent.DisjointGenesWeight * (totalDisjoint / n) +
-                 parent.MatchingGenesWeight * averageWeightDifference +
-                 parent.FunctionDifferenceWeight * averageFunctionDifference;
-        }
-
-        public Dictionary<Func<Complex, Complex>, int> GetFunctionAnalysis()
-        {
-            var result = new Dictionary<Func<Complex, Complex>, int>();
-
-            foreach (var function in (Parent as CPPNNEATGA).AllFunctions)
-            {
-                result[function] = 0;
-            }
-
-            foreach (var neuronGene in GeneCollection.NeuronGenes)
-            {
-                if (neuronGene.ActivationFunction != null)
-                {
-                    result[neuronGene.ActivationFunction] += 1;
-                }
-            }
-
-            return result;
+                 parent.MatchingGenesWeight * averageWeightDifference;
         }
 
         protected override CPPNNetwork GetPhenome()

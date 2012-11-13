@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NEATSpacesLibrary.GeneticAlgorithms;
+using System.Numerics;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
@@ -14,7 +15,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             private set;
         }
 
-        public CPPNNEATLinkGene(int innovationNumber, CPPNNEATNeuronGene from, CPPNNEATNeuronGene to, double weight)
+        public CPPNNEATLinkGene(int innovationNumber, CPPNNEATNeuronGene from, CPPNNEATNeuronGene to, Complex weight)
         {
             this.InnovationNumber = innovationNumber;
             this.Enabled = true;
@@ -31,7 +32,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             internal set;
         }
 
-        internal double Weight 
+        internal Complex Weight 
         { 
             get; 
             set; 

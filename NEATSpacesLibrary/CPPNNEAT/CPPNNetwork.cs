@@ -181,7 +181,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             return result;
         }
 
-        public void AddLink(CPPNNetworkNeuron from, CPPNNetworkNeuron to, double weight)
+        public void AddLink(CPPNNetworkNeuron from, CPPNNetworkNeuron to, Complex weight)
         {
             if (neuronToIndexDict.ContainsKey(from) && neuronToIndexDict.ContainsKey(to) &&
                 to.NeuronType != CPPNNeuronType.Bias && to.NeuronType != CPPNNeuronType.Input)

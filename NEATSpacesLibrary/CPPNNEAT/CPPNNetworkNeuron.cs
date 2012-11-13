@@ -3,104 +3,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Numerics;
+using NEATSpacesLibrary.Extensions;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
-    public static class CPPNActivationFunctions
+    public static class CPPNActivationFunctionFactories
     {
-        public static Func<double, double> LinearActivationFunction 
+        public const int MAX_POWER = 10;
+
+        public static Func<Func<Complex, Complex>> ComplexLinearActivationFunctionFactory
         {
             get
             {
-                return x => x;
+                return delegate() { return x => x; };
             }
         }
 
-        public static Func<double, double> ClippedLinearActivationFunction 
+        public static Func<Func<Complex, Complex>> ComplexPolynomialActivationFunctionFactory
         {
             get
             {
-                return x => (x > 1)? 1 : (x < -1)? -1 : x;
+                var power = MathExtensions.RandomInteger(1, MAX_POWER);
+                return delegate() { return x => Complex.Pow(x, power); };
             }
         }
 
-        public static Func<double, double> TanHActivationFunction 
+        public static Func<Func<Complex, Complex>> ComplexLogarithmicActivationFunctionFactory
         {
             get
             {
-                return x => Math.Tanh(x);
+                var power = MathExtensions.RandomInteger(1, MAX_POWER);
+                return delegate() { return x => Complex.Log(x, power); };
             }
         }
 
-        public static Func<double, double> SinActivationFunction 
+        public static Func<Func<Complex, Complex>> ComplexExponentialActivationFunctionFactory
         {
             get
             {
-                return x => Math.Sin(2 * x);
-            }
-        }
-
-        public static Func<double, double> GaussActivationFunction 
-        {
-            get
-            {
-                return x => Math.Exp(-Math.Pow(x * 2.5, 2.0));
-            }
-        }
-
-        public static Func<double, double> StepActivationFunction 
-        {
-            get
-            {
-                return x => (x >= 0)? 1 : 0;
-            }
-        }
-
-        public static Func<double, double> SteepenedSigmoidActivationFunction
-        {
-            get
-            {
-                return x => 1 / (1 + Math.Exp(-4.9 * x));
-            }
-        }
-
-        public static Func<Complex, Complex> ComplexSteepenedSigmoidActivationFunction 
-        {
-            get
-            {
-                return x => 1 / (1 + Complex.Exp(-4.9 * x));
-            }
-        }
-
-        public static Func<Complex, Complex> ComplexLinearActivationFunction 
-        {
-            get
-            {
-                return x => x;
-            }
-        }
-
-        public static Func<Complex, Complex> ComplexGaussianActivationFunction 
-        {
-            get
-            {
-                return x => Complex.Exp(-Complex.Pow(x * 2.5, 2.0));
-            }
-        }
-
-        public static Func<Complex, Complex> ComplexTanHActivationFunction
-        {
-            get
-            {
-                return x => Complex.Tanh(x);
-            }
-        }
-
-        public static Func<Complex, Complex> ComplexSinActivationFunction
-        {
-            get
-            {
-                return x => Complex.Sin(x);
+                var power = MathExtensions.RandomInteger(1, MAX_POWER);
+                return delegate() { return x => Complex.Pow(power, x); };
             }
         }
     }
@@ -113,13 +55,13 @@ namespace NEATSpacesLibrary.CPPNNEAT
             private set;
         }
 
-        public double Weight
+        public Complex Weight
         {
             get;
             private set;
         }
 
-        public Synapse(CPPNNetworkNeuron neuron, double weight)
+        public Synapse(CPPNNetworkNeuron neuron, Complex weight)
         {
             this.Neuron = neuron;
             this.Weight = weight;
@@ -154,7 +96,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             synapsis = new List<Synapse>();
         }
 
-        public void AddChild(CPPNNetworkNeuron neuron, double weight)
+        public void AddChild(CPPNNetworkNeuron neuron, Complex weight)
         {
             synapsis.Add(new Synapse(neuron, weight));
         }
