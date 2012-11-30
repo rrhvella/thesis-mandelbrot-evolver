@@ -9,7 +9,8 @@ namespace NEATSpacesLibrary.CPPNNEAT
 {
     public static class CPPNActivationFunctionFactories
     {
-        public const int MAX_POWER = 10;
+        public const int MIN_POWER = 2;
+        public const int MAX_POWER = 4;
 
         public static Func<Func<Complex, Complex>> ComplexLinearActivationFunctionFactory
         {
@@ -23,7 +24,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             get
             {
-                var power = MathExtensions.RandomInteger(1, MAX_POWER);
+                var power = MathExtensions.RandomInteger(MIN_POWER, MAX_POWER);
                 return delegate() { return x => Complex.Pow(x, power); };
             }
         }
@@ -32,7 +33,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             get
             {
-                var power = MathExtensions.RandomInteger(1, MAX_POWER);
+                var power = MathExtensions.RandomInteger(MIN_POWER, MAX_POWER);
                 return delegate() { return x => Complex.Log(x, power); };
             }
         }
@@ -41,7 +42,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             get
             {
-                var power = MathExtensions.RandomInteger(1, MAX_POWER);
+                var power = MathExtensions.RandomInteger(MIN_POWER, MAX_POWER);
                 return delegate() { return x => Complex.Pow(power, x); };
             }
         }
