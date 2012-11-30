@@ -25,22 +25,22 @@ namespace NEATSpacesLibrary.NEATSpaces
         private static int ITERATIONS_TO_CLEAR_LINK_CACHE = 1;
 
         private static double WEIGHT_MUTATION_RATE = 0.9;
-        private static double NEW_NEURON_RATE = 0.3;
-        private static double NEW_LINK_RATE = 0.4;
+        private static double NEW_NEURON_RATE = 0.2;
+        private static double NEW_LINK_RATE = 0.3;
 
         private static double WEIGHT_PERTUBATION_RATE = 0.9;
 
         private static double DISABLE_GENE_RATE = 0.75;
 
-        private static double MAX_PERTURBATION = 2.0;
-        private static double MAX_WEIGHT = MAX_PERTURBATION;
+        private static double MAX_PERTURBATION = 0.1;
+        private static double MAX_WEIGHT = 2;
 
         private const double EXCESS_GENES_WEIGHT = 1.0;
         private const double DISJOINT_GENES_WEIGHT = 1.0;
-        private const double MATCHING_GENES_WEIGHT = 0.4;
-        private const double FUNCTION_DIFFERENCE_WEIGHT = 1.0;
+        private const double MATCHING_GENES_WEIGHT = 4.0;
+        private const double FUNCTION_DIFFERENCE_WEIGHT = 0.0;
 
-        private const double ELITISM_RATE = 0.8;
+        private const double ELITISM_RATE = 0.5;
         private const double INTERSPECIES_MATING_RATE = 0.001;
         
         private const double CROSSOVER_RATE = 0.75;
@@ -48,9 +48,9 @@ namespace NEATSpacesLibrary.NEATSpaces
         private const int NUMBER_OF_INPUTS = 2;
 
         private int imagesPerRow = 4;
-        private int imageWidth = 100;
-        private int populationSize = 8;
-        private int imageHeight = 100;
+        private int imageWidth = 60;
+        private int populationSize = 16;
+        private int imageHeight = 60;
         private int zoomFactor = 2;
 
         private GAPanel[] images;
@@ -88,10 +88,9 @@ namespace NEATSpacesLibrary.NEATSpaces
                                             return (pictureBox != null)? pictureBox.Score : 0;
                                         }, new List<Func<Func<Complex,Complex>>>  {
                                                 CPPNActivationFunctionFactories.ComplexLinearActivationFunctionFactory,
-                                                CPPNActivationFunctionFactories.ComplexPolynomialActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexExponentialActivationFunctionFactory,
+                                                CPPNActivationFunctionFactories.ComplexPolynomialActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexGaussianActivationFunctionFactory,
-                                                CPPNActivationFunctionFactories.ComplexSteepenedSigmoidActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexSinActivationFunctionFactory,
                                                 },
                                                 CPPNActivationFunctionFactories.ComplexLinearActivationFunctionFactory,
