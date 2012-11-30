@@ -33,7 +33,9 @@ namespace NEATSpacesLibrary.NEATSpaces
         }
 
 
-        private const int ESCAPE = 10;
+        private const int ESCAPE = 100;
+        private const double MIN = -2;
+        private const double MAX = 2;
         private int zoomFactor;
 
         void GAPanel_Paint(object sender, PaintEventArgs e)
@@ -56,15 +58,15 @@ namespace NEATSpacesLibrary.NEATSpaces
                 {
                     foreach (var y in Enumerable.Range(0, height))
                     {
-                        var positionComplex = new Complex((double)x / width,
-                                                                (double)y / height);
+                        var positionComplex = new Complex(MIN + (double)x / width * (MAX - MIN),
+                                                                MIN + (double)y / height * (MAX - MIN));
 
                         var complex = Complex.Zero;
                         var currentMagnitude = complex.Magnitude; 
 
                         int i = 0;
 
-                        for(; i < ESCAPE && currentMagnitude < 4; i++) { 
+                        for(; i < ESCAPE && currentMagnitude < 2; i++) { 
                             complex = network.GetActivation(new Complex[] { positionComplex, complex });
                             currentMagnitude = complex.Magnitude; 
                         }
