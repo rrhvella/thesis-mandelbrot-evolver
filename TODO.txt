@@ -25,3 +25,5 @@ Rename CPPNNEAT gene collection update so that it is consistent with the others.
 Add exception for when GA is not initialised
 
 No need to create debug file in normal mode.
+
+Remove validation tests and combine xor validation into test suite ;).
