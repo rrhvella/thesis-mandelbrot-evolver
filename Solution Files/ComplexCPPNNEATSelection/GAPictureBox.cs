@@ -7,6 +7,8 @@ using NEATSpacesLibrary.GeneticAlgorithms;
 using System.Drawing;
 using NEATSpacesLibrary.CPPNNEAT;
 using System.Numerics;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace NEATSpacesLibrary.NEATSpaces
 {
@@ -38,6 +40,15 @@ namespace NEATSpacesLibrary.NEATSpaces
         private const double MAX = 2;
         private int zoomFactor;
 
+        private const double ESCAPE_MAGNITUDE = 2;
+
+        private const int ALPHA_OFFSET = 24;
+        private const int RED_OFFSET = 16;
+        private const int GREEN_OFFSET = 8;
+        private const int BLUE_OFFSET = 0;
+
+        private const int BYTES_PER_INT = 4;
+
         void GAPanel_Paint(object sender, PaintEventArgs e)
         {
             if (Genome != null && Genome.Phenome != null)
@@ -49,10 +60,7 @@ namespace NEATSpacesLibrary.NEATSpaces
                 var network = Genome.Phenome;
                 network.Reset();
 
-                var graphics = e.Graphics;
-                var intensities = new double[width, height];
-
-                var maxMagnitude = 0.0;
+                var drawingBuffer = image.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
 
                 foreach (var x in Enumerable.Range(0, width))
                 {
@@ -66,52 +74,26 @@ namespace NEATSpacesLibrary.NEATSpaces
 
                         int i = 0;
 
-                        for(; i < ESCAPE && currentMagnitude < 2; i++) { 
+                        for(; i < ESCAPE && currentMagnitude < ESCAPE_MAGNITUDE; i++) { 
                             complex = network.GetActivation(new Complex[] { positionComplex, complex });
                             currentMagnitude = complex.Magnitude; 
                         }
 
-                        var intensity = (int)((double)i / ESCAPE * 255);
-                        //var intensity = currentMagnitude; 
+                        Marshal.WriteInt32(drawingBuffer.Scan0 + drawingBuffer.Stride * y + x * BYTES_PER_INT, ToColour(i));
 
-                        if (!(double.IsInfinity(intensity) || double.IsNaN(intensity)) && 
-                            intensity > maxMagnitude)
-                        {
-                            maxMagnitude = intensity;
-                        }
-
-
-                        intensities[x, y] = intensity;
                     }
                 }
 
-                foreach (var x in Enumerable.Range(0, width))
-                {
-                    foreach (var y in Enumerable.Range(0, height))
-                    {
-                        var intensity = intensities[x, y];
-                        if (double.IsInfinity(intensity))
-                        {
-                            intensity = maxMagnitude;
-                        }
-                        else if(double.IsNaN(intensity))
-                        {
-                            intensity = 0;
-                        }
-
-                        var shadow = 0;
-
-                        if (maxMagnitude > 0)
-                        {
-                            shadow = (int)(255 * intensity / maxMagnitude);
-                        }
-
-                        image.SetPixel(x, y, Color.FromArgb(shadow, shadow, shadow));
-                    }
-                }
-
-                graphics.DrawImage(image, new RectangleF(0, 0, Width, Height));
+                image.UnlockBits(drawingBuffer);
+                e.Graphics.DrawImage(image, ClientRectangle);
             }
+        }
+
+        private int ToColour(int iterationNumber)
+        {
+            var intensity = (iterationNumber * 255) / ESCAPE;
+            return 255 << ALPHA_OFFSET | intensity << RED_OFFSET | 
+                    intensity << GREEN_OFFSET | intensity << BLUE_OFFSET;
         }
 
         private void GAPictureBox_Click(object sender, EventArgs e)
