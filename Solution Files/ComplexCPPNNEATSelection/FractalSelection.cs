@@ -61,6 +61,42 @@ namespace ComplexCPPNNEATSelection
 
         private CPPNNEATGA ga;
 
+        private Complex viewPosition;
+        public Complex ViewPosition
+        {
+            get
+            {
+                return viewPosition;
+            }
+            set
+            {
+                viewPosition = value;
+
+                foreach (var fractalView in views)
+                {
+                    fractalView.ViewPosition = viewPosition;
+                }
+            }
+        }
+
+        private double viewSize;
+        public double ViewSize
+        {
+            get
+            {
+                return viewSize;
+            }
+            set
+            {
+                viewSize = value;
+
+                foreach (var fractalView in views)
+                {
+                    fractalView.ViewSize = viewSize;
+                }
+            }
+        }
+
         public FractalSelection()
         {
             views = new List<FractalView>();
@@ -68,8 +104,11 @@ namespace ComplexCPPNNEATSelection
             foreach (var i in Enumerable.Range(0, POPULATION_SIZE))
             {
                 var fractalView = new FractalView(VIEW_WIDTH, VIEW_HEIGHT);
-                views.Add(fractalView);
 
+                fractalView.ViewSize = ViewSize;
+
+                views.Add(fractalView);
+                
                 Controls.Add(fractalView);
                 fractalView.Show();
             }

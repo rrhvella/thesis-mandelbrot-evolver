@@ -15,8 +15,6 @@ namespace ComplexCPPNNEATSelection
     public class FractalView: Panel
     {
         private const int ESCAPE = 100;
-        private const double MIN = -2;
-        private const double MAX = 1;
 
         private const double ESCAPE_MAGNITUDE = 2;
 
@@ -58,6 +56,35 @@ namespace ComplexCPPNNEATSelection
             set;
         }
 
+
+        private Complex viewPosition;
+        public Complex ViewPosition 
+        {
+            get
+            {
+                return viewPosition;
+            }
+            set
+            {
+                fractalImageCacheInvalidated = true;
+                viewPosition = value;
+            }
+        }
+
+        private double viewSize;
+        public double ViewSize
+        { 
+            get 
+            {
+                return viewSize;
+            } 
+            set 
+            {
+                fractalImageCacheInvalidated = true;
+                viewSize = value;
+            } 
+        }
+
         private Bitmap fractalImage;
         private bool fractalImageCacheInvalidated;
         public Image FractalImage
@@ -78,8 +105,8 @@ namespace ComplexCPPNNEATSelection
                     {
                         foreach (var y in Enumerable.Range(0, viewHeight))
                         {
-                            var positionComplex = new Complex(MIN + (double)x / viewWidth * (MAX - MIN),
-                                                                    MIN + (double)y / viewHeight * (MAX - MIN));
+                            var positionComplex = viewPosition + 
+                                                    (new Complex((double)x / viewWidth, (double)y / viewHeight) * viewSize);
 
                             var complex = Complex.Zero;
                             var currentMagnitude = complex.Magnitude;
