@@ -66,8 +66,6 @@ namespace NEATSpacesLibrary.NEATSpaces
                 fractalView.Show();
             }
 
-            this.KeyDown += new KeyEventHandler(FractalSelection_KeyDown);
-
             this.ga = new CPPNNEATGA(NUMBER_OF_INPUTS, populationSize,
                                         delegate(CPPNNEATGenome genome)
                                         {
@@ -131,14 +129,11 @@ namespace NEATSpacesLibrary.NEATSpaces
             }
         }
 
-        private void FractalSelection_KeyDown(object sender, KeyEventArgs e)
+        public void NextGeneration()
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-                ga.ForceUpdateGenomes();
-                ga.GenerationalIterate();
-                LoadGenomesIntoImages();
-            }
+            ga.ForceUpdateGenomes();
+            ga.GenerationalIterate();
+            LoadGenomesIntoImages();
         }
 
         private void LoadGenomesIntoImages()
