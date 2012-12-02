@@ -45,7 +45,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             get
             {
                 var power = MathExtensions.RandomInteger(MIN_POWER, MAX_POWER);
-                return delegate() { return new CPPNNEATActivationFunction(x => Complex.Pow(x, power), 
+                return delegate() { return new CPPNNEATActivationFunction(x => Complex.Pow(power, x), 
                                                                         String.Format("{0}^x", power)); };
             }
         }
