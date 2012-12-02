@@ -71,6 +71,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CPPNNEAT\CPPNNEATActivationFunction.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGA.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATLinkGene.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATNeuronGene.cs" />

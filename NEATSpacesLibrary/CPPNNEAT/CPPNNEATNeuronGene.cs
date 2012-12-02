@@ -32,7 +32,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         }
 
         public CPPNNEATNeuronGene(int innovationNumber, double level, 
-                                CPPNNeuronType type, Func<Complex, Complex> activationFunction)
+                                CPPNNeuronType type, CPPNNEATActivationFunction activationFunction)
         {
             this.innovationNumber = innovationNumber;
             this.Level = level;
@@ -41,7 +41,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             this.ActivationFunction = activationFunction;
         }
 
-        public Func<Complex, Complex> ActivationFunction
+        public CPPNNEATActivationFunction ActivationFunction
         {
             get;
             internal set;
@@ -56,11 +56,11 @@ namespace NEATSpacesLibrary.CPPNNEAT
                     break;
 
                 case CPPNNeuronType.Output:
-                    Phene = new CPPNOutputNeuron(ActivationFunction);
+                    Phene = new CPPNOutputNeuron(ActivationFunction.Function);
                     break;
 
                 case CPPNNeuronType.Hidden:
-                    Phene = new CPPNHiddenNeuron(ActivationFunction);
+                    Phene = new CPPNHiddenNeuron(ActivationFunction.Function);
                     break;
 
                 case CPPNNeuronType.Bias:
@@ -75,37 +75,37 @@ namespace NEATSpacesLibrary.CPPNNEAT
             private set; 
         }
 
-        public string DebugInformation()
+        
+        public string TypeString() 
         {
-            var result = new StringBuilder();
-
             switch (Type)
             {
                 case CPPNNeuronType.Bias:
-                    result.Append("B");
-                    break;
+                    return "B";
 
                 case CPPNNeuronType.Output:
-                    result.Append("O");
-                    break;
+                    return "O";
 
                 case CPPNNeuronType.Input:
-                    result.Append("I");
-                    break;
+                    return "I";
 
                 case CPPNNeuronType.Hidden:
-                    result.Append("H");
-                    break;
+                    return "H";
+
+                default:
+                    return "";
             }
+        }
 
-            result.AppendFormat("({0})", innovationNumber);
 
-            return result.ToString();
+        public string DebugInformation()
+        {
+            return String.Format("{0}({1}, {2})", TypeString(), innovationNumber, ActivationFunction);
         }
 
         public override string ToString()
         {
-            return DebugInformation();
+            return String.Format("{0}({1})", TypeString(), ActivationFunction);
         }
     }
 }

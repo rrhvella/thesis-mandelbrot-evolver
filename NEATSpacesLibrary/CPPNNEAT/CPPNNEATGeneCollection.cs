@@ -100,7 +100,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
-        public void UpdateNeuronActivationFunction(int neuronIndex, Func<Complex, Complex> activationFunction)
+        public void UpdateNeuronActivationFunction(int neuronIndex, CPPNNEATActivationFunction activationFunction)
         {
             neuronGenes[neuronIndex].ActivationFunction = activationFunction;
             Parent.Update();

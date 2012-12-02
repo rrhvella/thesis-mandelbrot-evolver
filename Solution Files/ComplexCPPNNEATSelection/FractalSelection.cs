@@ -78,7 +78,7 @@ namespace ComplexCPPNNEATSelection
                                         {
                                             var pictureBox = views.Where(image => image.Genome == genome).FirstOrDefault();
                                             return (pictureBox != null)? pictureBox.Score : 0;
-                                        }, new List<Func<Func<Complex,Complex>>>  {
+                                        }, new List<Func<CPPNNEATActivationFunction>>  {
                                                 CPPNActivationFunctionFactories.ComplexLinearActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexExponentialActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexLogarithmicActivationFunctionFactory,

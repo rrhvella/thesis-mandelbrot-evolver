@@ -16,22 +16,22 @@ namespace NEATSpacesLibrary.CPPNNEAT
         private Dictionary<int, Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>> edgeMap;
         private Dictionary<int, CPPNNEATNeuronGene> hiddenNeuronMap;
 
-        public IList<Func<Func<Complex, Complex>>> CanonicalFunctionList
+        public IList<Func<CPPNNEATActivationFunction>> CanonicalFunctionList
         {
             get;
             private set;
         }
 
         public CPPNNEATGA(int numberOfInputs, int populationSize, Func<CPPNNEATGenome, double> scoreFunction,
-                        List<Func<Func<Complex, Complex>>> canonicalFunctionList, 
+                        List<Func<CPPNNEATActivationFunction>> canonicalFunctionList, 
                         bool feedForwardOnly)
             : this(numberOfInputs, populationSize, scoreFunction, canonicalFunctionList, null, feedForwardOnly) 
         {
         }
 
         public CPPNNEATGA(int numberOfInputs, int populationSize, Func<CPPNNEATGenome, double> scoreFunction,
-                        List<Func<Func<Complex, Complex>>> canonicalFunctionList, 
-                        Func<Func<Complex, Complex>> outputActivationFunction,
+                        List<Func<CPPNNEATActivationFunction>> canonicalFunctionList, 
+                        Func<CPPNNEATActivationFunction> outputActivationFunction,
                         bool feedForwardOnly): base(populationSize, scoreFunction)
         {
             if (numberOfInputs == 0)
