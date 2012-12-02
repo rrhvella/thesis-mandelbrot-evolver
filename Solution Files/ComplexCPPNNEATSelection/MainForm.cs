@@ -23,7 +23,7 @@ namespace ComplexCPPNNEATSelection
 
         void view_MouseHover(object sender, EventArgs e)
         {
-            genomeView.Text = (sender as FractalView).Genome.DebugInformation();
+            genomeView.Text = (sender as FractalView).Genome.ToString();
         }
 
         public static void Main(string[] args)

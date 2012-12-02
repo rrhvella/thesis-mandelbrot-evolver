@@ -102,5 +102,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
             return result.ToString();
         }
+
+        public override string ToString()
+        {
+            return DebugInformation();
+        }
     }
 }

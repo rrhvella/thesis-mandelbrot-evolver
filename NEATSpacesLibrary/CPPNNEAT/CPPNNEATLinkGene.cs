@@ -61,5 +61,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
                                                 From.DebugInformation(), To.DebugInformation());
 
         }
+
+        public override string ToString()
+        {
+            return String.Format("{0} - {1:f2} -> {2}", From, Weight, To);
+        }
     }
 }
