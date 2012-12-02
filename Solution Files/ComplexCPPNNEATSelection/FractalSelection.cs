@@ -50,6 +50,8 @@ namespace ComplexCPPNNEATSelection
         private const int IMAGES_PER_ROW = 4;
         private const int POPULATION_SIZE = 16;
 
+        private const int ESCAPE = 100;
+
         private List<FractalView> views;
         public IEnumerable<FractalView> Views 
         {
@@ -103,7 +105,12 @@ namespace ComplexCPPNNEATSelection
 
             foreach (var i in Enumerable.Range(0, POPULATION_SIZE))
             {
-                var fractalView = new FractalView(VIEW_WIDTH, VIEW_HEIGHT);
+                var fractalView = new FractalView();
+
+                fractalView.ViewWidth = VIEW_WIDTH;
+                fractalView.ViewHeight = VIEW_HEIGHT;
+
+                fractalView.Escape = ESCAPE;
 
                 fractalView.ViewSize = ViewSize;
 

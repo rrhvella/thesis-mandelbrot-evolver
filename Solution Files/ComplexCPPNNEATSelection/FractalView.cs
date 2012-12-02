@@ -14,8 +14,6 @@ namespace ComplexCPPNNEATSelection
 {
     public class FractalView: Panel
     {
-        private const int ESCAPE = 100;
-
         private const double ESCAPE_MAGNITUDE = 2;
 
         private const int ALPHA_OFFSET = 24;
@@ -34,7 +32,32 @@ namespace ComplexCPPNNEATSelection
         private const double BBLUE = 0.8;
 
         private int viewWidth;
+        public int ViewWidth
+        {
+            get 
+            { 
+                return viewWidth; 
+            }
+            set
+            {
+                viewWidth = value;
+                fractalImageCacheInvalidated = true;
+            }
+        }
+
         private int viewHeight;
+        public int ViewHeight
+        {
+            get
+            {
+                return viewHeight;
+            }
+            set
+            {
+                viewHeight = value;
+                fractalImageCacheInvalidated = true;
+            }
+        }
 
         public CPPNNEATGenome genome;
         public CPPNNEATGenome Genome
@@ -85,6 +108,20 @@ namespace ComplexCPPNNEATSelection
             } 
         }
 
+        private int escape;
+        public int Escape
+        { 
+            get 
+            {
+                return escape;
+            } 
+            set 
+            {
+                fractalImageCacheInvalidated = true;
+                escape = value;
+            } 
+        }
+
         private Bitmap fractalImage;
         private bool fractalImageCacheInvalidated;
         public Image FractalImage
@@ -93,27 +130,27 @@ namespace ComplexCPPNNEATSelection
             {
                 if (fractalImageCacheInvalidated)
                 {
-                    fractalImage = new Bitmap(viewWidth, viewHeight);
+                    fractalImage = new Bitmap(ViewWidth, ViewHeight);
 
                     var network = Genome.Phenome;
                     network.Reset();
 
-                    var drawingBuffer = fractalImage.LockBits(new Rectangle(0, 0, viewWidth, viewHeight),
+                    var drawingBuffer = fractalImage.LockBits(new Rectangle(0, 0, ViewWidth, ViewHeight),
                                                         ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
 
-                    foreach (var x in Enumerable.Range(0, viewWidth))
+                    foreach (var x in Enumerable.Range(0, ViewWidth))
                     {
-                        foreach (var y in Enumerable.Range(0, viewHeight))
+                        foreach (var y in Enumerable.Range(0, ViewHeight))
                         {
                             var positionComplex = viewPosition + 
-                                                    (new Complex((double)x / viewWidth, (double)y / viewHeight) * viewSize);
+                                                    (new Complex((double)x / ViewWidth, (double)y / ViewHeight) * viewSize);
 
                             var complex = Complex.Zero;
                             var currentMagnitude = complex.Magnitude;
 
                             int i = 0;
 
-                            for (; i < ESCAPE && currentMagnitude < ESCAPE_MAGNITUDE; i++)
+                            for (; i < escape && currentMagnitude < ESCAPE_MAGNITUDE; i++)
                             {
                                 complex = network.GetActivation(new Complex[] { positionComplex, complex });
                                 currentMagnitude = complex.Magnitude;
@@ -133,11 +170,8 @@ namespace ComplexCPPNNEATSelection
             }
         }
 
-        public FractalView(int viewWidth, int viewHeight)
+        public FractalView()
         {
-            this.viewWidth = viewWidth;
-            this.viewHeight = viewHeight;
-
             fractalImageCacheInvalidated = true;
 
             Click += new EventHandler(GAPictureBox_Click);
