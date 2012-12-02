@@ -15,7 +15,7 @@ using System.Numerics;
 
 namespace NEATSpacesLibrary.NEATSpaces
 {
-    public class NEATImageSelectionForm: Form
+    public class FractalSelection: Form
     {
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
 
@@ -51,19 +51,19 @@ namespace NEATSpacesLibrary.NEATSpaces
         private int imageHeight = 50;
         private int zoomFactor = 2;
 
-        private GAPanel[] images;
+        private FractalView[] images;
         private CPPNNEATGA ga;
 
-        public NEATImageSelectionForm()
+        public FractalSelection()
         {
             this.ClientSize = new Size(imagesPerRow * imageWidth * zoomFactor, 
                             (int)(Math.Ceiling(populationSize / (float)imagesPerRow) * imageHeight * zoomFactor));
 
-            images = new GAPanel[populationSize];
+            images = new FractalView[populationSize];
 
             foreach (var i in Enumerable.Range(0, populationSize))
             {
-                var newPictureBox = new GAPanel(zoomFactor);
+                var newPictureBox = new FractalView(zoomFactor);
 
                 newPictureBox.Width = imageWidth * zoomFactor;
                 newPictureBox.Height = imageHeight * zoomFactor;
@@ -150,7 +150,7 @@ namespace NEATSpacesLibrary.NEATSpaces
 
         public static void Main(String[] args)
         {
-            Application.Run(new NEATImageSelectionForm());
+            Application.Run(new FractalSelection());
         }
     }
 }

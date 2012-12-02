@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 
 namespace NEATSpacesLibrary.NEATSpaces
 {
-    public class GAPanel: Panel
+    public class FractalView: Panel
     {
         public CPPNNEATGenome Genome
         {
@@ -26,7 +26,7 @@ namespace NEATSpacesLibrary.NEATSpaces
             set;
         }
 
-        public GAPanel(int zoomFactor)
+        public FractalView(int zoomFactor)
         {
             this.zoomFactor = zoomFactor;
 
