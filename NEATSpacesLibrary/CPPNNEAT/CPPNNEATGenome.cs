@@ -240,12 +240,12 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         protected override string InnerDebugInformation()
         {
-            return ToRepresentation("-", link => link.DebugInformation());
+            return String.Join("-", GeneCollection.LinkGenes.Select(link => link.DebugInformation()));
         }
 
         public override string ToString() 
         {
-            return ToRepresentation("\r\n", link => link.ToString());
+            return String.Join("\r\n", GeneCollection.LinkGenes.Where(link => link.Enabled).Select(link => link.ToString()));
         }
 
         public override Genome<CPPNNEATGeneCollection, CPPNNetwork> InnerCopy()
