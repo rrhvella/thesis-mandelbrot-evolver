@@ -59,7 +59,7 @@ namespace ComplexCPPNNEATSelection
             }
         }
 
-        public CPPNNEATGenome genome;
+        private CPPNNEATGenome genome;
         public CPPNNEATGenome Genome
         {
             get
@@ -170,11 +170,13 @@ namespace ComplexCPPNNEATSelection
             }
         }
 
+        public event EventHandler<EventArgs> Selected;
+
         public FractalView()
         {
             fractalImageCacheInvalidated = true;
 
-            Click += new EventHandler(GAPictureBox_Click);
+            MouseClick += new MouseEventHandler(GAPictureBox_Click);
             Paint += new PaintEventHandler(GAPanel_Paint);
         }
 
@@ -197,9 +199,16 @@ namespace ComplexCPPNNEATSelection
                     g << GREEN_OFFSET | b << BLUE_OFFSET;
         }
 
-        private void GAPictureBox_Click(object sender, EventArgs e)
+        private void GAPictureBox_Click(object sender, MouseEventArgs e)
         {
-            Score++;
+            if (e.Button == MouseButtons.Left)
+            {
+                Score++;
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                Selected(this, new EventArgs());
+            }
         }
     }
 }
