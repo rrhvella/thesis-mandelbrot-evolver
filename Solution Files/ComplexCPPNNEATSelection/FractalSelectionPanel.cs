@@ -49,7 +49,7 @@ namespace NEATSpacesLibrary.NEATSpaces
         private int imageWidth = 50;
         private int populationSize = 16;
         private int imageHeight = 50;
-        private int zoomFactor = 4;
+        private int zoomFactor = 2;
 
         private GAPanel[] images;
         private CPPNNEATGA ga;
