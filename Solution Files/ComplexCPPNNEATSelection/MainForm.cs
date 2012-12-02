@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Numerics;
 
 namespace ComplexCPPNNEATSelection
 {
@@ -19,6 +20,10 @@ namespace ComplexCPPNNEATSelection
             {
                 view.MouseEnter += new EventHandler(view_MouseHover);
             }
+
+            viewX.Text = fractalSelectionInstance.ViewPosition.Real.ToString();
+            viewY.Text = fractalSelectionInstance.ViewPosition.Imaginary.ToString();
+            viewS.Text = fractalSelectionInstance.ViewSize.ToString();
         }
 
         void view_MouseHover(object sender, EventArgs e)
@@ -39,9 +44,13 @@ namespace ComplexCPPNNEATSelection
             }
         }
 
-        private void fractalSelectionInstance_MouseMove(object sender, EventArgs e)
+        private void updateView_Click(object sender, EventArgs e)
         {
-
+            fractalSelectionInstance.ViewPosition = new Complex(double.Parse(viewX.Text), double.Parse(viewY.Text));
+            fractalSelectionInstance.ViewSize = double.Parse(viewS.Text);
+            
+            fractalSelectionInstance.Refresh();
+            fractalSelectionInstance.Focus();
         }
     }
 }

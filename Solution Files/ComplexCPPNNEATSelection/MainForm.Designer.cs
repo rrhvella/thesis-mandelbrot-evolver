@@ -28,7 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.genomeView = new System.Windows.Forms.TextBox();
+            this.viewX = new System.Windows.Forms.TextBox();
+            this.viewY = new System.Windows.Forms.TextBox();
+            this.viewS = new System.Windows.Forms.TextBox();
+            this.updateView = new System.Windows.Forms.Button();
             this.fractalSelectionInstance = new ComplexCPPNNEATSelection.FractalSelection();
             this.SuspendLayout();
             // 
@@ -41,18 +46,55 @@
             this.genomeView.Size = new System.Drawing.Size(235, 399);
             this.genomeView.TabIndex = 1;
             // 
+            // viewX
+            // 
+            this.viewX.Location = new System.Drawing.Point(13, 406);
+            this.viewX.Name = "viewX";
+            this.viewX.Size = new System.Drawing.Size(100, 20);
+            this.viewX.TabIndex = 2;
+            // 
+            // viewY
+            // 
+            this.viewY.Location = new System.Drawing.Point(147, 406);
+            this.viewY.Name = "viewY";
+            this.viewY.Size = new System.Drawing.Size(100, 20);
+            this.viewY.TabIndex = 3;
+            // 
+            // viewS
+            // 
+            this.viewS.Location = new System.Drawing.Point(276, 405);
+            this.viewS.Name = "viewS";
+            this.viewS.Size = new System.Drawing.Size(100, 20);
+            this.viewS.TabIndex = 4;
+            // 
+            // updateView
+            // 
+            this.updateView.Location = new System.Drawing.Point(434, 405);
+            this.updateView.Name = "updateView";
+            this.updateView.Size = new System.Drawing.Size(235, 23);
+            this.updateView.TabIndex = 5;
+            this.updateView.Text = "update view";
+            this.updateView.UseVisualStyleBackColor = true;
+            this.updateView.Click += new System.EventHandler(this.updateView_Click);
+            // 
             // fractalSelectionInstance
             // 
             this.fractalSelectionInstance.Location = new System.Drawing.Point(-2, 0);
             this.fractalSelectionInstance.Name = "fractalSelectionInstance";
             this.fractalSelectionInstance.Size = new System.Drawing.Size(430, 399);
             this.fractalSelectionInstance.TabIndex = 0;
+            this.fractalSelectionInstance.ViewPosition = ((System.Numerics.Complex)(resources.GetObject("fractalSelectionInstance.ViewPosition")));
+            this.fractalSelectionInstance.ViewSize = 2D;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(667, 480);
+            this.Controls.Add(this.updateView);
+            this.Controls.Add(this.viewS);
+            this.Controls.Add(this.viewY);
+            this.Controls.Add(this.viewX);
             this.Controls.Add(this.genomeView);
             this.Controls.Add(this.fractalSelectionInstance);
             this.KeyPreview = true;
@@ -68,5 +110,9 @@
 
         private FractalSelection fractalSelectionInstance;
         private System.Windows.Forms.TextBox genomeView;
+        private System.Windows.Forms.TextBox viewX;
+        private System.Windows.Forms.TextBox viewY;
+        private System.Windows.Forms.TextBox viewS;
+        private System.Windows.Forms.Button updateView;
     }
 }
