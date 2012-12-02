@@ -19,11 +19,28 @@ namespace ComplexCPPNNEATSelection
             foreach (FractalView view in fractalSelectionInstance.Views)
             {
                 view.MouseEnter += new EventHandler(view_MouseHover);
+                view.Selected += new EventHandler<EventArgs>(view_Selected);
             }
 
             viewX.Text = fractalSelectionInstance.ViewPosition.Real.ToString();
             viewY.Text = fractalSelectionInstance.ViewPosition.Imaginary.ToString();
             viewS.Text = fractalSelectionInstance.ViewSize.ToString();
+
+            SyncFractalSelectorAndFinalView();
+        }
+
+        private void SyncFractalSelectorAndFinalView()
+        {
+            finalView.ViewPosition = fractalSelectionInstance.ViewPosition;
+            finalView.ViewSize = fractalSelectionInstance.ViewSize;
+
+            finalView.Refresh();
+        }
+
+        void view_Selected(object sender, EventArgs e)
+        {
+            finalView.Genome = (sender as FractalView).Genome;
+            finalView.Refresh();
         }
 
         void view_MouseHover(object sender, EventArgs e)
@@ -51,6 +68,8 @@ namespace ComplexCPPNNEATSelection
             
             fractalSelectionInstance.Refresh();
             fractalSelectionInstance.Focus();
+
+            SyncFractalSelectorAndFinalView();
         }
     }
 }

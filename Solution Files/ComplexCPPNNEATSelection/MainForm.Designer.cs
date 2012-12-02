@@ -34,6 +34,7 @@
             this.viewY = new System.Windows.Forms.TextBox();
             this.viewS = new System.Windows.Forms.TextBox();
             this.updateView = new System.Windows.Forms.Button();
+            this.finalView = new ComplexCPPNNEATSelection.FractalView();
             this.fractalSelectionInstance = new ComplexCPPNNEATSelection.FractalSelection();
             this.SuspendLayout();
             // 
@@ -77,6 +78,20 @@
             this.updateView.UseVisualStyleBackColor = true;
             this.updateView.Click += new System.EventHandler(this.updateView_Click);
             // 
+            // finalView
+            // 
+            this.finalView.Escape = 500;
+            this.finalView.Genome = null;
+            this.finalView.Location = new System.Drawing.Point(664, 0);
+            this.finalView.Name = "finalView";
+            this.finalView.Score = 0;
+            this.finalView.Size = new System.Drawing.Size(400, 400);
+            this.finalView.TabIndex = 6;
+            this.finalView.ViewHeight = 200;
+            this.finalView.ViewPosition = ((System.Numerics.Complex)(resources.GetObject("finalView.ViewPosition")));
+            this.finalView.ViewSize = 200D;
+            this.finalView.ViewWidth = 200;
+            // 
             // fractalSelectionInstance
             // 
             this.fractalSelectionInstance.Location = new System.Drawing.Point(-2, 0);
@@ -90,7 +105,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(667, 480);
+            this.ClientSize = new System.Drawing.Size(1065, 480);
+            this.Controls.Add(this.finalView);
             this.Controls.Add(this.updateView);
             this.Controls.Add(this.viewS);
             this.Controls.Add(this.viewY);
@@ -114,5 +130,6 @@
         private System.Windows.Forms.TextBox viewY;
         private System.Windows.Forms.TextBox viewS;
         private System.Windows.Forms.Button updateView;
+        private FractalView finalView;
     }
 }
