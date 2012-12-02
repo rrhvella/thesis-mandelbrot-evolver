@@ -23,9 +23,11 @@ namespace ComplexCPPNNEATSelection
 
         private const int BYTES_PER_INT = 4;
 
-        private const double ARED = 0.019;
-        private const double AGREEN = 0.015;
-        private const double ABLUE = 0.011;
+        private const double SPEED_MULTIPLIER = 400;
+
+        private const double ARED = 0.019 * SPEED_MULTIPLIER;
+        private const double AGREEN = 0.015 * SPEED_MULTIPLIER;
+        private const double ABLUE = 0.011 * SPEED_MULTIPLIER;
 
         private const double BRED = 0.8;
         private const double BGREEN = 0.8;
@@ -191,9 +193,11 @@ namespace ComplexCPPNNEATSelection
 
         private int ToColour(int iterationNumber)
         {
-            var r = 127 + (int)(128 * Math.Cos(ARED * iterationNumber + BRED));
-            var g = 127 + (int)(128 * Math.Cos(AGREEN * iterationNumber + BGREEN));
-            var b = 127 + (int)(128 * Math.Cos(ABLUE * iterationNumber + BBLUE));
+            var normalisedIterationNumber = iterationNumber / (double)escape;
+
+            var r = 127 + (int)(128 * Math.Cos(ARED * normalisedIterationNumber + BRED));
+            var g = 127 + (int)(128 * Math.Cos(AGREEN * normalisedIterationNumber + BGREEN));
+            var b = 127 + (int)(128 * Math.Cos(ABLUE * normalisedIterationNumber + BBLUE));
 
             return 255 << ALPHA_OFFSET | r << RED_OFFSET | 
                     g << GREEN_OFFSET | b << BLUE_OFFSET;
