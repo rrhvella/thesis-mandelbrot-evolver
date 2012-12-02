@@ -14,31 +14,9 @@ namespace NEATSpacesLibrary.NEATSpaces
 {
     public class FractalView: Panel
     {
-        public CPPNNEATGenome Genome
-        {
-            get;
-            set;
-        }
-
-        public int Score
-        {
-            get;
-            set;
-        }
-
-        public FractalView(int zoomFactor)
-        {
-            this.zoomFactor = zoomFactor;
-
-            Click += new EventHandler(GAPictureBox_Click);
-            Paint += new PaintEventHandler(GAPanel_Paint);
-        }
-
-
         private const int ESCAPE = 100;
         private const double MIN = -2;
         private const double MAX = 1;
-        private int zoomFactor;
 
         private const double ESCAPE_MAGNITUDE = 2;
 
@@ -57,44 +35,94 @@ namespace NEATSpacesLibrary.NEATSpaces
         private const double BGREEN = 0.8;
         private const double BBLUE = 0.8;
 
+        private int viewWidth;
+        private int viewHeight;
+
+        public CPPNNEATGenome genome;
+        public CPPNNEATGenome Genome
+        {
+            get
+            {
+                return genome;
+            }
+            set
+            {
+                fractalImageCacheInvalidated = true;
+                genome = value;
+            }
+        }
+
+        public int Score
+        {
+            get;
+            set;
+        }
+
+        private Bitmap fractalImage;
+        private bool fractalImageCacheInvalidated;
+        public Image FractalImage
+        {
+            get
+            {
+                if (fractalImageCacheInvalidated)
+                {
+                    fractalImage = new Bitmap(viewWidth, viewHeight);
+
+                    var network = Genome.Phenome;
+                    network.Reset();
+
+                    var drawingBuffer = fractalImage.LockBits(new Rectangle(0, 0, viewWidth, viewHeight),
+                                                        ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+
+                    foreach (var x in Enumerable.Range(0, viewWidth))
+                    {
+                        foreach (var y in Enumerable.Range(0, viewHeight))
+                        {
+                            var positionComplex = new Complex(MIN + (double)x / viewWidth * (MAX - MIN),
+                                                                    MIN + (double)y / viewHeight * (MAX - MIN));
+
+                            var complex = Complex.Zero;
+                            var currentMagnitude = complex.Magnitude;
+
+                            int i = 0;
+
+                            for (; i < ESCAPE && currentMagnitude < ESCAPE_MAGNITUDE; i++)
+                            {
+                                complex = network.GetActivation(new Complex[] { positionComplex, complex });
+                                currentMagnitude = complex.Magnitude;
+
+                            }
+
+                            Marshal.WriteInt32(drawingBuffer.Scan0 + drawingBuffer.Stride * y + x * BYTES_PER_INT, ToColour(i));
+
+                        }
+                    }
+
+                    fractalImage.UnlockBits(drawingBuffer);
+                    fractalImageCacheInvalidated = false;
+                }
+
+                return fractalImage;
+            }
+        }
+
+        public FractalView(int viewWidth, int viewHeight)
+        {
+            this.viewWidth = viewWidth;
+            this.viewHeight = viewHeight;
+
+            fractalImageCacheInvalidated = true;
+
+            Click += new EventHandler(GAPictureBox_Click);
+            Paint += new PaintEventHandler(GAPanel_Paint);
+        }
+
+
         void GAPanel_Paint(object sender, PaintEventArgs e)
         {
             if (Genome != null && Genome.Phenome != null)
             {
-                var width = Width / zoomFactor;
-                var height = Height / zoomFactor;
-
-                var image = new Bitmap(width, height);
-                var network = Genome.Phenome;
-                network.Reset();
-
-                var drawingBuffer = image.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-
-                foreach (var x in Enumerable.Range(0, width))
-                {
-                    foreach (var y in Enumerable.Range(0, height))
-                    {
-                        var positionComplex = new Complex(MIN + (double)x / width * (MAX - MIN),
-                                                                MIN + (double)y / height * (MAX - MIN));
-
-                        var complex = Complex.Zero;
-                        var currentMagnitude = complex.Magnitude; 
-
-                        int i = 0;
-
-                        for(; i < ESCAPE && currentMagnitude < ESCAPE_MAGNITUDE; i++) { 
-                            complex = network.GetActivation(new Complex[] { positionComplex, complex });
-                            currentMagnitude = complex.Magnitude; 
-
-                        }
-
-                        Marshal.WriteInt32(drawingBuffer.Scan0 + drawingBuffer.Stride * y + x * BYTES_PER_INT, ToColour(i));
-
-                    }
-                }
-
-                image.UnlockBits(drawingBuffer);
-                e.Graphics.DrawImage(image, ClientRectangle);
+                e.Graphics.DrawImage(FractalImage, ClientRectangle);
             }
         }
 

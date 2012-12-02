@@ -15,7 +15,7 @@ using System.Numerics;
 
 namespace NEATSpacesLibrary.NEATSpaces
 {
-    public class FractalSelection: Form
+    public class FractalSelection: Panel
     {
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
 
@@ -46,38 +46,27 @@ namespace NEATSpacesLibrary.NEATSpaces
         private const int NUMBER_OF_INPUTS = 2;
 
         private int imagesPerRow = 4;
-        private int imageWidth = 50;
+        private int viewWidth = 50;
         private int populationSize = 16;
-        private int imageHeight = 50;
-        private int zoomFactor = 2;
+        private int viewHeight = 50;
 
         private FractalView[] images;
         private CPPNNEATGA ga;
 
         public FractalSelection()
         {
-            this.ClientSize = new Size(imagesPerRow * imageWidth * zoomFactor, 
-                            (int)(Math.Ceiling(populationSize / (float)imagesPerRow) * imageHeight * zoomFactor));
-
             images = new FractalView[populationSize];
 
             foreach (var i in Enumerable.Range(0, populationSize))
             {
-                var newPictureBox = new FractalView(zoomFactor);
+                var fractalView = new FractalView(viewWidth, viewHeight);
+                images[i] = fractalView;
 
-                newPictureBox.Width = imageWidth * zoomFactor;
-                newPictureBox.Height = imageHeight * zoomFactor;
-
-                newPictureBox.Left = imageWidth * (i % imagesPerRow) * zoomFactor;
-                newPictureBox.Top = imageWidth * (i / imagesPerRow) * zoomFactor;
-
-                images[i] = newPictureBox;
-
-                Controls.Add(newPictureBox);
-                newPictureBox.Show();
+                Controls.Add(fractalView);
+                fractalView.Show();
             }
 
-            this.KeyDown += new KeyEventHandler(ImageSelectionForm_KeyDown);
+            this.KeyDown += new KeyEventHandler(FractalSelection_KeyDown);
 
             this.ga = new CPPNNEATGA(NUMBER_OF_INPUTS, populationSize,
                                         delegate(CPPNNEATGenome genome)
@@ -125,7 +114,24 @@ namespace NEATSpacesLibrary.NEATSpaces
             LoadGenomesIntoImages();
         }
 
-        private void ImageSelectionForm_KeyDown(object sender, KeyEventArgs e)
+        protected override void OnResize(EventArgs eventargs)
+        {
+            var fractalViewWidth = ClientSize.Width / imagesPerRow;
+            var fractalViewHeight = ClientSize.Height / (int)Math.Ceiling((double)populationSize / imagesPerRow);
+
+            foreach(var i in Enumerable.Range(0, images.Length)) 
+            {
+                var view = images[i];
+
+                view.Width = fractalViewWidth;
+                view.Height = fractalViewHeight;
+
+                view.Left = view.Width * (i % imagesPerRow);
+                view.Top = view.Height * (i / imagesPerRow);
+            }
+        }
+
+        private void FractalSelection_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
@@ -146,11 +152,6 @@ namespace NEATSpacesLibrary.NEATSpaces
             }
 
             Refresh();
-        }
-
-        public static void Main(String[] args)
-        {
-            Application.Run(new FractalSelection());
         }
     }
 }
