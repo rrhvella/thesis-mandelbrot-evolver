@@ -44,10 +44,11 @@ namespace ComplexCPPNNEATSelection
 
         private const int NUMBER_OF_INPUTS = 2;
 
-        private int imagesPerRow = 4;
-        private int viewWidth = 50;
-        private int populationSize = 16;
-        private int viewHeight = 50;
+        private const int VIEW_WIDTH = 50;
+        private const int VIEW_HEIGHT = 50;
+
+        private const int IMAGES_PER_ROW = 4;
+        private const int POPULATION_SIZE = 16;
 
         private List<FractalView> views;
         public IEnumerable<FractalView> Views 
@@ -64,16 +65,16 @@ namespace ComplexCPPNNEATSelection
         {
             views = new List<FractalView>();
 
-            foreach (var i in Enumerable.Range(0, populationSize))
+            foreach (var i in Enumerable.Range(0, POPULATION_SIZE))
             {
-                var fractalView = new FractalView(viewWidth, viewHeight);
+                var fractalView = new FractalView(VIEW_WIDTH, VIEW_HEIGHT);
                 views.Add(fractalView);
 
                 Controls.Add(fractalView);
                 fractalView.Show();
             }
 
-            this.ga = new CPPNNEATGA(NUMBER_OF_INPUTS, populationSize,
+            this.ga = new CPPNNEATGA(NUMBER_OF_INPUTS, POPULATION_SIZE,
                                         delegate(CPPNNEATGenome genome)
                                         {
                                             var pictureBox = views.Where(image => image.Genome == genome).FirstOrDefault();
@@ -121,8 +122,8 @@ namespace ComplexCPPNNEATSelection
 
         protected override void OnResize(EventArgs eventargs)
         {
-            var fractalViewWidth = ClientSize.Width / imagesPerRow;
-            var fractalViewHeight = ClientSize.Height / (int)Math.Ceiling((double)populationSize / imagesPerRow);
+            var fractalViewWidth = ClientSize.Width / IMAGES_PER_ROW;
+            var fractalViewHeight = ClientSize.Height / (int)Math.Ceiling((double)POPULATION_SIZE / IMAGES_PER_ROW);
 
             foreach(var i in Enumerable.Range(0, views.Count)) 
             {
@@ -131,8 +132,8 @@ namespace ComplexCPPNNEATSelection
                 view.Width = fractalViewWidth;
                 view.Height = fractalViewHeight;
 
-                view.Left = view.Width * (i % imagesPerRow);
-                view.Top = view.Height * (i / imagesPerRow);
+                view.Left = view.Width * (i % IMAGES_PER_ROW);
+                view.Top = view.Height * (i / IMAGES_PER_ROW);
             }
         }
 
