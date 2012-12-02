@@ -19,39 +19,37 @@ namespace NEATSpacesLibrary.NEATSpaces
     {
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
 
-        private const double INPUT_DIVISOR = 30;
-
         private static int NO_INNOVATION_THRESHOLD = 1000000;
         private static int ITERATIONS_TO_CLEAR_LINK_CACHE = 1;
 
         private static double WEIGHT_MUTATION_RATE = 0.9;
-        private static double NEW_NEURON_RATE = 0.2;
-        private static double NEW_LINK_RATE = 0.3;
+        private static double NEW_NEURON_RATE = 0.04;
+        private static double NEW_LINK_RATE = 0.08;
 
         private static double WEIGHT_PERTUBATION_RATE = 0.9;
 
         private static double DISABLE_GENE_RATE = 0.75;
 
-        private static double MAX_PERTURBATION = 0.1;
-        private static double MAX_WEIGHT = 2;
+        private static double MAX_PERTURBATION = 0.01;
+        private static double MAX_WEIGHT = 1.5;
 
         private const double EXCESS_GENES_WEIGHT = 1.0;
         private const double DISJOINT_GENES_WEIGHT = 1.0;
-        private const double MATCHING_GENES_WEIGHT = 4.0;
+        private const double MATCHING_GENES_WEIGHT = 3.0;
         private const double FUNCTION_DIFFERENCE_WEIGHT = 0.0;
 
-        private const double ELITISM_RATE = 0.5;
+        private const double ELITISM_RATE = 0.3;
         private const double INTERSPECIES_MATING_RATE = 0.001;
         
-        private const double CROSSOVER_RATE = 0.75;
+        private const double CROSSOVER_RATE = 0.5;
 
         private const int NUMBER_OF_INPUTS = 2;
 
         private int imagesPerRow = 4;
-        private int imageWidth = 60;
+        private int imageWidth = 50;
         private int populationSize = 16;
-        private int imageHeight = 60;
-        private int zoomFactor = 2;
+        private int imageHeight = 50;
+        private int zoomFactor = 4;
 
         private GAPanel[] images;
         private CPPNNEATGA ga;
@@ -89,6 +87,8 @@ namespace NEATSpacesLibrary.NEATSpaces
                                         }, new List<Func<Func<Complex,Complex>>>  {
                                                 CPPNActivationFunctionFactories.ComplexLinearActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexExponentialActivationFunctionFactory,
+                                                CPPNActivationFunctionFactories.ComplexTanHActivationFunctionFactory,
+                                                CPPNActivationFunctionFactories.ComplexEulerActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexPolynomialActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexGaussianActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexSinActivationFunctionFactory,
