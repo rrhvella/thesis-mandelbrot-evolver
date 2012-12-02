@@ -68,6 +68,22 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 return delegate() { return x => Complex.Sin(x); };
             }
         }
+
+        public static Func<Func<Complex, Complex>> ComplexEulerActivationFunctionFactory 
+        {
+            get
+            {
+                return delegate() { return x => Complex.Exp(x); };
+            }
+        }
+
+        public static Func<Func<Complex, Complex>> ComplexTanHActivationFunctionFactory 
+        {
+            get
+            {
+                return delegate() { return x => Complex.Tanh(x); };
+            }
+        }
     }
 
     public class Synapse
