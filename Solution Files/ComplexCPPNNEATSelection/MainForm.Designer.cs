@@ -34,25 +34,25 @@
             // 
             // genomeView
             // 
-            this.genomeView.Location = new System.Drawing.Point(-2, 332);
+            this.genomeView.Location = new System.Drawing.Point(-2, 394);
             this.genomeView.Multiline = true;
             this.genomeView.Name = "genomeView";
             this.genomeView.ReadOnly = true;
-            this.genomeView.Size = new System.Drawing.Size(616, 148);
+            this.genomeView.Size = new System.Drawing.Size(430, 89);
             this.genomeView.TabIndex = 1;
             // 
             // fractalSelectionInstance
             // 
             this.fractalSelectionInstance.Location = new System.Drawing.Point(-2, 0);
             this.fractalSelectionInstance.Name = "fractalSelectionInstance";
-            this.fractalSelectionInstance.Size = new System.Drawing.Size(616, 326);
+            this.fractalSelectionInstance.Size = new System.Drawing.Size(430, 399);
             this.fractalSelectionInstance.TabIndex = 0;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(613, 480);
+            this.ClientSize = new System.Drawing.Size(429, 480);
             this.Controls.Add(this.genomeView);
             this.Controls.Add(this.fractalSelectionInstance);
             this.KeyPreview = true;
