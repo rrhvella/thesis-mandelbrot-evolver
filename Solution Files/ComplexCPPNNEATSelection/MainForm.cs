@@ -12,9 +12,13 @@ namespace ComplexCPPNNEATSelection
 {
     public partial class MainForm : Form
     {
+        private Complex INITIAL_VIEW_POSITION = new Complex(-2, -2);
+
         public MainForm()
         {
             InitializeComponent();
+
+            fractalSelectionInstance.ViewPosition = INITIAL_VIEW_POSITION;
 
             foreach (FractalView view in fractalSelectionInstance.Views)
             {

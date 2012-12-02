@@ -80,15 +80,14 @@
             // 
             // finalView
             // 
-            this.finalView.Escape = 500;
+            this.finalView.Escape = 100;
             this.finalView.Genome = null;
-            this.finalView.Location = new System.Drawing.Point(664, 0);
+            this.finalView.Location = new System.Drawing.Point(785, 104);
             this.finalView.Name = "finalView";
             this.finalView.Score = 0;
-            this.finalView.Size = new System.Drawing.Size(400, 400);
+            this.finalView.Size = new System.Drawing.Size(200, 200);
             this.finalView.TabIndex = 6;
             this.finalView.ViewHeight = 200;
-            this.finalView.ViewPosition = ((System.Numerics.Complex)(resources.GetObject("finalView.ViewPosition")));
             this.finalView.ViewSize = 200D;
             this.finalView.ViewWidth = 200;
             // 
@@ -98,8 +97,7 @@
             this.fractalSelectionInstance.Name = "fractalSelectionInstance";
             this.fractalSelectionInstance.Size = new System.Drawing.Size(430, 399);
             this.fractalSelectionInstance.TabIndex = 0;
-            this.fractalSelectionInstance.ViewPosition = ((System.Numerics.Complex)(resources.GetObject("fractalSelectionInstance.ViewPosition")));
-            this.fractalSelectionInstance.ViewSize = 2D;
+            this.fractalSelectionInstance.ViewSize = 4D;
             // 
             // MainForm
             // 
