@@ -87,6 +87,7 @@ namespace NEATSpacesLibrary.NEATSpaces
                                         }, new List<Func<Func<Complex,Complex>>>  {
                                                 CPPNActivationFunctionFactories.ComplexLinearActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexExponentialActivationFunctionFactory,
+                                                CPPNActivationFunctionFactories.ComplexLogarithmicActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexTanHActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexEulerActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexPolynomialActivationFunctionFactory,
