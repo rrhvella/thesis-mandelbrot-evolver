@@ -4,7 +4,6 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NEATSpacesLibrary.NEATSpaces;
 using NEATSpacesLibrary.GeneticAlgorithms;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
@@ -13,7 +12,7 @@ using System.Diagnostics;
 using NEATSpacesLibrary.CPPNNEAT;
 using System.Numerics;
 
-namespace NEATSpacesLibrary.NEATSpaces
+namespace ComplexCPPNNEATSelection
 {
     public class FractalSelection: Panel
     {
@@ -50,17 +49,25 @@ namespace NEATSpacesLibrary.NEATSpaces
         private int populationSize = 16;
         private int viewHeight = 50;
 
-        private FractalView[] images;
+        private List<FractalView> views;
+        public IEnumerable<FractalView> Views 
+        {
+            get
+            {
+                return views.AsReadOnly();
+            }
+        }
+
         private CPPNNEATGA ga;
 
         public FractalSelection()
         {
-            images = new FractalView[populationSize];
+            views = new List<FractalView>();
 
             foreach (var i in Enumerable.Range(0, populationSize))
             {
                 var fractalView = new FractalView(viewWidth, viewHeight);
-                images[i] = fractalView;
+                views.Add(fractalView);
 
                 Controls.Add(fractalView);
                 fractalView.Show();
@@ -69,7 +76,7 @@ namespace NEATSpacesLibrary.NEATSpaces
             this.ga = new CPPNNEATGA(NUMBER_OF_INPUTS, populationSize,
                                         delegate(CPPNNEATGenome genome)
                                         {
-                                            var pictureBox = images.Where(image => image.Genome == genome).FirstOrDefault();
+                                            var pictureBox = views.Where(image => image.Genome == genome).FirstOrDefault();
                                             return (pictureBox != null)? pictureBox.Score : 0;
                                         }, new List<Func<Func<Complex,Complex>>>  {
                                                 CPPNActivationFunctionFactories.ComplexLinearActivationFunctionFactory,
@@ -117,9 +124,9 @@ namespace NEATSpacesLibrary.NEATSpaces
             var fractalViewWidth = ClientSize.Width / imagesPerRow;
             var fractalViewHeight = ClientSize.Height / (int)Math.Ceiling((double)populationSize / imagesPerRow);
 
-            foreach(var i in Enumerable.Range(0, images.Length)) 
+            foreach(var i in Enumerable.Range(0, views.Count)) 
             {
-                var view = images[i];
+                var view = views[i];
 
                 view.Width = fractalViewWidth;
                 view.Height = fractalViewHeight;
@@ -142,8 +149,8 @@ namespace NEATSpacesLibrary.NEATSpaces
 
             foreach (var genome in ga.Population.OrderByDescending(genome => genome.Score))
             {
-                images[index].Score = 0;
-                images[index++].Genome = genome;
+                views[index].Score = 0;
+                views[index++].Genome = genome;
             }
 
             Refresh();

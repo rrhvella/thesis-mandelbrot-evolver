@@ -28,17 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.genomeList = new System.Windows.Forms.ListBox();
-            this.fractalSelectionInstance = new NEATSpacesLibrary.NEATSpaces.FractalSelection();
+            this.genomeView = new System.Windows.Forms.TextBox();
+            this.fractalSelectionInstance = new ComplexCPPNNEATSelection.FractalSelection();
             this.SuspendLayout();
             // 
-            // genomeList
+            // genomeView
             // 
-            this.genomeList.FormattingEnabled = true;
-            this.genomeList.Location = new System.Drawing.Point(-2, 322);
-            this.genomeList.Name = "genomeList";
-            this.genomeList.Size = new System.Drawing.Size(616, 160);
-            this.genomeList.TabIndex = 1;
+            this.genomeView.Location = new System.Drawing.Point(-2, 332);
+            this.genomeView.Multiline = true;
+            this.genomeView.Name = "genomeView";
+            this.genomeView.ReadOnly = true;
+            this.genomeView.Size = new System.Drawing.Size(616, 148);
+            this.genomeView.TabIndex = 1;
             // 
             // fractalSelectionInstance
             // 
@@ -52,18 +53,20 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(613, 480);
-            this.Controls.Add(this.genomeList);
+            this.Controls.Add(this.genomeView);
             this.Controls.Add(this.fractalSelectionInstance);
             this.KeyPreview = true;
             this.Name = "MainForm";
             this.Text = "Main";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private NEATSpacesLibrary.NEATSpaces.FractalSelection fractalSelectionInstance;
-        private System.Windows.Forms.ListBox genomeList;
+        private FractalSelection fractalSelectionInstance;
+        private System.Windows.Forms.TextBox genomeView;
     }
 }

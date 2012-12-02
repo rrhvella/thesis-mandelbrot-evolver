@@ -10,7 +10,7 @@ using System.Numerics;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-namespace NEATSpacesLibrary.NEATSpaces
+namespace ComplexCPPNNEATSelection
 {
     public class FractalView: Panel
     {
