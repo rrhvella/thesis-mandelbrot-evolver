@@ -23,15 +23,20 @@ namespace ComplexCPPNNEATSelection
 
         private const int BYTES_PER_INT = 4;
 
-        private const double SPEED_MULTIPLIER = 400;
+        private const double SPEED_MULTIPLIER = 106.132;
 
         private const double ARED = 0.019 * SPEED_MULTIPLIER;
-        private const double AGREEN = 0.015 * SPEED_MULTIPLIER;
-        private const double ABLUE = 0.011 * SPEED_MULTIPLIER;
+        private const double AGREEN = 0.01 * SPEED_MULTIPLIER;
+        private const double ABLUE = 0.017 * SPEED_MULTIPLIER;
 
-        private const double BRED = 0.8;
-        private const double BGREEN = 0.8;
-        private const double BBLUE = 0.8;
+        private const double BRED = 1;
+        private const double BGREEN = 1;
+        private const double BBLUE = 1;
+
+        private static readonly Color[] BASE_COLOURS = new Color[] { 
+            Color.FromArgb(0, 255, 255),
+            Color.FromArgb(0, 255, 0)
+        };
 
         private int viewWidth;
         public int ViewWidth
@@ -195,9 +200,12 @@ namespace ComplexCPPNNEATSelection
         {
             var normalisedIterationNumber = iterationNumber / (double)escape;
 
-            var r = 127 + (int)(128 * Math.Cos(ARED * normalisedIterationNumber + BRED));
-            var g = 127 + (int)(128 * Math.Cos(AGREEN * normalisedIterationNumber + BGREEN));
-            var b = 127 + (int)(128 * Math.Cos(ABLUE * normalisedIterationNumber + BBLUE));
+            var brightness = 1 - normalisedIterationNumber;
+            var baseColor = BASE_COLOURS[(int)Math.Round(normalisedIterationNumber * (BASE_COLOURS.Length - 1))];
+
+            var r = (int)(baseColor.R * brightness);
+            var g = (int)(baseColor.G * brightness);
+            var b = (int)(baseColor.B * brightness);
 
             return 255 << ALPHA_OFFSET | r << RED_OFFSET | 
                     g << GREEN_OFFSET | b << BLUE_OFFSET;
