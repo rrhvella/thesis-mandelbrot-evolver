@@ -29,3 +29,8 @@ No need to create debug file in normal mode.
 Remove validation tests and combine xor validation into test suite ;).
 
 For readonly lists, manipulate the private member, not the property.
+
+MathExtensions.Random should allow the specification of an existing random object. 
+
+GAs should always use a single random object.
+
