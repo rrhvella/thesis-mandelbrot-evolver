@@ -57,6 +57,31 @@ namespace MandelbrotCPPNNEAT
             return fractalImage;
         }
 
+        public double GetVarianceBasedFitness(int viewWidth, int viewHeight, int iterationNumberLimit)
+        {
+            var setLessThanLimit = new List<int>();
+            var averageLessThanLimit = 0.0;
+            var totalAtLimit = 0;
+
+            foreach(var tup in GetIterationNumbers(viewWidth, viewHeight, iterationNumberLimit))
+            {
+                if (tup.IterationNumber == iterationNumberLimit)
+                {
+                    totalAtLimit += 1;
+                }
+                else
+                {
+                    averageLessThanLimit += tup.IterationNumber;
+                    setLessThanLimit.Add(tup.IterationNumber);
+                }
+            }
+
+            averageLessThanLimit /= setLessThanLimit.Count;
+
+            return setLessThanLimit.Select(i => Math.Pow(i - averageLessThanLimit, 2)).Sum() / 
+                        ((setLessThanLimit.Count - 1) * totalAtLimit);
+        }
+
         private struct IterationNumberTuple
         {
             public int X;
