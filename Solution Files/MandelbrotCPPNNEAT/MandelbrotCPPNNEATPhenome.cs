@@ -46,6 +46,34 @@ namespace MandelbrotCPPNNEAT
             var drawingBuffer = fractalImage.LockBits(new Rectangle(0, 0, viewWidth, viewHeight),
                                                 ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
 
+            foreach(var tup in GetIterationNumbers(viewWidth, viewHeight, iterationNumberLimit))
+            {
+                Marshal.WriteInt32(drawingBuffer.Scan0 + drawingBuffer.Stride * tup.Y + tup.X * BYTES_PER_INT, 
+                                ToColour(tup.IterationNumber, iterationNumberLimit));
+            }
+
+            fractalImage.UnlockBits(drawingBuffer);
+
+            return fractalImage;
+        }
+
+        private struct IterationNumberTuple
+        {
+            public int X;
+            public int Y;
+            public int IterationNumber;
+
+            public IterationNumberTuple(int x, int y, int iterationNumber)
+            {
+                this.X = x;
+                this.Y = y;
+                this.IterationNumber = iterationNumber;
+            }
+        }
+
+        private IEnumerable<IterationNumberTuple> GetIterationNumbers(int viewWidth, int viewHeight, 
+                                                                    int iterationNumberLimit)
+        {
             foreach (var x in Enumerable.Range(0, viewWidth))
             {
                 foreach (var y in Enumerable.Range(0, viewHeight))
@@ -62,18 +90,11 @@ namespace MandelbrotCPPNNEAT
                     {
                         complex = network.GetActivation(new Complex[] { positionComplex, complex });
                         currentMagnitude = complex.Magnitude;
-
                     }
 
-                    Marshal.WriteInt32(drawingBuffer.Scan0 + drawingBuffer.Stride * y + x * BYTES_PER_INT, 
-                                    ToColour(i, iterationNumberLimit));
-
+                    yield return new IterationNumberTuple(x, y, i);
                 }
             }
-
-            fractalImage.UnlockBits(drawingBuffer);
-
-            return fractalImage;
         }
 
         private int ToColour(int iterationNumber, int iterationNumberLimit)
