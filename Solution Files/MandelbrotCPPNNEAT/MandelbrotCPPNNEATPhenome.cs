@@ -38,20 +38,20 @@ namespace MandelbrotCPPNNEAT
             this.viewScale = viewScale;
         }
 
-        public Bitmap GetImage(int ViewWidth, int ViewHeight, int iterationNumberLimit)
+        public Bitmap GetImage(int viewWidth, int viewHeight, int iterationNumberLimit)
         {
-            Bitmap fractalImage = new Bitmap(ViewWidth, ViewHeight);
+            Bitmap fractalImage = new Bitmap(viewWidth, viewHeight);
             network.Reset();
 
-            var drawingBuffer = fractalImage.LockBits(new Rectangle(0, 0, ViewWidth, ViewHeight),
+            var drawingBuffer = fractalImage.LockBits(new Rectangle(0, 0, viewWidth, viewHeight),
                                                 ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
 
-            foreach (var x in Enumerable.Range(0, ViewWidth))
+            foreach (var x in Enumerable.Range(0, viewWidth))
             {
-                foreach (var y in Enumerable.Range(0, ViewHeight))
+                foreach (var y in Enumerable.Range(0, viewHeight))
                 {
                     var positionComplex = viewPosition + 
-                                            (new Complex((double)x / ViewWidth, (double)y / ViewHeight) * viewScale);
+                                            (new Complex((double)x / viewWidth, (double)y / viewHeight) * viewScale);
 
                     var complex = Complex.Zero;
                     var currentMagnitude = complex.Magnitude;
