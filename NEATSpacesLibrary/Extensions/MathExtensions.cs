@@ -63,16 +63,26 @@ namespace NEATSpacesLibrary.Extensions
 
         public static Complex ComplexRandom()
         {
-            return ComplexRandom(0, 1);
+            return ComplexRandom(1);
         }
 
         public static Complex ComplexRandom(double from, double to)
         {
-            var range = (to - from);
-            var r = from + range * RandomNumber();
-            var a = from + range * RandomNumber();
+            var r = RandomNumber(from, to);
+            var a = RandomNumber();
 
             return Complex.FromPolarCoordinates(r, a * Math.PI);
         }
+
+        public static Complex ComplexRandom(double to)
+        {
+            return ComplexRandom(0, to);
+        }
+
+        public static double RandomNumber(double from, double to)
+        {
+            return from + (to - from) * RandomNumber();
+        }
+
     }
 }
