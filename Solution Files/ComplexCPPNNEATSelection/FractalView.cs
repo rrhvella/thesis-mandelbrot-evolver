@@ -9,6 +9,7 @@ using NEATSpacesLibrary.CPPNNEAT;
 using System.Numerics;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using MandelbrotCPPNNEAT;
 
 
 namespace ComplexCPPNNEATSelection
