@@ -80,6 +80,10 @@
     <Compile Include="CPPNNEAT\ICPPNNEATGenome.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\MathExtensions.cs" />
+    <Compile Include="GAExperiment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GAList.cs" />
     <Compile Include="GeneticAlgorithms\BaseGA.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGeneCollection.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGenome.cs" />
