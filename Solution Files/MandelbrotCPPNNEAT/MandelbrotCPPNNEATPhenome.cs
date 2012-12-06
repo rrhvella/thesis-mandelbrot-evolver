@@ -78,8 +78,15 @@ namespace MandelbrotCPPNNEAT
 
             averageLessThanLimit /= setLessThanLimit.Count;
 
+            var denominator = ((setLessThanLimit.Count - 1) * totalAtLimit);
+
+            if(denominator == 0) 
+            {
+                return 0;
+            }
+
             return setLessThanLimit.Select(i => Math.Pow(i - averageLessThanLimit, 2)).Sum() / 
-                        ((setLessThanLimit.Count - 1) * totalAtLimit);
+                        denominator;
         }
 
         private struct IterationNumberTuple
