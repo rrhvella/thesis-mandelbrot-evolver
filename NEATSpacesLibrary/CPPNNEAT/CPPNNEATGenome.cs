@@ -8,7 +8,8 @@ using System.Numerics;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
-    public class CPPNNEATGenome : SpeciatedGenome<CPPNNEATGeneCollection, CPPNNetwork>
+    public abstract class CPPNNEATGenome<GType, PType> : SpeciatedGenome<GType, PType>, ICPPNNEATGenome
+        where GType: CPPNNEATGeneCollection, new()
     {
         private static int SMALL_GENOME_THRESHOLD = 20;
 
@@ -92,15 +93,15 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         public CPPNNEATGenome() 
         {
-            this.GeneCollection = new CPPNNEATGeneCollection();
+            this.GeneCollection = new GType();
             this.GeneCollection.Parent = this;
         }
 
-        public CPPNNEATGenome(CPPNNEATGenome parent, CPPNNEATGenome partner): this()
+        public CPPNNEATGenome(CPPNNEATGenome<GType, PType> parent, CPPNNEATGenome<GType, PType>  partner): this()
         {
             this.Parent = parent.Parent;
 
-            var parentGA = Parent as CPPNNEATGA;
+            var parentGA = Parent as ICPPNNEATGA;
             var differences = new DifferenceAnalysis(parent.GeneCollection, partner.GeneCollection);
 
             var disjointAndExcessSource = differences.FirstCollection;
@@ -150,12 +151,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
-        public Complex GetActivation(Complex[] input)
-        {
-            return Phenome.GetActivation(input);
-        }
-
-        public override double CompatibilityDistance(SpeciatedGenome<CPPNNEATGeneCollection, CPPNNetwork> genome)
+        public override double CompatibilityDistance(SpeciatedGenome<GType, PType> genome)
         {
             var differences = new DifferenceAnalysis(this.GeneCollection, genome.GeneCollection);
 
@@ -175,31 +171,22 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 n = 1;
             }
 
-            var parent = Parent as CPPNNEATGA;
+            var parent = Parent as ICPPNNEATGA;
 
             return parent.ExcessGenesWeight * (totalExcess / n) +
                  parent.DisjointGenesWeight * (totalDisjoint / n) +
                  parent.MatchingGenesWeight * averageWeightDifference;
         }
 
-        protected override CPPNNetwork GetPhenome()
+        protected CPPNNetwork GetNetwork()
         {
             GeneCollection.Update();
             return GeneCollection.Phenome;
         }
 
-        protected override Genome<CPPNNEATGeneCollection, CPPNNetwork>[] InnerCrossover(Genome<CPPNNEATGeneCollection, CPPNNetwork> partner)
-        {
-            return new Genome<CPPNNEATGeneCollection, CPPNNetwork>[] 
-            {
-                new CPPNNEATGenome(this, (CPPNNEATGenome)partner),
-                new CPPNNEATGenome(this, (CPPNNEATGenome)partner)
-            };
-        }
-
         protected override void InnerMutate()
         {
-            var parent = Parent as CPPNNEATGA;
+            var parent = Parent as ICPPNNEATGA;
             if (parent.Random.NextDouble() <= parent.NewLinkRate)
             {
                  GeneCollection.TryCreateLinkGene();
@@ -248,11 +235,11 @@ namespace NEATSpacesLibrary.CPPNNEAT
             return String.Join("\r\n", GeneCollection.LinkGenes.Where(link => link.Enabled).Select(link => link.ToString()));
         }
 
-        public override Genome<CPPNNEATGeneCollection, CPPNNetwork> InnerCopy()
+        public override Genome<GType, PType> InnerCopy()
         {
-            var result = (CPPNNEATGenome)this.MemberwiseClone();
+            var result = (CPPNNEATGenome<GType, PType>)this.MemberwiseClone();
 
-            result.GeneCollection = new CPPNNEATGeneCollection();
+            result.GeneCollection = new GType();
             result.GeneCollection.Parent = result;
 
             foreach (var linkGene in GeneCollection.LinkGenes)

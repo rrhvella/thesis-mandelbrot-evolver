@@ -72,10 +72,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CPPNNEAT\CPPNNEATActivationFunction.cs" />
-    <Compile Include="CPPNNEAT\CPPNNEATGA.cs" />
+    <Compile Include="CPPNNEAT\BaseCPPNNEATGA.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATLinkGene.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATNeuronGene.cs" />
     <Compile Include="CPPNNEAT\CPPNNetworkNeuron.cs" />
+    <Compile Include="CPPNNEAT\ICPPNNEATGA.cs" />
+    <Compile Include="CPPNNEAT\ICPPNNEATGenome.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\MathExtensions.cs" />
     <Compile Include="GeneticAlgorithms\BaseGA.cs" />

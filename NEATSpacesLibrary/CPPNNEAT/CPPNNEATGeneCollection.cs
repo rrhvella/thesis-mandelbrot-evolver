@@ -21,17 +21,17 @@ namespace NEATSpacesLibrary.CPPNNEAT
     {
         private Dictionary<int, CPPNNEATLinkGene> linkGeneMap;
 
-        internal CPPNNEATGenome Parent
+        internal ICPPNNEATGenome Parent
         {
             get;
             set;
         }
 
-        public CPPNNEATGA ParentGA 
+        public ICPPNNEATGA ParentGA 
         {
             get
             {
-                return (CPPNNEATGA)Parent.Parent;
+                return (ICPPNNEATGA)Parent.Parent;
             }
         }
 

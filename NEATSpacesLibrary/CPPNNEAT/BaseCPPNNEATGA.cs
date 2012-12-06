@@ -8,8 +8,10 @@ using System.Numerics;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
-    public class CPPNNEATGA :
-        BaseSpeciatedGA<CPPNNEATGenome, CPPNNEATGeneCollection, CPPNNetwork>
+    public class BaseCPPNNEATGA<GenomeType, GType, PType> :
+        BaseSpeciatedGA<GenomeType, GType, PType>
+        where GenomeType : CPPNNEATGenome<GType, PType>, new()
+        where GType : CPPNNEATGeneCollection, new()
     {
 
         private Dictionary<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>, int> edgeInnovationNumberMap;
@@ -22,14 +24,14 @@ namespace NEATSpacesLibrary.CPPNNEAT
             private set;
         }
 
-        public CPPNNEATGA(int numberOfInputs, int populationSize, Func<CPPNNEATGenome, double> scoreFunction,
+        public BaseCPPNNEATGA(int numberOfInputs, int populationSize, Func<GenomeType, double> scoreFunction,
                         List<Func<CPPNNEATActivationFunction>> canonicalFunctionList, 
                         bool feedForwardOnly)
             : this(numberOfInputs, populationSize, scoreFunction, canonicalFunctionList, null, feedForwardOnly) 
         {
         }
 
-        public CPPNNEATGA(int numberOfInputs, int populationSize, Func<CPPNNEATGenome, double> scoreFunction,
+        public BaseCPPNNEATGA(int numberOfInputs, int populationSize, Func<GenomeType, double> scoreFunction,
                         List<Func<CPPNNEATActivationFunction>> canonicalFunctionList, 
                         Func<CPPNNEATActivationFunction> outputActivationFunction,
                         bool feedForwardOnly): base(populationSize, scoreFunction)

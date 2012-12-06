@@ -36,6 +36,8 @@ namespace ComplexCPPNNEATSelection
         private const double DISJOINT_GENES_WEIGHT = 1.0;
         private const double MATCHING_GENES_WEIGHT = 3.0;
         private const double FUNCTION_DIFFERENCE_WEIGHT = 0.0;
+        private const double VIEW_POSITION_DISTANCE_COEFFICIENT = 1.0;
+        private const double VIEW_SCALE_DISTANCE_COEFFICIENT= 2.0;
 
         private const double ELITISM_RATE = 0.3;
         private const double INTERSPECIES_MATING_RATE = 0.001;
@@ -52,6 +54,17 @@ namespace ComplexCPPNNEATSelection
 
         private const int ESCAPE = 100;
 
+        private static readonly Complex INITIAL_POSITION_ORIGIN = new Complex(-0.5, 0);
+        private const double INITIAL_POSITION_MAX_DISPLACEMENT = 1.5;
+
+        private const double MIN_INITIAL_SCALE = 0.01;
+        private const double MAX_INITIAL_SCALE = 1;
+
+        private const double DISPLACEMENT_STANDARD_DEVIATION = 0.002;
+        private const double SCALE_TWEAK_COEFFICIENT = 1.1;
+
+        private const double EXCHANGE_PROBABILITY = 0.5;
+
         private List<FractalView> views;
         public IEnumerable<FractalView> Views 
         {
@@ -61,7 +74,7 @@ namespace ComplexCPPNNEATSelection
             }
         }
 
-        private CPPNNEATGA ga;
+        private MandelbrotCPPNNEATGA ga;
 
         private Complex viewPosition;
         public Complex ViewPosition
@@ -120,8 +133,8 @@ namespace ComplexCPPNNEATSelection
                 fractalView.Show();
             }
 
-            this.ga = new CPPNNEATGA(NUMBER_OF_INPUTS, POPULATION_SIZE,
-                                        delegate(CPPNNEATGenome genome)
+            this.ga = new MandelbrotCPPNNEATGA(NUMBER_OF_INPUTS, POPULATION_SIZE,
+                                        delegate(MandelbrotCPPNNEATGenome genome)
                                         {
                                             var pictureBox = views.Where(image => image.Genome == genome).FirstOrDefault();
                                             return (pictureBox != null)? pictureBox.Score : 0;
@@ -135,8 +148,7 @@ namespace ComplexCPPNNEATSelection
                                                 CPPNActivationFunctionFactories.ComplexGaussianActivationFunctionFactory,
                                                 CPPNActivationFunctionFactories.ComplexSinActivationFunctionFactory,
                                                 },
-                                                CPPNActivationFunctionFactories.ComplexLinearActivationFunctionFactory,
-                                        true);
+                                                CPPNActivationFunctionFactories.ComplexLinearActivationFunctionFactory);
 
             ga.CompatibilityDistanceThreshold = COMPATIBILITY_DISTANCE_THRESHOLD;
             ga.NoInnovationThreshold = NO_INNOVATION_THRESHOLD;
@@ -161,6 +173,19 @@ namespace ComplexCPPNNEATSelection
             ga.DisjointGenesWeight = DISJOINT_GENES_WEIGHT;
             ga.MatchingGenesWeight = MATCHING_GENES_WEIGHT;
             ga.FunctionDifferenceWeight = FUNCTION_DIFFERENCE_WEIGHT;
+
+            ga.InitialPositionOrigin = INITIAL_POSITION_ORIGIN;
+            ga.InitialPositionMaxDisplacement = INITIAL_POSITION_MAX_DISPLACEMENT;
+            ga.MinInitialScale = MIN_INITIAL_SCALE;
+            ga.MaxInitialScale = MAX_INITIAL_SCALE;
+
+            ga.DisplacementStandardDeviation = DISPLACEMENT_STANDARD_DEVIATION;
+            ga.ScaleTweakCoefficient = SCALE_TWEAK_COEFFICIENT;
+
+            ga.ExchangeProbability = EXCHANGE_PROBABILITY;
+
+            ga.ViewPositionDistanceCoefficient = VIEW_POSITION_DISTANCE_COEFFICIENT;
+            ga.ViewScaleDistanceCoefficient = VIEW_SCALE_DISTANCE_COEFFICIENT;
 
             ga.Initialise();
             LoadGenomesIntoImages();
