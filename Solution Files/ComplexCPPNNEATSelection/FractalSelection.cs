@@ -11,7 +11,7 @@ using System.Threading;
 using System.Diagnostics;
 using NEATSpacesLibrary.CPPNNEAT;
 using System.Numerics;
-using MandelbrotCPPNNNEAT;
+using MandelbrotCPPNNEAT;
 using MandelbrotCPPNNEAT;
 
 namespace ComplexCPPNNEATSelection

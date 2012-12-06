@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 using NEATSpacesLibrary.Extensions;
 using MandelbrotCPPNNEAT;
 
-namespace MandelbrotCPPNNNEAT
+namespace MandelbrotCPPNNEAT
 {
 
     public class MandelbrotCPPNNEATGA : BaseCPPNNEATGA<MandelbrotCPPNNEATGenome, MandelbrotCPPNNEATGeneCollection,

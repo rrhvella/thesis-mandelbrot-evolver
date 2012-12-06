@@ -6,7 +6,7 @@ using NEATSpacesLibrary.CPPNNEAT;
 using System.Numerics;
 using NEATSpacesLibrary.GeneticAlgorithms;
 using NEATSpacesLibrary.Extensions;
-using MandelbrotCPPNNNEAT;
+using MandelbrotCPPNNEAT;
 
 namespace MandelbrotCPPNNEAT
 {
