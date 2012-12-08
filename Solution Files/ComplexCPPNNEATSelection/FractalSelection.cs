@@ -12,7 +12,6 @@ using System.Diagnostics;
 using NEATSpacesLibrary.CPPNNEAT;
 using System.Numerics;
 using MandelbrotCPPNNEAT;
-using MandelbrotCPPNNEAT;
 
 namespace ComplexCPPNNEATSelection
 {
