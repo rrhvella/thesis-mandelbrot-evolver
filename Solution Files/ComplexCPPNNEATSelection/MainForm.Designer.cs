@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.genomeView = new System.Windows.Forms.TextBox();
             this.finalView = new ComplexCPPNNEATSelection.FractalView();
             this.fractalSelectionInstance = new ComplexCPPNNEATSelection.FractalSelection();
@@ -49,13 +48,13 @@
             // 
             this.finalView.Escape = 100;
             this.finalView.Genome = null;
-            this.finalView.Location = new System.Drawing.Point(769, 75);
+            this.finalView.Location = new System.Drawing.Point(663, 0);
             this.finalView.Name = "finalView";
             this.finalView.Score = 0;
-            this.finalView.Size = new System.Drawing.Size(200, 200);
+            this.finalView.Size = new System.Drawing.Size(400, 400);
             this.finalView.TabIndex = 6;
-            this.finalView.ViewHeight = 200;
-            this.finalView.ViewWidth = 200;
+            this.finalView.ViewHeight = 400;
+            this.finalView.ViewWidth = 400;
             // 
             // fractalSelectionInstance
             // 
@@ -67,7 +66,7 @@
             // generationalLabel
             // 
             this.generationalLabel.AutoSize = true;
-            this.generationalLabel.Location = new System.Drawing.Point(769, 37);
+            this.generationalLabel.Location = new System.Drawing.Point(660, 412);
             this.generationalLabel.Name = "generationalLabel";
             this.generationalLabel.Size = new System.Drawing.Size(117, 13);
             this.generationalLabel.TabIndex = 7;
@@ -76,7 +75,7 @@
             // generations
             // 
             this.generations.AutoSize = true;
-            this.generations.Location = new System.Drawing.Point(892, 37);
+            this.generations.Location = new System.Drawing.Point(783, 412);
             this.generations.Name = "generations";
             this.generations.Size = new System.Drawing.Size(13, 13);
             this.generations.TabIndex = 8;
@@ -86,7 +85,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1065, 396);
+            this.ClientSize = new System.Drawing.Size(1065, 483);
             this.Controls.Add(this.generations);
             this.Controls.Add(this.generationalLabel);
             this.Controls.Add(this.finalView);
