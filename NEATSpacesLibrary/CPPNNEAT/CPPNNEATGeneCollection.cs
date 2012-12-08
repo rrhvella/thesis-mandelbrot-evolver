@@ -27,6 +27,15 @@ namespace NEATSpacesLibrary.CPPNNEAT
             set;
         }
 
+        public IEnumerable<CPPNNEATActivationFunction> ActivationFunctions
+        {
+            get
+            {
+                return NeuronGenes.Select(neuronGene => neuronGene.ActivationFunction)
+                                .Where(func => func != null);
+            }
+        }
+
         public ICPPNNEATGA ParentGA 
         {
             get
