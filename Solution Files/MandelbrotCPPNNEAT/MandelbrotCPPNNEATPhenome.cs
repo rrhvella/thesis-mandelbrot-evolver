@@ -94,12 +94,14 @@ namespace MandelbrotCPPNNEAT
             public int X;
             public int Y;
             public int IterationNumber;
+            public Complex Z;
 
-            public IterationNumberTuple(int x, int y, int iterationNumber)
+            public IterationNumberTuple(int x, int y, int iterationNumber, Complex z)
             {
                 this.X = x;
                 this.Y = y;
                 this.IterationNumber = iterationNumber;
+                this.Z = z;
             }
         }
 
@@ -124,7 +126,7 @@ namespace MandelbrotCPPNNEAT
                         currentMagnitude = z.Magnitude;
                     }
 
-                    yield return new IterationNumberTuple(x, y, i);
+                    yield return new IterationNumberTuple(x, y, i, z);
                 }
             }
         }
