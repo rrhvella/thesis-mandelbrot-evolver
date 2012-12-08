@@ -12,33 +12,15 @@ namespace ComplexCPPNNEATSelection
 {
     public partial class MainForm : Form
     {
-        private Complex INITIAL_VIEW_POSITION = new Complex(-2, -2);
-
         public MainForm()
         {
             InitializeComponent();
-
-            fractalSelectionInstance.ViewPosition = INITIAL_VIEW_POSITION;
 
             foreach (FractalView view in fractalSelectionInstance.Views)
             {
                 view.MouseEnter += new EventHandler(view_MouseHover);
                 view.Selected += new EventHandler<EventArgs>(view_Selected);
             }
-
-            viewX.Text = fractalSelectionInstance.ViewPosition.Real.ToString();
-            viewY.Text = fractalSelectionInstance.ViewPosition.Imaginary.ToString();
-            viewS.Text = fractalSelectionInstance.ViewSize.ToString();
-
-            SyncFractalSelectorAndFinalView();
-        }
-
-        private void SyncFractalSelectorAndFinalView()
-        {
-            finalView.ViewPosition = fractalSelectionInstance.ViewPosition;
-            finalView.ViewSize = fractalSelectionInstance.ViewSize;
-
-            finalView.Refresh();
         }
 
         void view_Selected(object sender, EventArgs e)
@@ -63,17 +45,6 @@ namespace ComplexCPPNNEATSelection
             {
                 fractalSelectionInstance.NextGeneration();
             }
-        }
-
-        private void updateView_Click(object sender, EventArgs e)
-        {
-            fractalSelectionInstance.ViewPosition = new Complex(double.Parse(viewX.Text), double.Parse(viewY.Text));
-            fractalSelectionInstance.ViewSize = double.Parse(viewS.Text);
-            
-            fractalSelectionInstance.Refresh();
-            fractalSelectionInstance.Focus();
-
-            SyncFractalSelectorAndFinalView();
         }
     }
 }

@@ -30,10 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.genomeView = new System.Windows.Forms.TextBox();
-            this.viewX = new System.Windows.Forms.TextBox();
-            this.viewY = new System.Windows.Forms.TextBox();
-            this.viewS = new System.Windows.Forms.TextBox();
-            this.updateView = new System.Windows.Forms.Button();
             this.finalView = new ComplexCPPNNEATSelection.FractalView();
             this.fractalSelectionInstance = new ComplexCPPNNEATSelection.FractalSelection();
             this.SuspendLayout();
@@ -47,48 +43,16 @@
             this.genomeView.Size = new System.Drawing.Size(235, 399);
             this.genomeView.TabIndex = 1;
             // 
-            // viewX
-            // 
-            this.viewX.Location = new System.Drawing.Point(13, 406);
-            this.viewX.Name = "viewX";
-            this.viewX.Size = new System.Drawing.Size(100, 20);
-            this.viewX.TabIndex = 2;
-            // 
-            // viewY
-            // 
-            this.viewY.Location = new System.Drawing.Point(147, 406);
-            this.viewY.Name = "viewY";
-            this.viewY.Size = new System.Drawing.Size(100, 20);
-            this.viewY.TabIndex = 3;
-            // 
-            // viewS
-            // 
-            this.viewS.Location = new System.Drawing.Point(276, 405);
-            this.viewS.Name = "viewS";
-            this.viewS.Size = new System.Drawing.Size(100, 20);
-            this.viewS.TabIndex = 4;
-            // 
-            // updateView
-            // 
-            this.updateView.Location = new System.Drawing.Point(434, 405);
-            this.updateView.Name = "updateView";
-            this.updateView.Size = new System.Drawing.Size(235, 23);
-            this.updateView.TabIndex = 5;
-            this.updateView.Text = "update view";
-            this.updateView.UseVisualStyleBackColor = true;
-            this.updateView.Click += new System.EventHandler(this.updateView_Click);
-            // 
             // finalView
             // 
             this.finalView.Escape = 100;
             this.finalView.Genome = null;
-            this.finalView.Location = new System.Drawing.Point(785, 104);
+            this.finalView.Location = new System.Drawing.Point(769, 75);
             this.finalView.Name = "finalView";
             this.finalView.Score = 0;
             this.finalView.Size = new System.Drawing.Size(200, 200);
             this.finalView.TabIndex = 6;
             this.finalView.ViewHeight = 200;
-            this.finalView.ViewSize = 200D;
             this.finalView.ViewWidth = 200;
             // 
             // fractalSelectionInstance
@@ -97,18 +61,13 @@
             this.fractalSelectionInstance.Name = "fractalSelectionInstance";
             this.fractalSelectionInstance.Size = new System.Drawing.Size(430, 399);
             this.fractalSelectionInstance.TabIndex = 0;
-            this.fractalSelectionInstance.ViewSize = 4D;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1065, 480);
+            this.ClientSize = new System.Drawing.Size(1065, 396);
             this.Controls.Add(this.finalView);
-            this.Controls.Add(this.updateView);
-            this.Controls.Add(this.viewS);
-            this.Controls.Add(this.viewY);
-            this.Controls.Add(this.viewX);
             this.Controls.Add(this.genomeView);
             this.Controls.Add(this.fractalSelectionInstance);
             this.KeyPreview = true;
@@ -124,10 +83,6 @@
 
         private FractalSelection fractalSelectionInstance;
         private System.Windows.Forms.TextBox genomeView;
-        private System.Windows.Forms.TextBox viewX;
-        private System.Windows.Forms.TextBox viewY;
-        private System.Windows.Forms.TextBox viewS;
-        private System.Windows.Forms.Button updateView;
         private FractalView finalView;
     }
 }
