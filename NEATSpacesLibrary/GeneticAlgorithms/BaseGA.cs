@@ -309,7 +309,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             foreach (var parentPairs in generationalSelect.ParentPairs)
             {
-                var child = parentPairs.Item1.Crossover(parentPairs.Item2)[0];
+                var child = parentPairs.Item1.Crossover(parentPairs.Item2);
 
                 child.Mutate();
                 AddGenome((GenomeType)child);
@@ -342,7 +342,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
 
             var selection = PerformSteadyStateSelection();
-            previousChildren = selection.Parent.Crossover(selection.Partner);
+            previousChildren = new List<Genome<GType, PType>> { selection.Parent.Crossover(selection.Partner) };
 
             foreach (var i in Enumerable.Range(0, selection.IndividualsToReplace.Length))
             {

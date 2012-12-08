@@ -103,7 +103,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         protected abstract PType GetPhenome();
         
         public abstract void Initialise();
-        protected abstract Genome<GType, PType>[] InnerCrossover(Genome<GType, PType> partner);
+        protected abstract Genome<GType, PType> InnerCrossover(Genome<GType, PType> partner);
         protected abstract void InnerMutate();
 
         public void UpdatePhenome()
@@ -118,7 +118,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             Parent.Update();
         }
 
-        public Genome<GType, PType>[] Crossover(Genome<GType, PType> partner)
+        public Genome<GType, PType> Crossover(Genome<GType, PType> partner)
         {
             return InnerCrossover(partner);
         }

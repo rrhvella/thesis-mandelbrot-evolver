@@ -22,25 +22,23 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             return GeneCollection;
         }
 
-        protected override Genome<GType, GType>[] InnerCrossover(Genome<GType, GType> partner)
+        protected override Genome<GType, GType> InnerCrossover(Genome<GType, GType> partner)
         {
-            var children = new GenomeType[] { new GenomeType(), new GenomeType() };
+            var child = new GenomeType();
 
             foreach(var i in Enumerable.Range(0, GeneCollection.Count))
             {
                 if (Parent.Random.NextDouble() <= crossoverRate)
                 {
-                    children[0].GeneCollection[i] = GeneCollection[i];
-                    children[1].GeneCollection[i] = partner.GeneCollection[i];
+                    child.GeneCollection[i] = GeneCollection[i];
                 } 
                 else 
                 {
-                    children[1].GeneCollection[i] = GeneCollection[i];
-                    children[0].GeneCollection[i] = partner.GeneCollection[i];
+                    child.GeneCollection[i] = partner.GeneCollection[i];
                 }
             }
 
-            return children;
+            return child;
         }
 
         protected override void InnerMutate()

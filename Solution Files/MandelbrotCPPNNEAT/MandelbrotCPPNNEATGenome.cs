@@ -30,13 +30,10 @@ namespace MandelbrotCPPNNEAT
             return new MandelbrotCPPNNEATPhenome(GetNetwork(), parent.ViewPosition, parent.ViewScale);
         }
 
-        protected override Genome<CPPNNEATGeneCollection, MandelbrotCPPNNEATPhenome>[] 
+        protected override Genome<CPPNNEATGeneCollection, MandelbrotCPPNNEATPhenome> 
                 InnerCrossover(Genome<CPPNNEATGeneCollection, MandelbrotCPPNNEATPhenome> partner)
         {
-            return new[] {
-                new MandelbrotCPPNNEATGenome((MandelbrotCPPNNEATGenome)this, (MandelbrotCPPNNEATGenome)partner),
-                new MandelbrotCPPNNEATGenome((MandelbrotCPPNNEATGenome)this, (MandelbrotCPPNNEATGenome)partner)
-            };
+            return new MandelbrotCPPNNEATGenome((MandelbrotCPPNNEATGenome)this, (MandelbrotCPPNNEATGenome)partner);
         }
     }
 }
