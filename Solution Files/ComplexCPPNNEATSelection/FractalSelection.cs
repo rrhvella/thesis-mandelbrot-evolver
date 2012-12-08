@@ -37,8 +37,6 @@ namespace ComplexCPPNNEATSelection
         private const double DISJOINT_GENES_WEIGHT = 1.0;
         private const double MATCHING_GENES_WEIGHT = 3.0;
         private const double FUNCTION_DIFFERENCE_WEIGHT = 0.0;
-        private const double VIEW_POSITION_DISTANCE_COEFFICIENT = 1.0;
-        private const double VIEW_SCALE_DISTANCE_COEFFICIENT= 2.0;
 
         private const double ELITISM_RATE = 0.3;
         private const double INTERSPECIES_MATING_RATE = 0.001;
