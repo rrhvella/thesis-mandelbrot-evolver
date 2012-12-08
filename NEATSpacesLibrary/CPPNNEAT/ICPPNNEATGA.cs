@@ -7,7 +7,7 @@ using NEATSpacesLibrary.GeneticAlgorithms;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
-    public interface ICPPNNEATGA : IGA
+    public interface ICPPNNEATGA : ISpeciatedGA
     {
         IList<CPPNNEATLinkGene> DefaultLinkGenes { get; }
 
