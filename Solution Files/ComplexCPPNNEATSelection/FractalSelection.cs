@@ -17,14 +17,14 @@ namespace ComplexCPPNNEATSelection
 {
     public class FractalSelection: Panel
     {
-        private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
+        private static double COMPATIBILITY_DISTANCE_THRESHOLD = 6.0;
 
         private static int NO_INNOVATION_THRESHOLD = 1000000;
         private static int ITERATIONS_TO_CLEAR_LINK_CACHE = 1;
 
         private static double WEIGHT_MUTATION_RATE = 0.9;
-        private static double NEW_NEURON_RATE = 0.04;
-        private static double NEW_LINK_RATE = 0.08;
+        private static double NEW_NEURON_RATE = 0.12;
+        private static double NEW_LINK_RATE = 0.24;
 
         private static double WEIGHT_PERTUBATION_RATE = 0.9;
 
@@ -36,7 +36,7 @@ namespace ComplexCPPNNEATSelection
         private const double EXCESS_GENES_WEIGHT = 1.0;
         private const double DISJOINT_GENES_WEIGHT = 1.0;
         private const double MATCHING_GENES_WEIGHT = 3.0;
-        private const double FUNCTION_DIFFERENCE_WEIGHT = 0.0;
+        private const double FUNCTION_DIFFERENCE_WEIGHT = 1.0;
 
         private const double ELITISM_RATE = 0.3;
         private const double INTERSPECIES_MATING_RATE = 0.001;
@@ -45,13 +45,13 @@ namespace ComplexCPPNNEATSelection
 
         private const int NUMBER_OF_INPUTS = 2;
 
-        private const int VIEW_WIDTH = 50;
-        private const int VIEW_HEIGHT = 50;
+        private const int VIEW_WIDTH = 40;
+        private const int VIEW_HEIGHT = 40;
 
         private const int IMAGES_PER_ROW = 4;
         private const int POPULATION_SIZE = 16;
 
-        private const int ESCAPE = 100;
+        private const int ESCAPE = 200;
 
         private static readonly Complex VIEW_POSITION = new Complex(-2.2, -1.5);
         private const double VIEW_SCALE = 3;
