@@ -14,58 +14,16 @@ using MandelbrotCPPNNEAT;
 namespace MandelbrotCPPNNEAT
 {
 
-    public class MandelbrotCPPNNEATGA : BaseCPPNNEATGA<MandelbrotCPPNNEATGenome, MandelbrotCPPNNEATGeneCollection,
+    public class MandelbrotCPPNNEATGA : BaseCPPNNEATGA<MandelbrotCPPNNEATGenome, CPPNNEATGeneCollection,
                                                         MandelbrotCPPNNEATPhenome>, ICPPNNEATGA
     {
-        public Complex InitialPositionOrigin
+        public Complex ViewPosition
         {
             get;
             set;
         }
 
-        public double InitialPositionMaxDisplacement
-        {
-            get;
-            set;
-        }
-
-        public double DisplacementStandardDeviation
-        {
-            get;
-            set;
-        }
-
-        public double ScaleTweakCoefficient
-        {
-            get;
-            set;
-        }
-
-        public double ExchangeProbability
-        {
-            get;
-            set;
-        }
-
-        public double MinInitialScale
-        {
-            get;
-            set;
-        }
-
-        public double MaxInitialScale
-        {
-            get;
-            set;
-        }
-
-        public double ViewPositionDistanceCoefficient
-        {
-            get;
-            set;
-        }
-
-        public double ViewScaleDistanceCoefficient
+        public double ViewScale
         {
             get;
             set;

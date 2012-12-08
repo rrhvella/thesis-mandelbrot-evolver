@@ -56,16 +56,8 @@ namespace ComplexCPPNNEATSelection
 
         private const int ESCAPE = 100;
 
-        private static readonly Complex INITIAL_POSITION_ORIGIN = new Complex(-0.5, 0);
-        private const double INITIAL_POSITION_MAX_DISPLACEMENT = 1.5;
-
-        private const double MIN_INITIAL_SCALE = 0.01;
-        private const double MAX_INITIAL_SCALE = 1;
-
-        private const double DISPLACEMENT_STANDARD_DEVIATION = 0.002;
-        private const double SCALE_TWEAK_COEFFICIENT = 1.1;
-
-        private const double EXCHANGE_PROBABILITY = 0.5;
+        private static readonly Complex VIEW_POSITION = new Complex(-2.2, -1.5);
+        private const double VIEW_SCALE = 3;
 
         private List<FractalView> views;
         public IEnumerable<FractalView> Views 
@@ -176,18 +168,8 @@ namespace ComplexCPPNNEATSelection
             ga.MatchingGenesWeight = MATCHING_GENES_WEIGHT;
             ga.FunctionDifferenceWeight = FUNCTION_DIFFERENCE_WEIGHT;
 
-            ga.InitialPositionOrigin = INITIAL_POSITION_ORIGIN;
-            ga.InitialPositionMaxDisplacement = INITIAL_POSITION_MAX_DISPLACEMENT;
-            ga.MinInitialScale = MIN_INITIAL_SCALE;
-            ga.MaxInitialScale = MAX_INITIAL_SCALE;
-
-            ga.DisplacementStandardDeviation = DISPLACEMENT_STANDARD_DEVIATION;
-            ga.ScaleTweakCoefficient = SCALE_TWEAK_COEFFICIENT;
-
-            ga.ExchangeProbability = EXCHANGE_PROBABILITY;
-
-            ga.ViewPositionDistanceCoefficient = VIEW_POSITION_DISTANCE_COEFFICIENT;
-            ga.ViewScaleDistanceCoefficient = VIEW_SCALE_DISTANCE_COEFFICIENT;
+            ga.ViewPosition = VIEW_POSITION;
+            ga.ViewScale = VIEW_SCALE;
 
             ga.Initialise();
             LoadGenomesIntoImages();
