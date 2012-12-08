@@ -32,6 +32,8 @@
             this.genomeView = new System.Windows.Forms.TextBox();
             this.finalView = new ComplexCPPNNEATSelection.FractalView();
             this.fractalSelectionInstance = new ComplexCPPNNEATSelection.FractalSelection();
+            this.generationalLabel = new System.Windows.Forms.Label();
+            this.generations = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // genomeView
@@ -62,11 +64,31 @@
             this.fractalSelectionInstance.Size = new System.Drawing.Size(430, 399);
             this.fractalSelectionInstance.TabIndex = 0;
             // 
+            // generationalLabel
+            // 
+            this.generationalLabel.AutoSize = true;
+            this.generationalLabel.Location = new System.Drawing.Point(769, 37);
+            this.generationalLabel.Name = "generationalLabel";
+            this.generationalLabel.Size = new System.Drawing.Size(117, 13);
+            this.generationalLabel.TabIndex = 7;
+            this.generationalLabel.Text = "Number of generations:";
+            // 
+            // generations
+            // 
+            this.generations.AutoSize = true;
+            this.generations.Location = new System.Drawing.Point(892, 37);
+            this.generations.Name = "generations";
+            this.generations.Size = new System.Drawing.Size(13, 13);
+            this.generations.TabIndex = 8;
+            this.generations.Text = "0";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1065, 396);
+            this.Controls.Add(this.generations);
+            this.Controls.Add(this.generationalLabel);
             this.Controls.Add(this.finalView);
             this.Controls.Add(this.genomeView);
             this.Controls.Add(this.fractalSelectionInstance);
@@ -84,5 +106,7 @@
         private FractalSelection fractalSelectionInstance;
         private System.Windows.Forms.TextBox genomeView;
         private FractalView finalView;
+        private System.Windows.Forms.Label generationalLabel;
+        private System.Windows.Forms.Label generations;
     }
 }

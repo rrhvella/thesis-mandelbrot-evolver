@@ -238,6 +238,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
         }
 
+        public int NumberOfGenerations { get; set; }
+
         public BaseGA(int populationSize, Func<GenomeType, double> scoreFunction)
         {
             this.populationSize = populationSize;
@@ -259,6 +261,8 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 newGenome.Initialise();
                 AddGenome(newGenome);
             }
+
+            this.NumberOfGenerations = 0;
         }
 
         private void AddGenome(GenomeType genome) 
@@ -325,6 +329,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
 
             previousSelection = generationalSelect;
+            NumberOfGenerations++;
         }
 
         protected abstract GAGenerationalSelectionResult<GenomeType, GType, PType> PerformGenerationalSelection();

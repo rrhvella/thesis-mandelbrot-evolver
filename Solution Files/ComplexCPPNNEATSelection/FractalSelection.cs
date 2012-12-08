@@ -170,5 +170,13 @@ namespace ComplexCPPNNEATSelection
 
             Refresh();
         }
+
+        public int NumberOfGenerations
+        {
+            get
+            {
+                return ga.NumberOfGenerations;
+            }
+        }
     }
 }

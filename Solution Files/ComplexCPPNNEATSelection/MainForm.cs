@@ -44,6 +44,7 @@ namespace ComplexCPPNNEATSelection
             if (e.KeyCode == Keys.Enter)
             {
                 fractalSelectionInstance.NextGeneration();
+                generations.Text = fractalSelectionInstance.NumberOfGenerations.ToString();
             }
         }
     }
