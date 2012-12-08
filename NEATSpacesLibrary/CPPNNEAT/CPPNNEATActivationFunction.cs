@@ -101,6 +101,14 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         private string label;
 
+        public string Label
+        {
+            get
+            {
+                return label;
+            }
+        }
+
         public CPPNNEATActivationFunction(Func<Complex, Complex> function, string label)
         {
             this.Function = function;
