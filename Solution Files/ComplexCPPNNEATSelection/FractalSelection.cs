@@ -70,42 +70,6 @@ namespace ComplexCPPNNEATSelection
 
         private MandelbrotCPPNNEATGA ga;
 
-        private Complex viewPosition;
-        public Complex ViewPosition
-        {
-            get
-            {
-                return viewPosition;
-            }
-            set
-            {
-                viewPosition = value;
-
-                foreach (var fractalView in views)
-                {
-                    fractalView.ViewPosition = viewPosition;
-                }
-            }
-        }
-
-        private double viewSize;
-        public double ViewSize
-        {
-            get
-            {
-                return viewSize;
-            }
-            set
-            {
-                viewSize = value;
-
-                foreach (var fractalView in views)
-                {
-                    fractalView.ViewSize = viewSize;
-                }
-            }
-        }
-
         public FractalSelection()
         {
             views = new List<FractalView>();
@@ -118,8 +82,6 @@ namespace ComplexCPPNNEATSelection
                 fractalView.ViewHeight = VIEW_HEIGHT;
 
                 fractalView.Escape = ESCAPE;
-
-                fractalView.ViewSize = ViewSize;
 
                 views.Add(fractalView);
                 

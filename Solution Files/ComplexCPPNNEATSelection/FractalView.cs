@@ -64,35 +64,6 @@ namespace ComplexCPPNNEATSelection
             set;
         }
 
-
-        private Complex viewPosition;
-        public Complex ViewPosition 
-        {
-            get
-            {
-                return viewPosition;
-            }
-            set
-            {
-                fractalImageCacheInvalidated = true;
-                viewPosition = value;
-            }
-        }
-
-        private double viewSize;
-        public double ViewSize
-        { 
-            get 
-            {
-                return viewSize;
-            } 
-            set 
-            {
-                fractalImageCacheInvalidated = true;
-                viewSize = value;
-            } 
-        }
-
         private int escape;
         public int Escape
         { 
