@@ -172,10 +172,31 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
 
             var parent = Parent as ICPPNNEATGA;
+            var averageFunctionDifference = GetAverageFunctionDifference(this, genome);
 
             return parent.ExcessGenesWeight * (totalExcess / n) +
                  parent.DisjointGenesWeight * (totalDisjoint / n) +
-                 parent.MatchingGenesWeight * averageWeightDifference;
+                 parent.MatchingGenesWeight * averageWeightDifference +
+                 parent.FunctionDifferenceWeight * averageFunctionDifference;
+        }
+
+        private static double GetAverageFunctionDifference(CPPNNEATGenome<GType, PType> genome1, SpeciatedGenome<GType, PType> genome2)
+        {
+            var functionDifferenceMap = genome1.GeneCollection.ActivationFunctions.GroupBy(func => func.Label)
+                                                .ToDictionary(group => group.Key, group => group.Count());
+
+            foreach (var activationFunctionGroup in genome2.GeneCollection.ActivationFunctions.GroupBy(func => func.Label))
+            {
+                if(!functionDifferenceMap.ContainsKey(activationFunctionGroup.Key)) 
+                {
+                    functionDifferenceMap[activationFunctionGroup.Key] = 0;
+                }
+
+                functionDifferenceMap[activationFunctionGroup.Key] = 
+                                    Math.Abs(functionDifferenceMap[activationFunctionGroup.Key] - activationFunctionGroup.Count());
+            }
+            
+            return functionDifferenceMap.Average(pair => pair.Value);
         }
 
         protected CPPNNetwork GetNetwork()
