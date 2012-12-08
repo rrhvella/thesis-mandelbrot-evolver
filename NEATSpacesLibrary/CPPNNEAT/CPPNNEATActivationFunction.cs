@@ -40,12 +40,12 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         public static CPPNNEATActivationFunction ComplexSteepenedSigmoidActivationFunctionFactory()
         {
-            return new CPPNNEATActivationFunction(x => 1 / (1 + Complex.Exp(-4.9 * x)), "σ(x)"); 
+            return new CPPNNEATActivationFunction(x => 1 / (1 + Complex.Exp(-4.9 * x)), "\u03c3(x)"); 
         }
 
         public static CPPNNEATActivationFunction ComplexGaussianActivationFunctionFactory()
         {
-            return new CPPNNEATActivationFunction(x => Complex.Exp(-Complex.Pow(x * 2.5, 2.0)), "∮(x)"); 
+            return new CPPNNEATActivationFunction(x => Complex.Exp(-Complex.Pow(x * 2.5, 2.0)), "\u222e(x)"); 
         }
 
         public static CPPNNEATActivationFunction ComplexSinActivationFunctionFactory()
