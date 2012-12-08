@@ -33,6 +33,7 @@
             this.fractalSelectionInstance = new ComplexCPPNNEATSelection.FractalSelection();
             this.generationalLabel = new System.Windows.Forms.Label();
             this.generations = new System.Windows.Forms.Label();
+            this.Output = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // genomeView
@@ -75,17 +76,28 @@
             // generations
             // 
             this.generations.AutoSize = true;
-            this.generations.Location = new System.Drawing.Point(783, 412);
+            this.generations.Location = new System.Drawing.Point(800, 412);
             this.generations.Name = "generations";
             this.generations.Size = new System.Drawing.Size(13, 13);
             this.generations.TabIndex = 8;
             this.generations.Text = "0";
+            // 
+            // Output
+            // 
+            this.Output.Location = new System.Drawing.Point(878, 407);
+            this.Output.Name = "Output";
+            this.Output.Size = new System.Drawing.Size(185, 23);
+            this.Output.TabIndex = 9;
+            this.Output.Text = "Output";
+            this.Output.UseVisualStyleBackColor = true;
+            this.Output.Click += new System.EventHandler(this.Output_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1065, 483);
+            this.Controls.Add(this.Output);
             this.Controls.Add(this.generations);
             this.Controls.Add(this.generationalLabel);
             this.Controls.Add(this.finalView);
@@ -107,5 +119,6 @@
         private FractalView finalView;
         private System.Windows.Forms.Label generationalLabel;
         private System.Windows.Forms.Label generations;
+        private System.Windows.Forms.Button Output;
     }
 }
