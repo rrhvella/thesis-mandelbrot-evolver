@@ -38,5 +38,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         double ExcessGenesWeight { get; set; }
 
         double DisableGeneRate { get; set; }
+
+        double FunctionDifferenceWeight { get; set; }
     }
 }
