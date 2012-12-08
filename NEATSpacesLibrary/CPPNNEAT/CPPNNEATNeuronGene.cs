@@ -100,12 +100,12 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         public string DebugInformation()
         {
-            return String.Format("{0}({1}, {2})", TypeString(), innovationNumber, ActivationFunction);
+            return ToString();
         }
 
         public override string ToString()
         {
-            return String.Format("{0}({1})", TypeString(), ActivationFunction);
+            return String.Format("{0}({1}, {2})", TypeString(), innovationNumber, ActivationFunction);
         }
     }
 }
