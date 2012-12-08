@@ -32,8 +32,6 @@ namespace MandelbrotCPPNNEAT
         private CPPNNetwork network;
         private Complex viewPosition;
         private double viewScale;
-        private Complex SHADING_ORIGIN;
-        private double POSITION_DISTANCE_TO_SHADING_ADJUSTMENT_RATIO;
 
         public MandelbrotCPPNNEATPhenome(CPPNNetwork viewNetwork, Complex viewPosition, double viewScale)
         {
