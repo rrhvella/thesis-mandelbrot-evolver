@@ -110,18 +110,18 @@ namespace MandelbrotCPPNNEAT
             {
                 foreach (var y in Enumerable.Range(0, viewHeight))
                 {
-                    var positionComplex = viewPosition + 
+                    var c = viewPosition + 
                                             (new Complex((double)x / viewWidth, (double)y / viewHeight) * viewScale);
 
-                    var complex = Complex.Zero;
-                    var currentMagnitude = complex.Magnitude;
+                    var z = Complex.Zero;
+                    var currentMagnitude = z.Magnitude;
 
                     int i = 0;
 
                     for (; i < iterationNumberLimit && currentMagnitude < ESCAPE_MAGNITUDE; i++)
                     {
-                        complex = network.GetActivation(new Complex[] { positionComplex, complex });
-                        currentMagnitude = complex.Magnitude;
+                        z = network.GetActivation(new Complex[] { z, c });
+                        currentMagnitude = z.Magnitude;
                     }
 
                     yield return new IterationNumberTuple(x, y, i);
