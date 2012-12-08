@@ -51,8 +51,6 @@ namespace ComplexCPPNNEATSelection
         private const int IMAGES_PER_ROW = 4;
         private const int POPULATION_SIZE = 16;
 
-        private const int ESCAPE = 200;
-
         private static readonly Complex VIEW_POSITION = new Complex(-2.2, -1.5);
         private const double VIEW_SCALE = 3;
 
@@ -77,8 +75,6 @@ namespace ComplexCPPNNEATSelection
 
                 fractalView.ViewWidth = VIEW_WIDTH;
                 fractalView.ViewHeight = VIEW_HEIGHT;
-
-                fractalView.Escape = ESCAPE;
 
                 views.Add(fractalView);
                 

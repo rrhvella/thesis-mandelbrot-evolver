@@ -16,6 +16,8 @@ namespace ComplexCPPNNEATSelection
 {
     public class FractalView: Panel
     {
+        private const int ESCAPE = 200;
+
         private int viewWidth;
         public int ViewWidth
         {
@@ -64,19 +66,6 @@ namespace ComplexCPPNNEATSelection
             set;
         }
 
-        private int escape;
-        public int Escape
-        { 
-            get 
-            {
-                return escape;
-            } 
-            set 
-            {
-                fractalImageCacheInvalidated = true;
-                escape = value;
-            } 
-        }
 
         private Bitmap fractalImage;
         private bool fractalImageCacheInvalidated;
@@ -86,7 +75,7 @@ namespace ComplexCPPNNEATSelection
             {
                 if (fractalImageCacheInvalidated)
                 {
-                    fractalImage = Genome.Phenome.GetImage(ViewWidth, ViewHeight, escape);
+                    fractalImage = Genome.Phenome.GetImage(ViewWidth, ViewHeight, ESCAPE);
                     fractalImageCacheInvalidated = false;
                 }
 

@@ -47,7 +47,6 @@
             // 
             // finalView
             // 
-            this.finalView.Escape = 100;
             this.finalView.Genome = null;
             this.finalView.Location = new System.Drawing.Point(663, 0);
             this.finalView.Name = "finalView";
