@@ -27,8 +27,8 @@ namespace ComplexCPPNNEATSelection
                 view.Selected += new EventHandler<EventArgs>(view_Selected);
             }
 
-            var imageIndex = Directory.GetFiles(".", "image-")
-                                        .Select(filename => Int32.Parse(Regex.Match(filename, "image-{[0-9]*}").Captures[0].Value))
+            var imageIndex = Directory.GetFiles(".", "image-*")
+                                        .Select(filename => Int32.Parse(Regex.Match(filename, ".*image-([0-9]*).*").Groups[1].Captures[0].Value))
                                         .ToList();
 
             currentOutputIndex = (imageIndex.Count == 0)? 0 : imageIndex.Max() + 1;
@@ -62,10 +62,16 @@ namespace ComplexCPPNNEATSelection
         private void Output_Click(object sender, EventArgs e)
         {
             finalView.FractalImage.Save(String.Format("image-{0}.png", currentOutputIndex), ImageFormat.Png);
-            StreamWriter writer = new StreamWriter(new FileStream(String.Format("image-{0}.txt", currentOutputIndex), FileMode.Create));
 
-            writer.Write(finalView.Genome);
-            writer.Close();
+            StreamWriter writerNetwork = new StreamWriter(new FileStream(String.Format("network-{0}.txt", currentOutputIndex), FileMode.Create));
+
+            writerNetwork.Write(finalView.Genome);
+            writerNetwork.Close();
+
+            StreamWriter writerGenerations = new StreamWriter(new FileStream(String.Format("generations-{0}.txt", currentOutputIndex), FileMode.Create));
+
+            writerGenerations.Write(fractalSelectionInstance.NumberOfGenerations);
+            writerGenerations.Close();
 
             currentOutputIndex++;
         }
