@@ -24,9 +24,12 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             get
             {
-                var power = MathExtensions.RandomInteger(MIN_POWER, MAX_POWER);
-                return delegate() { return new CPPNNEATActivationFunction(x => Complex.Pow(x, power), 
-                                                                        String.Format("x^{0}", power)); };
+                return delegate() 
+                { 
+                    var power = MathExtensions.RandomInteger(MIN_POWER, MAX_POWER);
+                    return new CPPNNEATActivationFunction(x => Complex.Pow(x, power), 
+                                                                        String.Format("x^{0}", power)); 
+                };
             }
         }
 
@@ -34,9 +37,12 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             get
             {
-                var power = MathExtensions.RandomInteger(MIN_POWER, MAX_POWER);
-                return delegate() { return new CPPNNEATActivationFunction(x => Complex.Log(x, power), 
-                                                                        String.Format("log{0}(x)", power)); };
+                return delegate() 
+                { 
+                    var power = MathExtensions.RandomInteger(MIN_POWER, MAX_POWER);
+                    return new CPPNNEATActivationFunction(x => Complex.Log(x, power), 
+                                                                        String.Format("log{0}(x)", power)); 
+                };
             }
         }
 
@@ -44,9 +50,12 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             get
             {
-                var power = MathExtensions.RandomInteger(MIN_POWER, MAX_POWER);
-                return delegate() { return new CPPNNEATActivationFunction(x => Complex.Pow(power, x), 
-                                                                        String.Format("{0}^x", power)); };
+                return delegate()
+                {
+                    var power = MathExtensions.RandomInteger(MIN_POWER, MAX_POWER);
+                    return new CPPNNEATActivationFunction(x => Complex.Pow(power, x),
+                                                                        String.Format("{0}^x", power));
+                };
             }
         }
 
