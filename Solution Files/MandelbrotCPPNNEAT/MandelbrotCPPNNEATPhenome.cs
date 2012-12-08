@@ -22,14 +22,18 @@ namespace MandelbrotCPPNNEAT
         private const int BYTES_PER_INT = 4;
 
         private static readonly Color[] BASE_COLOURS = new Color[] { 
-            Color.FromArgb(0, 255, 255),
-            Color.FromArgb(0, 255, 0)
+            Color.FromArgb(255, 221, 0),
+            Color.FromArgb(161, 255, 0),
+            Color.FromArgb(0, 33, 225),
+            Color.FromArgb(93, 0, 225)
         };
 
 
         private CPPNNetwork network;
         private Complex viewPosition;
         private double viewScale;
+        private Complex SHADING_ORIGIN;
+        private double POSITION_DISTANCE_TO_SHADING_ADJUSTMENT_RATIO;
 
         public MandelbrotCPPNNEATPhenome(CPPNNetwork viewNetwork, Complex viewPosition, double viewScale)
         {
@@ -49,7 +53,7 @@ namespace MandelbrotCPPNNEAT
             foreach(var tup in GetIterationNumbers(viewWidth, viewHeight, iterationNumberLimit))
             {
                 Marshal.WriteInt32(drawingBuffer.Scan0 + drawingBuffer.Stride * tup.Y + tup.X * BYTES_PER_INT, 
-                                ToColour(tup.IterationNumber, iterationNumberLimit));
+                                ToColour(tup.IterationNumber, iterationNumberLimit, tup.Z));
             }
 
             fractalImage.UnlockBits(drawingBuffer);
@@ -113,7 +117,7 @@ namespace MandelbrotCPPNNEAT
                 foreach (var y in Enumerable.Range(0, viewHeight))
                 {
                     var c = viewPosition + 
-                                            (new Complex((double)x / viewWidth, (double)y / viewHeight) * viewScale);
+                                (new Complex((double)x / viewWidth, (double)y / viewHeight) * viewScale);
 
                     var z = Complex.Zero;
                     var currentMagnitude = z.Magnitude;
@@ -131,11 +135,12 @@ namespace MandelbrotCPPNNEAT
             }
         }
 
-        private int ToColour(int iterationNumber, int iterationNumberLimit)
+        private int ToColour(int iterationNumber, int iterationNumberLimit, Complex z)
         {
+            var shadingAdjustment = Math.Log(Math.Log(z.Magnitude), 2);
             var normalisedIterationNumber = iterationNumber / (double)iterationNumberLimit;
 
-            var brightness = 1 - normalisedIterationNumber;
+            var brightness = 1 - normalisedIterationNumber - shadingAdjustment / iterationNumberLimit;
             var baseColor = BASE_COLOURS[(int)Math.Round(normalisedIterationNumber * (BASE_COLOURS.Length - 1))];
 
             var r = (int)(baseColor.R * brightness);
