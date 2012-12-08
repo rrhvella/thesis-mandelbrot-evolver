@@ -61,17 +61,19 @@ namespace ComplexCPPNNEATSelection
 
         private void Output_Click(object sender, EventArgs e)
         {
-            finalView.FractalImage.Save(String.Format("image-{0}.png", currentOutputIndex), ImageFormat.Png);
+            finalView.FractalImage.Save(String.Format("mandelbrot-{0}-image.png", currentOutputIndex), ImageFormat.Png);
 
-            StreamWriter writerNetwork = new StreamWriter(new FileStream(String.Format("network-{0}.txt", currentOutputIndex), FileMode.Create));
+            StreamWriter writerNetwork = new StreamWriter(new FileStream(String.Format("mandelbrot-{0}-network.txt", currentOutputIndex), FileMode.Create));
 
             writerNetwork.Write(finalView.Genome);
             writerNetwork.Close();
 
-            StreamWriter writerGenerations = new StreamWriter(new FileStream(String.Format("generations-{0}.txt", currentOutputIndex), FileMode.Create));
+            StreamWriter writerGenerations = new StreamWriter(new FileStream(String.Format("mandelbrot-{0}-generations.txt", currentOutputIndex), FileMode.Create));
 
             writerGenerations.Write(fractalSelectionInstance.NumberOfGenerations);
             writerGenerations.Close();
+
+            fractalSelectionInstance.Focus();
 
             currentOutputIndex++;
         }
