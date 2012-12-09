@@ -18,6 +18,14 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         private List<ActivationRecord> activations;
 
+        public IEnumerable<CPPNNetworkNeuron> Neurons
+        {
+            get
+            {
+                return neuronToIndexDict.Keys.AsEnumerable();
+            }
+        }
+
         private class ActivationRecord
         {
             public double? Activation;
