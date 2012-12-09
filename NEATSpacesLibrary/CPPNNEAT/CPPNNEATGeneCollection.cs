@@ -20,10 +20,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
     {
         private Dictionary<int, CPPNNEATLinkGene> linkGeneMap;
 
-        internal CPPNNEATGenome Parent
+        public CPPNNEATGenome Parent
         {
             get;
-            set;
+            internal set;
         }
 
         public CPPNNEATGA ParentGA 
