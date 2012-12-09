@@ -27,8 +27,8 @@ namespace ComplexCPPNNEATSelection
                 view.Selected += new EventHandler<EventArgs>(view_Selected);
             }
 
-            var imageIndex = Directory.GetFiles(".", "image-*")
-                                        .Select(filename => Int32.Parse(Regex.Match(filename, ".*image-([0-9]*).*").Groups[1].Captures[0].Value))
+            var imageIndex = Directory.GetFiles(".", "mandelbrot-*-image.png")
+                                        .Select(filename => Int32.Parse(Regex.Match(filename, ".*mandelbrot-([0-9]*)-image.*").Groups[1].Captures[0].Value))
                                         .ToList();
 
             currentOutputIndex = (imageIndex.Count == 0)? 0 : imageIndex.Max() + 1;
