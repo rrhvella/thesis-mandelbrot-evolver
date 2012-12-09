@@ -105,6 +105,11 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         public override string ToString()
         {
+            if(Type == CPPNNeuronType.Bias || Type == CPPNNeuronType.Input)  
+            {
+                return String.Format("{0}({1})", TypeString(), innovationNumber);
+            }
+
             return String.Format("{0}({1}, {2})", TypeString(), innovationNumber, ActivationFunction);
         }
     }
