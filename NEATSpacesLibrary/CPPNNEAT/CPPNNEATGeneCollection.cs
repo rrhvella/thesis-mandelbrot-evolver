@@ -38,6 +38,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         private List<CPPNNEATLinkGene> sortedLinkGenes;
 
         private HashSet<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>> possibleConnections;
+        private HashSet<CPPNNEATNeuronGene> orphanedNeurons;
 
         public IList<CPPNNEATLinkGene> LinkGenes
         {
@@ -78,7 +79,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             get
             {
-                return null;
+                return LinkGenes.Where(link => link.Enabled && !orphanedNeurons.Contains(link.To) && !orphanedNeurons.Contains(link.From));
             }
         }
 
@@ -94,6 +95,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             this.NeuronGenes = new List<CPPNNEATNeuronGene>();
             this.neuronGeneSet = new HashSet<CPPNNEATNeuronGene>();
             this.possibleConnections = new HashSet<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>>();
+            this.orphanedNeurons = new HashSet<CPPNNEATNeuronGene>();
         }
 
         public void Initialise()
@@ -111,6 +113,26 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             neuronGenes[neuronIndex].ActivationFunction = activationFunction;
             Parent.Update();
+        }
+
+
+        private void HasBeenUnOrphaned(CPPNNEATNeuronGene neuron, CPPNNEATLinkGene propogatingLink, 
+                        Func<CPPNNEATLinkGene, CPPNNEATNeuronGene> parentFunction, Func<CPPNNEATLinkGene, CPPNNEATNeuronGene> childFunction)
+
+        {
+            if(neuron.Type != CPPNNeuronType.Hidden || !orphanedNeurons.Contains(neuron) || orphanedNeurons.Contains(parentFunction(propogatingLink))) 
+            {
+                return;
+            }
+
+            orphanedNeurons.Remove(neuron);
+
+            var enabledLinks = LinkGenes.Where(link => link.Enabled);
+
+            foreach (var enabledLink in enabledLinks.Where(link => parentFunction(link) == neuron).ToList())
+            {
+                HasBeenUnOrphaned(childFunction(enabledLink), enabledLink, parentFunction, childFunction);
+            }
         }
 
         public bool TryAddLinkGene(CPPNNEATLinkGene gene)
@@ -131,6 +153,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
 
             sortedLinkGenesCacheExpired = true;
+
+            HasBeenUnOrphaned(gene.To, gene, link => link.From, link => link.To);
+            HasBeenUnOrphaned(gene.From, gene, link => link.To, link => link.From);
 
             Parent.Update();
 
@@ -210,10 +235,35 @@ namespace NEATSpacesLibrary.CPPNNEAT
             Parent.Update();
         }
 
+        private void HasBeenOrphaned(CPPNNEATNeuronGene neuron, CPPNNEATLinkGene propogatingLink, 
+                        Func<CPPNNEATLinkGene, CPPNNEATNeuronGene> parentFunction, Func<CPPNNEATLinkGene, CPPNNEATNeuronGene> childFunction)
+
+        {
+            if(neuron.Type != CPPNNeuronType.Hidden || orphanedNeurons.Contains(neuron)) 
+            {
+                return;
+            }
+
+            var validLinks = ValidLinks;
+
+            if (validLinks.Where(link => link != propogatingLink && childFunction(link) == neuron).Count() == 0)
+            {
+                orphanedNeurons.Add(neuron);
+
+                foreach (var validLink in validLinks.Where(link => parentFunction(link) == neuron).ToList())
+                {
+                    HasBeenOrphaned(childFunction(validLink), validLink, parentFunction, childFunction);
+                }
+            }
+        }
+
         private void DisableLinkGene(CPPNNEATLinkGene selectedLink)
         {
             selectedLink.Enabled = false;
             possibleConnections.Add(Tuple.Create(selectedLink.From, selectedLink.To));
+
+            HasBeenOrphaned(selectedLink.To, selectedLink, link => link.From, link => link.To);
+            HasBeenOrphaned(selectedLink.From, selectedLink, link => link.To, link => link.From);
 
             Parent.Update();
         }
@@ -222,6 +272,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             selectedLink.Enabled = true;
             possibleConnections.Remove(Tuple.Create(selectedLink.From, selectedLink.To));
+
+            HasBeenUnOrphaned(selectedLink.To, selectedLink, link => link.From, link => link.To);
+            HasBeenUnOrphaned(selectedLink.From, selectedLink, link => link.To, link => link.From);
 
             Parent.Update();
         }
