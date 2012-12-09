@@ -78,32 +78,37 @@ namespace NEATSpacesLibrary.CPPNNEAT
             private set; 
         }
 
-        public string DebugInformation()
+        
+        public string TypeString() 
         {
-            var result = new StringBuilder();
-
             switch (Type)
             {
                 case CPPNNeuronType.Bias:
-                    result.Append("B");
-                    break;
+                    return "B";
 
                 case CPPNNeuronType.Output:
-                    result.Append("O");
-                    break;
+                    return "O";
 
                 case CPPNNeuronType.Input:
-                    result.Append("I");
-                    break;
+                    return "I";
 
                 case CPPNNeuronType.Hidden:
-                    result.Append("H");
-                    break;
+                    return "H";
+
+                default:
+                    return "";
             }
+        }
 
-            result.AppendFormat("({0})", InnovationNumber);
 
-            return result.ToString();
+        public string DebugInformation()
+        {
+            return ToString();
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0}({1}, {2})", TypeString(), InnovationNumber, ActivationFunction);
         }
     }
 }

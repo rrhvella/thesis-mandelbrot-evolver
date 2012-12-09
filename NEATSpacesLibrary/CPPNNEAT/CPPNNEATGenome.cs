@@ -266,6 +266,11 @@ namespace NEATSpacesLibrary.CPPNNEAT
             return String.Join("-", GeneCollection.LinkGenes.Select(link => link.DebugInformation()));
         }
 
+        public override string ToString() 
+        {
+            return String.Join("\r\n", GeneCollection.LinkGenes.Where(link => link.Enabled).Select(link => link.ToString()));
+        }
+
         public override Genome<CPPNNEATGeneCollection, CPPNNetwork> InnerCopy()
         {
             var result = (CPPNNEATGenome)this.MemberwiseClone();
