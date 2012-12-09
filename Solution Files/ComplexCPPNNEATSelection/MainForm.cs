@@ -15,11 +15,17 @@ namespace ComplexCPPNNEATSelection
 {
     public partial class MainForm : Form
     {
+        private const string OUTPUT_DIRECTORY = "output";
         private int currentOutputIndex;
 
         public MainForm()
         {
             InitializeComponent();
+
+            if (!Directory.Exists(OUTPUT_DIRECTORY))
+            {
+                Directory.CreateDirectory(OUTPUT_DIRECTORY);
+            }
 
             foreach (FractalView view in fractalSelectionInstance.Views)
             {
@@ -27,7 +33,7 @@ namespace ComplexCPPNNEATSelection
                 view.Selected += new EventHandler<EventArgs>(view_Selected);
             }
 
-            var imageIndex = Directory.GetFiles(".", "mandelbrot-*-image.png")
+            var imageIndex = Directory.GetFiles(OUTPUT_DIRECTORY, "mandelbrot-*-image.png")
                                         .Select(filename => Int32.Parse(Regex.Match(filename, ".*mandelbrot-([0-9]*)-image.*").Groups[1].Captures[0].Value))
                                         .ToList();
 
@@ -61,14 +67,14 @@ namespace ComplexCPPNNEATSelection
 
         private void Output_Click(object sender, EventArgs e)
         {
-            finalView.FractalImage.Save(String.Format("mandelbrot-{0}-image.png", currentOutputIndex), ImageFormat.Png);
+            finalView.FractalImage.Save(String.Format("{0}/mandelbrot-{1}-image.png", OUTPUT_DIRECTORY, currentOutputIndex), ImageFormat.Png);
 
-            StreamWriter writerNetwork = new StreamWriter(new FileStream(String.Format("mandelbrot-{0}-network.txt", currentOutputIndex), FileMode.Create));
+            StreamWriter writerNetwork = new StreamWriter(new FileStream(String.Format("{0}/mandelbrot-{1}-network.txt", OUTPUT_DIRECTORY, currentOutputIndex), FileMode.Create));
 
             writerNetwork.Write(finalView.Genome);
             writerNetwork.Close();
 
-            StreamWriter writerGenerations = new StreamWriter(new FileStream(String.Format("mandelbrot-{0}-generations.txt", currentOutputIndex), FileMode.Create));
+            StreamWriter writerGenerations = new StreamWriter(new FileStream(String.Format("{0}/mandelbrot-{1}-generations.txt", OUTPUT_DIRECTORY, currentOutputIndex), FileMode.Create));
 
             writerGenerations.Write(fractalSelectionInstance.NumberOfGenerations);
             writerGenerations.Close();
