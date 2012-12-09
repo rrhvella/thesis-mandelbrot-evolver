@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NEATSpacesLibrary.CPPNNEAT;
 
@@ -241,15 +242,34 @@ namespace NEATSpacesTests.CPPNNEAT
             Assert.IsTrue(testCollection.TryCreateLinkGene());
         }
 
-        private bool PerformOrphanedChecks(CPPNNEATGeneCollection collection, bool isTrue)
+        private void PerformOrphanedChecks(CPPNNEATGeneCollection collection, int expected)
         {
-            Assert.AreEqual(isTrue, collection.ValidLinks.Where(link => link.From.Type == CPPNNeuronType.Hidden ||
-                                                        link.To.Type == CPPNNeuronType.Hidden).Count() > 0);
+            Assert.AreEqual(expected, collection.ValidLinks.Neurons().Where(neuron => neuron.Type == CPPNNeuronType.Hidden).Count());
             collection.Update();
-            Assert.AreEqual(isTrue, collection.Phenome.Neurons
-                            .Where(neuron => neuron.NeuronType == CPPNNeuronType.Hidden).Count() == 1);
+            Assert.AreEqual(expected, collection.Phenome.Neurons
+                            .Where(neuron => neuron.NeuronType == CPPNNeuronType.Hidden).Count());
 
-            Assert.AreEqual(isTrue, collection.Parent.ToString().Contains(CPPNNEATConstants.HIDDEN_NEURON_STRING));
+
+            HashSet<string> hiddenNeuronStrings = new HashSet<string>();
+
+            var matches = Regex.Matches(collection.Parent.ToString(), "(H\\([0-9]*)");
+
+            for(int i = 0; i < matches.Count; i++)
+            {
+                var groups = matches[i].Groups;
+
+                for(int j = 1; j < groups.Count; j++)
+                {
+                    var captures = groups[j].Captures;
+
+                    for(int k = 0; k < captures.Count; k++)
+                    {
+                        hiddenNeuronStrings.Add(captures[k].Value);
+                    }
+                }
+            }
+
+            Assert.AreEqual(expected, hiddenNeuronStrings.Count); 
         }
 
         [TestCase]
@@ -259,16 +279,24 @@ namespace NEATSpacesTests.CPPNNEAT
 
             testCollection.DisableLinkGene(CPPNNEATConstants.FIRST_INPUT_TO_HIDDEN_INDEX);
 
-            PerformOrphanedChecks(testCollection, true);
+            PerformOrphanedChecks(testCollection, 1);
 
             testCollection.DisableLinkGene(CPPNNEATConstants.BIAS_TO_HIDDEN_INDEX);
             testCollection.DisableLinkGene(CPPNNEATConstants.SECOND_INPUT_TO_HIDDEN_INDEX);
 
-            PerformOrphanedChecks(testCollection, false);
+            PerformOrphanedChecks(testCollection, 0);
 
             testCollection.EnableLinkGene(CPPNNEATConstants.BIAS_TO_HIDDEN_INDEX);
 
-            PerformOrphanedChecks(testCollection, true);
+            PerformOrphanedChecks(testCollection, 1);
+
+            testCollection.DisableLinkGene(CPPNNEATConstants.BIAS_TO_HIDDEN_INDEX);
+
+            PerformOrphanedChecks(testCollection, 0);
+
+            testCollection.TryCreateLinkGene(CPPNNEATConstants.BIAS_NEURON_INDEX, CPPNNEATConstants.HIDDEN_NEURON_INDEX);
+
+            PerformOrphanedChecks(testCollection, 1);
         }
 
         [TestCase]
@@ -277,10 +305,49 @@ namespace NEATSpacesTests.CPPNNEAT
             UpdateHiddenNeuronNetwork(testCollection);
 
             testCollection.DisableLinkGene(CPPNNEATConstants.HIDDEN_TO_OUTPUT_INDEX);
-            PerformOrphanedChecks(testCollection, false);
+            PerformOrphanedChecks(testCollection, 0);
 
             testCollection.EnableLinkGene(CPPNNEATConstants.HIDDEN_TO_OUTPUT_INDEX);
-            PerformOrphanedChecks(testCollection, true);
+            PerformOrphanedChecks(testCollection, 1);
+
+            testCollection.DisableLinkGene(CPPNNEATConstants.HIDDEN_TO_OUTPUT_INDEX);
+            PerformOrphanedChecks(testCollection, 0);
+
+            testCollection.TryCreateLinkGene(CPPNNEATConstants.HIDDEN_NEURON_INDEX, CPPNNEATConstants.OUTPUT_NEURON_INDEX);
+            PerformOrphanedChecks(testCollection, 1);
+        }
+
+        [TestCase]
+        public void TestOrphanedHiddenNodeTwoLayer()
+        {
+            UpdateHiddenNeuronNetwork(testCollection);
+
+            testCollection.CreateNeuronGene(CPPNNEATConstants.SECOND_INPUT_TO_HIDDEN_INDEX);
+            testCollection.DisableLinkGene(CPPNNEATConstants.INDEX_AFTER_COMPLETE_ONE_LAYER_NETWORK);
+
+            PerformOrphanedChecks(testCollection, 1);
+
+            testCollection.EnableLinkGene(CPPNNEATConstants.INDEX_AFTER_COMPLETE_ONE_LAYER_NETWORK);
+
+            PerformOrphanedChecks(testCollection, 2);
+
+            testCollection.DisableLinkGene(CPPNNEATConstants.INDEX_AFTER_COMPLETE_ONE_LAYER_NETWORK);
+
+            PerformOrphanedChecks(testCollection, 1);
+
+            testCollection.TryCreateLinkGene(CPPNNEATConstants.BIAS_NEURON_INDEX, CPPNNEATConstants.HIDDEN_NEURON_INDEX + 1);
+
+            PerformOrphanedChecks(testCollection, 2);
+
+            testCollection.DisableLinkGene(CPPNNEATConstants.INDEX_AFTER_COMPLETE_ONE_LAYER_NETWORK + 2);
+            testCollection.DisableLinkGene(CPPNNEATConstants.FIRST_INPUT_TO_HIDDEN_INDEX);
+            testCollection.DisableLinkGene(CPPNNEATConstants.BIAS_TO_HIDDEN_INDEX);
+
+            PerformOrphanedChecks(testCollection, 0);
+
+            testCollection.TryCreateLinkGene(CPPNNEATConstants.BIAS_NEURON_INDEX, CPPNNEATConstants.HIDDEN_NEURON_INDEX + 1);
+
+            PerformOrphanedChecks(testCollection, 2);
         }
     }
 }

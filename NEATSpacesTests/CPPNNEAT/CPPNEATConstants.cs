@@ -18,7 +18,7 @@ namespace NEATSpacesTests.CPPNNEAT
         public static readonly Func<double, double> OUTPUT_ACTIVATION_FUNCTION = CPPNActivationFunctions.TanHActivationFunction;
         public static readonly Func<double, double> HIDDEN_ACTIVATION_FUNCTION = CPPNActivationFunctions.TanHActivationFunction;
 
-        public static string HIDDEN_NEURON_STRING = "H(5, tanh(x))";
+        public static string HIDDEN_NEURON_STRING = "H(4, ";
 
         public const int BIAS_NEURON_INDEX = 0;
         public const int OUTPUT_NEURON_INDEX = 1;
@@ -36,6 +36,7 @@ namespace NEATSpacesTests.CPPNNEAT
         public const int HIDDEN_TO_OUTPUT_INDEX = 4;
 
         public const int OUTPUT_TO_HIDDEN_INDEX = 7;
+        public const int INDEX_AFTER_COMPLETE_ONE_LAYER_NETWORK = 7;
 
         private static double Level1(double input1, double input2) 
         {
