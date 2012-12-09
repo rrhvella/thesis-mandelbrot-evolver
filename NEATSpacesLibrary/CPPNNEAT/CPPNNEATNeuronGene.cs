@@ -16,7 +16,11 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
     public class CPPNNEATNeuronGene: IDebugabble
     {
-        private int innovationNumber;
+        public int InnovationNumber
+        {
+            get;
+            private set;
+        }
 
         public double Level
         {
@@ -33,7 +37,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         public CPPNNEATNeuronGene(int innovationNumber, double level, 
                                 CPPNNeuronType type, Func<double, double> activationFunction)
         {
-            this.innovationNumber = innovationNumber;
+            this.InnovationNumber = innovationNumber;
             this.Level = level;
 
             this.Type = type;
@@ -97,7 +101,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                     break;
             }
 
-            result.AppendFormat("({0})", innovationNumber);
+            result.AppendFormat("({0})", InnovationNumber);
 
             return result.ToString();
         }
