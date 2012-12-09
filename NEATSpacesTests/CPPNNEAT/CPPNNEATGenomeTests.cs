@@ -42,6 +42,7 @@ namespace NEATSpacesTests.CPPNNEAT
 
         private const double CROSSOVER_RATE = 0.75;
         private const double MATE_BY_AVERAGING_RATE = 0.4;
+        private const int INPUT_START = 2;
 
         [TestCase]
         public void TestMatingAndMutationStability()
@@ -55,6 +56,18 @@ namespace NEATSpacesTests.CPPNNEAT
                                childNeuronsWithoutInputs * childNeuronsWithoutInputs;
             },
             null);
+        }
+
+        [TestCase]
+        public void TestOrderingOfInputNeurons()
+        {
+            MatingAndMutationStabilityTest(false, 
+            null, delegate(CPPNNEATGenome testChild)
+            {
+                foreach(var i in Enumerable.Range(INPUT_START, NUMBER_OF_INPUTS)) {
+                    Assert.AreEqual(i, testChild.GeneCollection.NeuronGenes[i].InnovationNumber);
+                }
+            });
         }
 
         [TestCase]
@@ -121,10 +134,13 @@ namespace NEATSpacesTests.CPPNNEAT
                     {
                     }
 
-                    Assert.AreEqual(getExpectedEdges((CPPNNEATGenome)testChild), 
-                            testChild.GeneCollection.LinkGenes.Count());
-                    Assert.AreEqual(0, 
-                            testChild.GeneCollection.LinkGenes.Where(link => !link.Enabled).Count());
+                    if (getExpectedEdges != null)
+                    {
+                        Assert.AreEqual(getExpectedEdges((CPPNNEATGenome)testChild),
+                                testChild.GeneCollection.LinkGenes.Count());
+                        Assert.AreEqual(0,
+                                testChild.GeneCollection.LinkGenes.Where(link => !link.Enabled).Count());
+                    }
 
                     if (otherTests != null)
                     {
