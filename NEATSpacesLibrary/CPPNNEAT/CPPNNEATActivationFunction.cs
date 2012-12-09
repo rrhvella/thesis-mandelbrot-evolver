@@ -10,7 +10,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
     public static class CPPNActivationFunctionFactories
     {
         public const int MIN_POWER = 2;
-        public const int MAX_POWER = 4;
+        public const int MAX_POWER = 8;
 
         public static CPPNNEATActivationFunction ComplexLinearActivationFunctionFactory()
         {

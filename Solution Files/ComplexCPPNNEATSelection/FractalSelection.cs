@@ -45,8 +45,8 @@ namespace ComplexCPPNNEATSelection
 
         private const int NUMBER_OF_INPUTS = 2;
 
-        private const int VIEW_WIDTH = 60;
-        private const int VIEW_HEIGHT = 60;
+        private const int VIEW_WIDTH = 50;
+        private const int VIEW_HEIGHT = 50;
 
         private const int IMAGES_PER_ROW = 4;
         private const int POPULATION_SIZE = 16;
