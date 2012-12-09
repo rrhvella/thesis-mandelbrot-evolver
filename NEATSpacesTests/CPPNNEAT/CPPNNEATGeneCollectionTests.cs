@@ -240,5 +240,55 @@ namespace NEATSpacesTests.CPPNNEAT
             Assert.IsTrue(testCollection.TryDisableLinkGene());
             Assert.IsTrue(testCollection.TryCreateLinkGene());
         }
+
+        private bool PerformOrphanedChecks(CPPNNEATGeneCollection collection, bool isTrue)
+        {
+            Assert.AreEqual(isTrue, collection.ValidLinks.Where(link => link.From.Type == CPPNNeuronType.Hidden ||
+                                                        link.To.Type == CPPNNeuronType.Hidden).Count > 0);
+            collection.Update();
+            Assert.AreEqual(isTrue, collection.Phenome.Neurons
+                            .Where(neuron => neuron.Type == CPPNNeuronType.Hidden).Count == 1);
+
+            Assert.AreEqual(isTrue, collection.Parent.ToString().Contains("H(
+                            .Where(neuron => neuron.Type == CPPNNeuronType.Hidden).Count == 1);
+        }
+
+        [TestCase]
+        public void TestOrphanedHiddenNodeFromInput()
+        {
+            UpdateHiddenNeuronNetwork(testCollection);
+
+            testCollection.DisableLinkGene(CPPNNEATConstants.FIRST_INPUT_TO_HIDDEN_INDEX);
+
+            Assert.IsTrue(HiddenNeuronExistsInValidLinks(testCollection));
+            Assert.IsTrue(HiddenNeuronExistsInPhenome(testCollection));
+
+            testCollection.DisableLinkGene(CPPNNEATConstants.BIAS_TO_HIDDEN_INDEX);
+            testCollection.DisableLinkGene(CPPNNEATConstants.SECOND_INPUT_TO_HIDDEN_INDEX);
+
+            Assert.IsFalse(HiddenNeuronExistsInValidLinks(testCollection));
+            Assert.IsFalse(HiddenNeuronExistsInPhenome(testCollection));
+
+            testCollection.EnableLinkGene(CPPNNEATConstants.BIAS_TO_HIDDEN_INDEX);
+
+            Assert.IsTrue(HiddenNeuronExistsInValidLinks(testCollection));
+            Assert.IsTrue(HiddenNeuronExistsInPhenome(testCollection));
+        }
+
+        [TestCase]
+        public void TestOrphanedHiddenNodeToOutput()
+        {
+            UpdateHiddenNeuronNetwork(testCollection);
+
+            testCollection.DisableLinkGene(CPPNNEATConstants.HIDDEN_TO_OUTPUT_INDEX);
+
+            Assert.IsFalse(HiddenNeuronExistsInValidLinks(testCollection));
+            Assert.IsFalse(HiddenNeuronExistsInPhenome(testCollection));
+
+            testCollection.EnableLinkGene(CPPNNEATConstants.HIDDEN_TO_OUTPUT_INDEX);
+
+            Assert.IsTrue(HiddenNeuronExistsInValidLinks(testCollection));
+            Assert.IsTrue(HiddenNeuronExistsInPhenome(testCollection));
+        }
     }
 }

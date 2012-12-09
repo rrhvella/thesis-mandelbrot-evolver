@@ -74,6 +74,14 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
+        public IEnumerable<CPPNNEATLinkGene> ValidLinks
+        {
+            get
+            {
+                return null;
+            }
+        }
+
         public CPPNNetwork Phenome
         {
             get;
@@ -232,8 +240,8 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             Phenome = new CPPNNetwork();
 
-            var enabledLinks = LinkGenes.Where(link => link.Enabled);
-            var enabledNeurons = enabledLinks.Neurons().Union(NeuronGenes.Where(neuron => neuron.Type == CPPNNeuronType.Input ||
+            var validLinks = ValidLinks;
+            var enabledNeurons = validLinks.Neurons().Union(NeuronGenes.Where(neuron => neuron.Type == CPPNNeuronType.Input ||
                                                                                         neuron.Type == CPPNNeuronType.Output));
 
             foreach (var neuronGene in enabledNeurons)
@@ -242,7 +250,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 Phenome.AddNeuron(neuronGene.Phene);
             }
 
-            foreach (var linkGene in enabledLinks)
+            foreach (var linkGene in validLinks)
             {
                 Phenome.AddLink(linkGene.From.Phene, linkGene.To.Phene, linkGene.Weight);
             }
