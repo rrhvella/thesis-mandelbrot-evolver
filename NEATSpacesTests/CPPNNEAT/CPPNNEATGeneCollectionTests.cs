@@ -244,13 +244,12 @@ namespace NEATSpacesTests.CPPNNEAT
         private bool PerformOrphanedChecks(CPPNNEATGeneCollection collection, bool isTrue)
         {
             Assert.AreEqual(isTrue, collection.ValidLinks.Where(link => link.From.Type == CPPNNeuronType.Hidden ||
-                                                        link.To.Type == CPPNNeuronType.Hidden).Count > 0);
+                                                        link.To.Type == CPPNNeuronType.Hidden).Count() > 0);
             collection.Update();
             Assert.AreEqual(isTrue, collection.Phenome.Neurons
-                            .Where(neuron => neuron.Type == CPPNNeuronType.Hidden).Count == 1);
+                            .Where(neuron => neuron.NeuronType == CPPNNeuronType.Hidden).Count() == 1);
 
-            Assert.AreEqual(isTrue, collection.Parent.ToString().Contains("H(
-                            .Where(neuron => neuron.Type == CPPNNeuronType.Hidden).Count == 1);
+            Assert.AreEqual(isTrue, collection.Parent.ToString().Contains(CPPNNEATConstants.HIDDEN_NEURON_STRING));
         }
 
         [TestCase]
@@ -260,19 +259,16 @@ namespace NEATSpacesTests.CPPNNEAT
 
             testCollection.DisableLinkGene(CPPNNEATConstants.FIRST_INPUT_TO_HIDDEN_INDEX);
 
-            Assert.IsTrue(HiddenNeuronExistsInValidLinks(testCollection));
-            Assert.IsTrue(HiddenNeuronExistsInPhenome(testCollection));
+            PerformOrphanedChecks(testCollection, true);
 
             testCollection.DisableLinkGene(CPPNNEATConstants.BIAS_TO_HIDDEN_INDEX);
             testCollection.DisableLinkGene(CPPNNEATConstants.SECOND_INPUT_TO_HIDDEN_INDEX);
 
-            Assert.IsFalse(HiddenNeuronExistsInValidLinks(testCollection));
-            Assert.IsFalse(HiddenNeuronExistsInPhenome(testCollection));
+            PerformOrphanedChecks(testCollection, false);
 
             testCollection.EnableLinkGene(CPPNNEATConstants.BIAS_TO_HIDDEN_INDEX);
 
-            Assert.IsTrue(HiddenNeuronExistsInValidLinks(testCollection));
-            Assert.IsTrue(HiddenNeuronExistsInPhenome(testCollection));
+            PerformOrphanedChecks(testCollection, true);
         }
 
         [TestCase]
@@ -281,14 +277,10 @@ namespace NEATSpacesTests.CPPNNEAT
             UpdateHiddenNeuronNetwork(testCollection);
 
             testCollection.DisableLinkGene(CPPNNEATConstants.HIDDEN_TO_OUTPUT_INDEX);
-
-            Assert.IsFalse(HiddenNeuronExistsInValidLinks(testCollection));
-            Assert.IsFalse(HiddenNeuronExistsInPhenome(testCollection));
+            PerformOrphanedChecks(testCollection, false);
 
             testCollection.EnableLinkGene(CPPNNEATConstants.HIDDEN_TO_OUTPUT_INDEX);
-
-            Assert.IsTrue(HiddenNeuronExistsInValidLinks(testCollection));
-            Assert.IsTrue(HiddenNeuronExistsInPhenome(testCollection));
+            PerformOrphanedChecks(testCollection, true);
         }
     }
 }
