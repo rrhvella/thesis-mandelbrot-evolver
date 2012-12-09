@@ -268,7 +268,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         public override string ToString() 
         {
-            return String.Join("\r\n", GeneCollection.LinkGenes.Where(link => link.Enabled).Select(link => link.ToString()));
+            return String.Join("\r\n", GeneCollection.ValidLinks.Select(link => link.ToString()));
         }
 
         public override Genome<CPPNNEATGeneCollection, CPPNNetwork> InnerCopy()
