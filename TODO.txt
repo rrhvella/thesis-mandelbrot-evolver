@@ -34,3 +34,5 @@ MathExtensions.Random should allow the specification of an existing random objec
 
 GAs should always use a single random object.
 
+Combine with Complex Version using a numeric wrapper class.
+
