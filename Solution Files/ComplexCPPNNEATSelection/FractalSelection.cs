@@ -51,7 +51,7 @@ namespace ComplexCPPNNEATSelection
         private const double MATCHING_GENES_WEIGHT = 3.0;
         private const double FUNCTION_DIFFERENCE_WEIGHT = 1.0;
 
-        private const double ELITISM_RATE = 0.3;
+        private const double SURVIVAL_TRESHOLD = 0.3;
         private const double INTERSPECIES_MATING_RATE = 0.001;
         
         private const double CROSSOVER_RATE = 0.5;
@@ -133,7 +133,7 @@ namespace ComplexCPPNNEATSelection
 
             ga.DisableGeneRate = DISABLE_GENE_RATE;
 
-            ga.ElitismRate = ELITISM_RATE;
+            ga.SurvivalTreshold = SURVIVAL_TRESHOLD;
             ga.InterSpeciesMatingRate = INTERSPECIES_MATING_RATE;
 
             ga.WeightPertubationRate = WEIGHT_PERTUBATION_RATE;
