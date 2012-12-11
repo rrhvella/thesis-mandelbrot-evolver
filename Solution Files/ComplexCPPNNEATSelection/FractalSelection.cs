@@ -15,11 +15,24 @@ using MandelbrotCPPNNEAT;
 
 namespace ComplexCPPNNEATSelection
 {
+    /// <summary>
+    /// Represents a collection of fractal views based on the genomes in a genetic algorithm. 
+    /// </summary>
     public class FractalSelection: Panel
     {
+        /// <summary>
+        /// Determines the point at which an individual is not part of a species, based on its distance to the species representative.
+        /// </summary>
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 6.0;
 
-        private static int NO_INNOVATION_THRESHOLD = 1000000;
+        /// <summary>
+        /// Determines the number of stagnant generations required for a species to be culled.
+        /// </summary>
+        private static int NO_INNOVATION_THRESHOLD = Int32.MaxValue;
+
+        /// <summary>
+        /// Determines the number of generations before the link cache is cleared 
+        /// </summary>
         private static int ITERATIONS_TO_CLEAR_LINK_CACHE = 1;
 
         private static double WEIGHT_MUTATION_RATE = 0.9;
@@ -54,6 +67,9 @@ namespace ComplexCPPNNEATSelection
         private static readonly Complex VIEW_POSITION = new Complex(-2.2, -1.5);
         private const double VIEW_SCALE = 3;
 
+        /// <summary>
+        /// The fractal views displayed in this control.
+        /// </summary>
         private List<FractalView> views;
         public IEnumerable<FractalView> Views 
         {
@@ -63,10 +79,17 @@ namespace ComplexCPPNNEATSelection
             }
         }
 
+        /// <summary>
+        /// The GA on which the views are based.
+        /// </summary>
         private MandelbrotCPPNNEATGA ga;
 
+        /// <summary>
+        /// Initialises a fractal selection object.
+        /// </summary>
         public FractalSelection()
         {
+            //Build the views.
             views = new List<FractalView>();
 
             foreach (var i in Enumerable.Range(0, POPULATION_SIZE))
@@ -82,6 +105,7 @@ namespace ComplexCPPNNEATSelection
                 fractalView.Show();
             }
 
+            //Build the GA.
             this.ga = new MandelbrotCPPNNEATGA(NUMBER_OF_INPUTS, POPULATION_SIZE,
                                         delegate(MandelbrotCPPNNEATGenome genome)
                                         {
