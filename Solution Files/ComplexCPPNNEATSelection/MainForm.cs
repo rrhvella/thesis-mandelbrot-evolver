@@ -29,7 +29,7 @@ namespace ComplexCPPNNEATSelection
 
             foreach (FractalView view in fractalSelectionInstance.Views)
             {
-                view.MouseEnter += new EventHandler(view_MouseHover);
+                view.MouseEnter += new EventHandler(view_MouseEnter);
                 view.Selected += new EventHandler<EventArgs>(view_Selected);
             }
 
@@ -46,7 +46,7 @@ namespace ComplexCPPNNEATSelection
             finalView.Refresh();
         }
 
-        void view_MouseHover(object sender, EventArgs e)
+        void view_MouseEnter(object sender, EventArgs e)
         {
             genomeView.Text = (sender as FractalView).Genome.ToString();
         }
