@@ -8,16 +8,37 @@ using System.Numerics;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
+    /// <summary>
+    /// CPPN-NEAT genome <refer></refer>.
+    /// </summary>
+    /// <typeparam name="GType">The type of the genome genetic sequence. </typeparam>
+    /// <typeparam name="PType">The type of the phenome. </typeparam>
     public abstract class CPPNNEATGenome<GType, PType> : SpeciatedGenome<GType, PType>, ICPPNNEATGenome
         where GType: CPPNNEATGeneCollection, new()
     {
+        /// <summary>
+        /// The number of links below which a genome is considered small.
+        /// </summary>
         private static int SMALL_GENOME_THRESHOLD = 20;
 
+        /// <summary>
+        /// Represents an analysis of the differences between two genomes.
+        /// </summary>
         public class DifferenceAnalysis
         {
+            /// <summary>
+            /// Represents a collection of results for a single genome.
+            /// </summary>
             public class DifferenceAnalysisCollection
             {
+                /// <summary>
+                /// The genes present in this genome which come after the last gene in the other 
+                /// genome.
+                /// </summary>
                 public List<CPPNNEATLinkGene> Excess { get; private set; }
+                /// <summary>
+                /// The genes present in this genome which are disjoint from the other genome.
+                /// </summary>
                 public List<CPPNNEATLinkGene> Disjoint { get; private set; }
 
                 public DifferenceAnalysisCollection()
@@ -27,11 +48,25 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 }
             }
 
+            /// <summary>
+            /// Represents a link gene which is present in both genomes.
+            /// </summary>
             public class Match
             {
+                /// <summary>
+                /// The instance in the first genome.
+                /// </summary>
                 public CPPNNEATLinkGene FirstCollection {get; private set;}
+
+                /// <summary>
+                /// The instance in the second genome.
+                /// </summary>
                 public CPPNNEATLinkGene SecondCollection {get; private set;}
 
+                /// <summary>
+                /// </summary>
+                /// <param name="firstCollection">The instance in the first genome.</param>
+                /// <param name="secondCollection">The instance in the second genome.</param>
                 public Match(CPPNNEATLinkGene firstCollection, CPPNNEATLinkGene secondCollection)
                 {
                     this.FirstCollection = firstCollection;
@@ -39,17 +74,32 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 }
             }
 
+            /// <summary>
+            /// The disjoint and excess genes in the first genome.
+            /// </summary>
             public DifferenceAnalysisCollection FirstCollection { get; private set; }
+            /// <summary>
+            /// The disjoint and excess genes in the second genome.
+            /// </summary>
             public DifferenceAnalysisCollection SecondCollection { get; private set; }
 
+            /// <summary>
+            /// The common genes between the two genomes.
+            /// </summary>
             public List<Match> Matches { get; private set; }
 
+            /// <summary>
+            /// </summary>
+            /// <param name="geneCollection1">The sequence of the first genome.</param>
+            /// <param name="geneCollection2">The sequence of the second genome. </param>
             public DifferenceAnalysis(CPPNNEATGeneCollection geneCollection1, 
                                     CPPNNEATGeneCollection geneCollection2)
             {
                 this.FirstCollection = new DifferenceAnalysisCollection();
                 this.SecondCollection = new DifferenceAnalysisCollection();
 
+                //Place the genes of the two sequences side by side, iterate through them, and
+                //seperate the matched, disjoint and excess genes.
                 var link1 = geneCollection1.LinkGenes.GetEnumerator();
                 var link2 = geneCollection2.LinkGenes.GetEnumerator();
 
@@ -97,6 +147,11 @@ namespace NEATSpacesLibrary.CPPNNEAT
             this.GeneCollection.Parent = this;
         }
 
+        /// <summary>
+        /// Initialises an individual based on the genomes of its parents.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="partner"></param>
         public CPPNNEATGenome(CPPNNEATGenome<GType, PType> parent, CPPNNEATGenome<GType, PType>  partner): this()
         {
             this.Parent = parent.Parent;
@@ -104,6 +159,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             var parentGA = Parent as ICPPNNEATGA;
             var differences = new DifferenceAnalysis(parent.GeneCollection, partner.GeneCollection);
 
+            //Pick the source of the excess and disjoint genes based on the fitness.
             var disjointAndExcessSource = differences.FirstCollection;
 
             if (partner.Score > parent.Score)
@@ -116,6 +172,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                                                                     differences.SecondCollection;
             }
 
+            //Determine the method to combine the weights.
             Func<CPPNNEATLinkGene, CPPNNEATLinkGene, Complex> weightSelector = null;
 
             if (parentGA.Random.NextDouble() <= parentGA.MateByAveragingRate)
@@ -127,6 +184,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 weightSelector = (first, second) => (parentGA.Random.NextDouble() <= 0.5)? first.Weight : second.Weight;
             }
 
+            //For each matched genes:
+            //- Copy the matched gene into the child.
+            //- Combine the weights.
+            //- Disable the gene, if it is disabled in either parent.
             foreach (var match in differences.Matches)
             {
                 var geneToCopy = match.FirstCollection;
@@ -144,6 +205,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 }
             }
 
+            //Copy the disjoint and excess genes from the selected source.
             foreach (var linkGene in disjointAndExcessSource
                                     .Disjoint.Union(disjointAndExcessSource.Excess))
             {
@@ -151,15 +213,24 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
+        /// <summary>
+        /// Returns the compatibility distance between this genome and the given genome.
+        /// </summary>
+        /// <param name="genome"></param>
+        /// <returns></returns>
         public override double CompatibilityDistance(SpeciatedGenome<GType, PType> genome)
         {
+            //Please see the relevent section in the Methods for more information on how the compatibility distance is 
+            //calculated <refer>.
             var differences = new DifferenceAnalysis(this.GeneCollection, genome.GeneCollection);
 
             var totalExcess = differences.FirstCollection.Excess.Count + differences.SecondCollection.Excess.Count;
             var totalDisjoint = differences.FirstCollection.Disjoint.Count + differences.SecondCollection.Disjoint.Count;
 
             var averageWeightDifference = differences.Matches
-                                                    .Select(match => (match.FirstCollection.Weight - match.SecondCollection.Weight).Magnitude)
+                                                    .Select(match => 
+                                                            (match.FirstCollection.Weight - match.SecondCollection.Weight)
+                                                            .Magnitude)
                                                     .Average();
 
 
@@ -172,7 +243,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
 
             var parent = Parent as ICPPNNEATGA;
-            var averageFunctionDifference = GetAverageFunctionDifference(this, genome);
+            var averageFunctionDifference = GetAverageFunctionDifference(this, (CPPNNEATGenome<GType, PType>)genome);
 
             return parent.ExcessGenesWeight * (totalExcess / n) +
                  parent.DisjointGenesWeight * (totalDisjoint / n) +
@@ -180,7 +251,14 @@ namespace NEATSpacesLibrary.CPPNNEAT
                  parent.FunctionDifferenceWeight * averageFunctionDifference;
         }
 
-        private static double GetAverageFunctionDifference(CPPNNEATGenome<GType, PType> genome1, SpeciatedGenome<GType, PType> genome2)
+        /// <summary>
+        /// Returns the average difference between the function counts of genome1 and genome2.
+        /// </summary>
+        /// <param name="genome1"></param>
+        /// <param name="genome2"></param>
+        /// <returns></returns>
+        private static double GetAverageFunctionDifference(CPPNNEATGenome<GType, PType> genome1, 
+                                                        CPPNNEATGenome<GType, PType> genome2)
         {
             var functionDifferenceMap = genome1.GeneCollection.ActivationFunctions.GroupBy(func => func.Label)
                                                 .ToDictionary(group => group.Key, group => group.Count());
@@ -193,12 +271,17 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 }
 
                 functionDifferenceMap[activationFunctionGroup.Key] = 
-                                    Math.Abs(functionDifferenceMap[activationFunctionGroup.Key] - activationFunctionGroup.Count());
+                                    Math.Abs(functionDifferenceMap[activationFunctionGroup.Key] - 
+                                        activationFunctionGroup.Count());
             }
             
             return functionDifferenceMap.Average(pair => pair.Value);
         }
 
+        /// <summary>
+        /// Returns the network derived from this genome.
+        /// </summary>
+        /// <returns></returns>
         protected CPPNNetwork GetNetwork()
         {
             GeneCollection.Update();
