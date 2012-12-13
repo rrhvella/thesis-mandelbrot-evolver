@@ -17,6 +17,7 @@ namespace MandelbrotCPPNNEAT
     public class MandelbrotCPPNNEATGA : BaseCPPNNEATGA<MandelbrotCPPNNEATGenome, CPPNNEATGeneCollection,
                                                         MandelbrotCPPNNEATPhenome>, ICPPNNEATGA
     {
+        private const int NUMBER_OF_INPUTS = 2;
         public Complex ViewPosition
         {
             get;
@@ -29,11 +30,11 @@ namespace MandelbrotCPPNNEAT
             set;
         }
 
-        public MandelbrotCPPNNEATGA(int numberOfInputs, int populationSize, 
+        public MandelbrotCPPNNEATGA(int populationSize, 
                         Func<MandelbrotCPPNNEATGenome, double> scoreFunction,
                         List<Func<CPPNNEATActivationFunction>> canonicalFunctionList, 
                         Func<CPPNNEATActivationFunction> outputActivationFunction)
-            : base(numberOfInputs, populationSize, scoreFunction, canonicalFunctionList, outputActivationFunction, true) 
+            : base(NUMBER_OF_INPUTS, populationSize, scoreFunction, canonicalFunctionList, outputActivationFunction, true) 
         {
         }
     }
