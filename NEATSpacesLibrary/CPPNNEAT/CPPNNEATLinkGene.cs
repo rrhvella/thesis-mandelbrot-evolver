@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace NEATSpacesLibrary.CPPNNEAT
 {
-    public class CPPNNEATLinkGene: IDebugabble
+    public class CPPNNEATLinkGene
     {
         public int InnovationNumber
         {
@@ -53,13 +53,6 @@ namespace NEATSpacesLibrary.CPPNNEAT
         public CPPNNEATLinkGene Copy()
         {
             return (CPPNNEATLinkGene)this.MemberwiseClone();
-        }
-
-        public string DebugInformation()
-        {
-            return String.Format("[{0}, {1}, {2:f2}, {3}->{4}]", InnovationNumber, (Enabled)? 1 : 0, Weight,
-                                                From.DebugInformation(), To.DebugInformation());
-
         }
 
         public override string ToString()

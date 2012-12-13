@@ -15,7 +15,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         Output
     }
 
-    public class CPPNNEATNeuronGene: IDebugabble
+    public class CPPNNEATNeuronGene 
     {
         private int innovationNumber;
 
@@ -95,12 +95,6 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 default:
                     return "";
             }
-        }
-
-
-        public string DebugInformation()
-        {
-            return ToString();
         }
 
         public override string ToString()

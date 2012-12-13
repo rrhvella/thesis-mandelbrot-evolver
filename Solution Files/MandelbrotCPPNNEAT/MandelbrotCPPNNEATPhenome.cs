@@ -193,7 +193,7 @@ namespace MandelbrotCPPNNEAT
         /// <returns></returns>
         private int ToColour(int iterationNumber, int iterationNumberLimit, Complex z)
         {
-            //Please see the relevent section in the methods for more information on the colouring method <refer>.
+            //Please see the relevent section in the Methods for more information on the colouring method <refer>.
             var shadingAdjustment = Math.Log(Math.Log(z.Magnitude), 2);
             var normalisedIterationNumber = iterationNumber / (double)iterationNumberLimit;
 
