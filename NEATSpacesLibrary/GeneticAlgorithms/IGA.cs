@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NEATSpacesLibrary.GeneticAlgorithms
 {
-    public interface IGA : IDebugabble
+    public interface IGA 
     {
         bool Failed 
         { 

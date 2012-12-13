@@ -6,27 +6,7 @@ using System.Collections;
 
 namespace NEATSpacesLibrary.GeneticAlgorithms
 {
-    public static class GenomeListExtensions
-    {
-        public static string GenomeDebugInformation<GenomeType, GType, PType>(this IEnumerable<GenomeType> self)
-            where GenomeType : Genome<GType, PType>
-        {
-            var result = new StringBuilder();
-
-            result.AppendLine("Genomes: ");
-
-            result.AppendLine();
-
-            foreach (var genome in self)
-            {
-                result.AppendLine(genome.DebugInformation());
-            }
-
-            return result.ToString();
-        }
-    }
-
-    public abstract class Genome<GType, PType> : IDebugabble 
+    public abstract class Genome<GType, PType>  
     {
         private double score;
         public double Score
@@ -100,9 +80,20 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             protected set;
         }
 
+
+        /// <summary>
+        /// Returns the phenome of the individual <seealso cref="MandelbrotCPPNNEATPhenome"/>
+        /// </summary>
+        /// <returns></returns>
         protected abstract PType GetPhenome();
         
         public abstract void Initialise();
+
+        /// <summary>
+        /// Returns the child of this genome when it mates with another individual.
+        /// </summary>
+        /// <param name="partner"></param>
+        /// <returns></returns>
         protected abstract Genome<GType, PType> InnerCrossover(Genome<GType, PType> partner);
         protected abstract void InnerMutate();
 
@@ -118,6 +109,13 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             Parent.Update();
         }
 
+        
+        
+        /// <summary>
+        /// Returns the child of this genome when it mates with another individual.
+        /// </summary>
+        /// <param name="partner"></param>
+        /// <returns></returns>
         public Genome<GType, PType> Crossover(Genome<GType, PType> partner)
         {
             return InnerCrossover(partner);
@@ -127,27 +125,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         {
             InnerMutate();
             Update();
-        }
-
-        protected virtual string InnerDebugInformation()
-        {
-            return this.ToString();
-        }
-
-        public string DebugInformation()
-        {
-            var result = new StringBuilder();
-
-            result.Append("Score: ");
-            result.AppendLine(Score.ToString());
-
-            result.Append("Adjusted Score: ");
-            result.AppendLine(AdjustedScore.ToString());
-
-            result.AppendLine("Genome: ");
-            result.AppendLine(InnerDebugInformation());
-
-            return result.ToString();
         }
 
         public abstract Genome<GType, PType> InnerCopy();

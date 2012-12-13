@@ -31,21 +31,12 @@ namespace MandelbrotCPPNNEAT
         {
         }
 
-        /// <summary>
-        /// Returns the phenome of the individual <seealso cref="MandelbrotCPPNNEATPhenome"/>
-        /// </summary>
-        /// <returns></returns>
         protected override MandelbrotCPPNNEATPhenome GetPhenome()
         {
             var parent = Parent as MandelbrotCPPNNEATGA;
             return new MandelbrotCPPNNEATPhenome(GetNetwork(), parent.ViewPosition, parent.ViewScale);
         }
 
-        /// <summary>
-        /// Returns the child of this genome when it mates with another individual.
-        /// </summary>
-        /// <param name="partner"></param>
-        /// <returns></returns>
         protected override Genome<CPPNNEATGeneCollection, MandelbrotCPPNNEATPhenome> 
                 InnerCrossover(Genome<CPPNNEATGeneCollection, MandelbrotCPPNNEATPhenome> partner)
         {

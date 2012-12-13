@@ -6,7 +6,7 @@ using NEATSpacesLibrary.Extensions;
 
 namespace NEATSpacesLibrary.GeneticAlgorithms
 {
-    public class Species<GType, PType> : IDebugabble
+    public class Species<GType, PType> 
     {
         private ISpeciatedGA parent;
 
@@ -107,24 +107,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             {
                 return members.Count;
             }
-        }
-
-        public string DebugInformation()
-        {
-            StringBuilder result = new StringBuilder();
-
-            result.AppendFormat("Can breed?: {0}", (CanBreed)? "Yes": "No");
-            result.AppendLine();
-
-            result.Append("Best: ");
-            result.AppendLine(Best.DebugInformation());
-
-            result.AppendLine();
-            result.AppendLine();
-
-            result.Append(Members.GenomeDebugInformation<SpeciatedGenome<GType, PType>, GType, PType>());
-
-            return result.ToString();
         }
 
         public void Clear()

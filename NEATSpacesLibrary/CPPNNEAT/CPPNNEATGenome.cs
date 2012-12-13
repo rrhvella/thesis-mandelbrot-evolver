@@ -241,16 +241,6 @@ namespace NEATSpacesLibrary.CPPNNEAT
             GeneCollection.Initialise();
         }
 
-        private string ToRepresentation(string seperator, Func<CPPNNEATLinkGene, string> linkRepresentation)
-        {
-            return String.Join(seperator, GeneCollection.LinkGenes.Select(linkRepresentation));
-        }
-
-        protected override string InnerDebugInformation()
-        {
-            return String.Join("-", GeneCollection.LinkGenes.Select(link => link.DebugInformation()));
-        }
-
         public override string ToString() 
         {
             return String.Join("\r\n", GeneCollection.ValidLinks.Select(link => link.ToString()));

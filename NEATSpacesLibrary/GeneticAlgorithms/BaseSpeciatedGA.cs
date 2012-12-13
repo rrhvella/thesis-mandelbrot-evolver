@@ -8,8 +8,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 {
     public abstract class BaseSpeciatedGA<GenomeType, GType, PType> : 
             BaseGA<GenomeType, GType, PType>,
-            ISpeciatedGA, 
-            IDebugabble
+            ISpeciatedGA
             where GenomeType : SpeciatedGenome<GType, PType>, new()
     {
         public double InterSpeciesMatingRate { get; set; }
@@ -129,23 +128,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         private IList<GenomeType> SelectBreeders(IEnumerable<GenomeType> candidates)
         {
             return candidates.Take((int)Math.Ceiling(candidates.Count() * SurvivalTreshold)).ToList();
-        }
-
-        protected override string InnerDebugInformation()
-        {
-            var result = new StringBuilder();
-
-            foreach (var i in Enumerable.Range(0, populationSpecies.Count))
-            {
-                result.Append("Species ");
-                result.AppendLine(i.ToString());
-
-                result.AppendLine();
-
-                result.AppendLine(populationSpecies[i].DebugInformation());
-            }
-
-            return result.ToString();
         }
 
         protected override GAGenerationalSelectionResult<GenomeType, GType, PType> PerformGenerationalSelection()

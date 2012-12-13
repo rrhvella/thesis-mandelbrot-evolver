@@ -8,11 +8,6 @@ using System.Collections;
 
 namespace NEATSpacesLibrary.GeneticAlgorithms
 {
-    public interface IDebugabble
-    {
-        string DebugInformation();
-    }
-
     public class GenomeEventArgs<GenomeType> : EventArgs
     {
         public GenomeType Genome 
@@ -41,7 +36,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         }
     }
 
-    public class GASteadyStateSelectionResult<GenomeType, GType, PType> : IDebugabble where GenomeType: Genome<GType, PType>
+    public class GASteadyStateSelectionResult<GenomeType, GType, PType> where GenomeType: Genome<GType, PType>
     {
         public GenomeType Parent
         {
@@ -69,28 +64,9 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             this.IndividualsToReplace = new[] { individualToReplace1, individualToReplace2 };
         }
-
-        public string DebugInformation()
-        {
-            var result = new StringBuilder();
-
-            result.AppendLine("Parent: ");
-            result.AppendLine(Parent.DebugInformation());
-
-            result.AppendLine("Partner: ");
-            result.AppendLine(Partner.DebugInformation());
-
-            result.AppendLine("Individual to replace 1: ");
-            result.AppendLine(IndividualsToReplace[0].DebugInformation());
-
-            result.AppendLine("Individual to replace 2: ");
-            result.AppendLine(IndividualsToReplace[1].DebugInformation());
-
-            return result.ToString();
-        }
     }
 
-    public class GAGenerationalSelectionResult<GenomeType, GType, PType> : IDebugabble where GenomeType : Genome<GType, PType>
+    public class GAGenerationalSelectionResult<GenomeType, GType, PType> where GenomeType : Genome<GType, PType>
     {
         public IList<GenomeType> ToRetain 
         { 
@@ -123,28 +99,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             ToRetain = new List<GenomeType>();
             ToMutate = new List<GenomeType>();
             ParentPairs = new List<Tuple<GenomeType, GenomeType>>();
-        }
-
-        public string DebugInformation()
-        {
-            var result = new StringBuilder();
-
-            result.AppendLine("To retain unchanged: ");
-            result.AppendLine(ToRetain.GenomeDebugInformation<GenomeType, GType, PType>());
-
-            result.AppendLine("To mutate without crossover: ");
-            result.AppendLine(ToMutate.GenomeDebugInformation<GenomeType, GType, PType>());
-
-            result.AppendLine("Parent pairs: ");
-
-            foreach (var parentPair in ParentPairs)
-            {
-                result.AppendLine(parentPair.Item1.DebugInformation());
-                result.AppendLine(parentPair.Item2.DebugInformation());
-                result.AppendLine();
-            }
-
-            return result.ToString();
         }
     }
 
@@ -191,9 +145,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         }
 
         private Func<GenomeType, double> scoreFunction;
-
-        private IDebugabble previousSelection;
-        private IList<Genome<GType, PType>> previousChildren;
 
         private GenomeType best;
         private bool bestCacheInvalidated;
@@ -288,7 +239,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 IterationBegin(this, new IterationEventArgs(iterationNumber));
             }
 
-            previousChildren = new List<Genome<GType, PType>>();
             var generationalSelect = PerformGenerationalSelection();
 
             population.Clear();
@@ -307,8 +257,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             {
                 genomeToMutate.Mutate();
                 AddGenome(genomeToMutate);
-
-                previousChildren.Add(genomeToMutate);
             }
 
             foreach (var parentPairs in generationalSelect.ParentPairs)
@@ -317,8 +265,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
                 child.Mutate();
                 AddGenome((GenomeType)child);
-
-                previousChildren.Add(child);
             }
 
             Update();
@@ -328,7 +274,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                 IterationComplete(this, new IterationEventArgs(++iterationNumber));
             }
 
-            previousSelection = generationalSelect;
             NumberOfGenerations++;
         }
 
@@ -347,7 +292,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
 
             var selection = PerformSteadyStateSelection();
-            previousChildren = new List<Genome<GType, PType>> { selection.Parent.Crossover(selection.Partner) };
+            var child = selection.Parent.Crossover(selection.Partner);
 
             foreach (var i in Enumerable.Range(0, selection.IndividualsToReplace.Length))
             {
@@ -358,10 +303,10 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
                     GenomeRemoved(this, new GenomeEventArgs<GenomeType>(selection.IndividualsToReplace[i]));
                 }
 
-                previousChildren[i].Parent = this;
-                previousChildren[i].Mutate();
+                child.Parent = this;
+                child.Mutate();
 
-                AddGenome((GenomeType)previousChildren[i]);
+                AddGenome((GenomeType)child);
             }
 
             Update();
@@ -370,8 +315,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             {
                 IterationComplete(this, new IterationEventArgs(++iterationNumber));
             }
-
-            previousSelection = selection;
         }
 
         public void ForceUpdateGenomes()
@@ -392,36 +335,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         }
 
         protected abstract GASteadyStateSelectionResult<GenomeType, GType, PType> PerformSteadyStateSelection();
-
-        protected virtual string InnerDebugInformation()
-        {
-            var result = new StringBuilder();
-
-            result.Append(Population.GenomeDebugInformation<GenomeType, GType, PType>());
-
-            return result.ToString();
-        }
-
-        public string DebugInformation()
-        {
-            var result = new StringBuilder();
-
-            result.AppendLine("Best: ");
-            result.AppendLine(Best.DebugInformation());
-
-            result.AppendLine();
-
-            result.AppendLine("Previous selection: ");
-            result.AppendLine(previousSelection.DebugInformation());
-
-            result.AppendLine("Previous children: ");
-            result.AppendLine(previousChildren.GenomeDebugInformation<Genome<GType, PType>, GType, PType>());
-
-            result.AppendLine(InnerDebugInformation());
-
-            return result.ToString();
-        }
-
 
         public void UpdateGenomes()
         {
