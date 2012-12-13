@@ -36,7 +36,8 @@ namespace NEATSpacesLibrary.CPPNNEAT
                         Func<CPPNNEATActivationFunction> outputActivationFunction,
                         bool feedForwardOnly): base(populationSize, scoreFunction)
         {
-            if (numberOfInputs == 0)
+
+            if (numberOfInputs > 0)
             {
                 throw new ApplicationException("Numbers of inputs cannot be 0.");
             }
