@@ -205,34 +205,50 @@ namespace NEATSpacesLibrary.CPPNNEAT
             return GeneCollection.Phenome;
         }
 
+        private const int LINK_MUTATION_INDEX = 0;
+        private const int NEURON_MUTATION_INDEX = 1;
+        private const int WEIGHT_MUTATION_INDEX = 2;
+        private const int TOTAL_MUTATIONS = 3;
+
         protected override void InnerMutate()
         {
             var parent = Parent as ICPPNNEATGA;
-            if (parent.Random.NextDouble() <= parent.NewLinkRate)
-            {
-                 GeneCollection.TryCreateLinkGene();
-            }
 
-            else if (parent.Random.NextDouble() <= parent.NewNeuronRate)
+            var mutationProbabilities = new double[TOTAL_MUTATIONS];
+
+            mutationProbabilities[LINK_MUTATION_INDEX] = parent.NewLinkRate;
+            mutationProbabilities[NEURON_MUTATION_INDEX]  = parent.NewNeuronRate;
+            mutationProbabilities[WEIGHT_MUTATION_INDEX] = parent.WeightMutationRate;
+
+            var selected = Enumerable.Range(0, TOTAL_MUTATIONS).RouletteWheelSingle(i => mutationProbabilities[i]);
+
+            switch (selected)
             {
-                GeneCollection.TryCreateNeuronGene();
-            }
-            else
-            {
-                foreach (var link in GeneCollection.LinkGenes)
-                {
-                    if (parent.Random.NextDouble() <= parent.WeightMutationRate)
+                case LINK_MUTATION_INDEX:
+                    GeneCollection.TryCreateLinkGene();
+                    break;
+
+                case NEURON_MUTATION_INDEX:
+                    GeneCollection.TryCreateNeuronGene();
+                    break;
+
+                case WEIGHT_MUTATION_INDEX:
+                    foreach (var link in GeneCollection.LinkGenes)
                     {
-                        if (Parent.Random.NextDouble() <= parent.WeightPertubationRate)
+                        if (parent.Random.NextDouble() <= parent.WeightMutationRate)
                         {
-                            link.Weight += MathExtensions.ComplexRandom(-parent.MaxPerturbation, parent.MaxPerturbation);
-                        }
-                        else
-                        {
-                            link.Weight = parent.GetRandomWeight();
+                            if (Parent.Random.NextDouble() <= parent.WeightPertubationRate)
+                            {
+                                link.Weight += MathExtensions.ComplexRandom(-parent.MaxPerturbation, 
+                                                                            parent.MaxPerturbation);
+                            }
+                            else
+                            {
+                                link.Weight = parent.GetRandomWeight();
+                            }
                         }
                     }
-                }
+                    break;
             }
         }
 
