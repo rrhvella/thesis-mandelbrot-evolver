@@ -46,7 +46,7 @@ namespace MandelbrotCPPNNEAT
         /// <param name="populationSize">The number of individuals in the population.</param>
         /// <param name="scoreFunction">The function used to determine the fitness of an individual.</param>
         /// <param name="canonicalFunctionList">The list of function factories used to generate the activation functions 
-        /// for the hidden inputs.</param>
+        /// for the hidden neurons.</param>
         /// <param name="outputActivationFunction">The function factory used to generate the output activation function. </param>
         public MandelbrotCPPNNEATGA(int populationSize, 
                         Func<MandelbrotCPPNNEATGenome, double> scoreFunction,
