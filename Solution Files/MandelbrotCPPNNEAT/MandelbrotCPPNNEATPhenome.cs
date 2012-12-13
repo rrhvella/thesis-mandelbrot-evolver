@@ -43,7 +43,6 @@ namespace MandelbrotCPPNNEAT
         public Bitmap GetImage(int viewWidth, int viewHeight, int iterationNumberLimit)
         {
             Bitmap fractalImage = new Bitmap(viewWidth, viewHeight);
-            network.Reset();
 
             var drawingBuffer = fractalImage.LockBits(new Rectangle(0, 0, viewWidth, viewHeight),
                                                 ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
@@ -110,6 +109,8 @@ namespace MandelbrotCPPNNEAT
         private IEnumerable<IterationNumberTuple> GetIterationNumbers(int viewWidth, int viewHeight, 
                                                                     int iterationNumberLimit)
         {
+            network.Reset();
+
             foreach (var x in Enumerable.Range(0, viewWidth))
             {
                 foreach (var y in Enumerable.Range(0, viewHeight))
