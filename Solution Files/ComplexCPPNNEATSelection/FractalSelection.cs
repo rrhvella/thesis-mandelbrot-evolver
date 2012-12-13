@@ -135,7 +135,7 @@ namespace ComplexCPPNNEATSelection
         private static readonly Complex VIEW_POSITION = new Complex(-2.2, -1.5);
         
         /// <summary>
-        /// The distance, on the complex plane, between the two corners of each side of the view.
+        /// The distance, in the complex plane, between the two corners of each side of the view.
         /// </summary>
         private const double VIEW_SCALE = 3;
 
