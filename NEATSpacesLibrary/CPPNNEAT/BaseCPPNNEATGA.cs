@@ -36,10 +36,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
                         Func<CPPNNEATActivationFunction> outputActivationFunction,
                         bool feedForwardOnly): base(populationSize, scoreFunction)
         {
-
-            if (numberOfInputs > 0)
+            //Assert that the number of inputs is greater than 0.
+            if (numberOfInputs < 1)
             {
-                throw new ApplicationException("Numbers of inputs cannot be 0.");
+                throw new ApplicationException("Numbers of inputs cannot be less than 1.");
             }
 
             this.NumberOfInputs = numberOfInputs;
