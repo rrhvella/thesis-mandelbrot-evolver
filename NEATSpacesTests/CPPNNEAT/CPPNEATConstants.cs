@@ -23,11 +23,13 @@ namespace NEATSpacesTests.CPPNNEAT
         public const int BIAS_NEURON_INDEX = 0;
         public const int OUTPUT_NEURON_INDEX = 1;
         public const int HIDDEN_NEURON_INDEX = 4;
+        public const int FIRST_INPUT_NEURON_INDEX = 2;
         public const int SECOND_INPUT_NEURON_INDEX = 3;
 
         public const int BIAS_TO_OUTPUT_INDEX = 0;
         public const int FIRST_INPUT_TO_OUTPUT_INDEX = 1;
         public const int SECOND_INPUT_TO_OUTPUT_INDEX = 2;
+        public const int FIRST_INPUT_TO_OUTPUT_INDEX_PARALLEL = 3;
 
         public const int BIAS_TO_HIDDEN_INDEX = 5;
         public const int LINK_AFTER_FIRST_HIDDEN_NEURON_INDEX = 5;
@@ -65,8 +67,7 @@ namespace NEATSpacesTests.CPPNNEAT
 
         public static double ParallelActivation(double input1, double input2) 
         {
-            return OUTPUT_ACTIVATION_FUNCTION(Level2(input1, input2) + 
-                    HIDDEN_ACTIVATION_FUNCTION(Level1(input1, input2)) * WEIGHT_4);
+            return OUTPUT_ACTIVATION_FUNCTION(Level1(input1, input2) + input1 * WEIGHT_4);
         }
 
         public static double TwoHiddenLayer(double input1, double input2)

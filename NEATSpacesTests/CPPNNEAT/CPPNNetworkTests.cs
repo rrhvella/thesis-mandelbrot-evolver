@@ -21,14 +21,24 @@ namespace NEATSpacesTests.CPPNNEAT
         [TestCase(1.0, -1.0)]
         public void TestActivation(double input1, double input2)
         {
-            var network = CreateNeuronNetwork();
-
-            network.AddLink(biasNeuron, outputNeuron, CPPNNEATConstants.BIAS);
-            network.AddLink(inputNeuron1, outputNeuron, CPPNNEATConstants.WEIGHT_1);
-            network.AddLink(inputNeuron2, outputNeuron, CPPNNEATConstants.WEIGHT_2);
+            var network = CreateConnectedNeuronNetwork();
 
             Assert.AreEqual(CPPNNEATConstants.DefaultActivation(input1, input2), network.GetActivation(new[] { input1, input2 }));
             Assert.AreEqual(CPPNNEATConstants.DefaultActivation(input1, input2), network.GetActivation(new[] { input1, input2 }));
+        }
+
+        [TestCase(1.0, 0.0)]
+        [TestCase(0.0, -1.0)]
+        [TestCase(-1.0, 1.0)]
+        [TestCase(1.0, -1.0)]
+        public void TestActivationParallel(double input1, double input2)
+        {
+            var network = CreateConnectedNeuronNetwork();
+
+            network.AddLink(inputNeuron1, outputNeuron, CPPNNEATConstants.WEIGHT_4);
+
+            Assert.AreEqual(CPPNNEATConstants.ParallelActivation(input1, input2), network.GetActivation(new[] { input1, input2 }));
+            Assert.AreEqual(CPPNNEATConstants.ParallelActivation(input1, input2), network.GetActivation(new[] { input1, input2 }));
         }
 
         [TestCase(1.0, 0.0)]
@@ -123,6 +133,17 @@ namespace NEATSpacesTests.CPPNNEAT
             network.AddNeuron(biasNeuron);
             network.AddNeuron(inputNeuron1);
             network.AddNeuron(inputNeuron2);
+
+            return network;
+        }
+
+        private CPPNNetwork CreateConnectedNeuronNetwork()
+        {
+            var network = CreateNeuronNetwork();
+
+            network.AddLink(biasNeuron, outputNeuron, CPPNNEATConstants.BIAS);
+            network.AddLink(inputNeuron1, outputNeuron, CPPNNEATConstants.WEIGHT_1);
+            network.AddLink(inputNeuron2, outputNeuron, CPPNNEATConstants.WEIGHT_2);
 
             return network;
         }

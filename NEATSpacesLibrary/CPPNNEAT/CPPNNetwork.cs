@@ -17,6 +17,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         private double[] adjacencyMatrix;
 
         private List<ActivationRecord> activations;
+        private Dictionary<int, List<double>> parallelWeightsMap;
 
         public IEnumerable<CPPNNetworkNeuron> Neurons
         {
@@ -143,7 +144,14 @@ namespace NEATSpacesLibrary.CPPNNEAT
                         }
                     }
 
-                    net += adjacencyMatrix[rowFirstCell + i] * (double)childActivationRecord.Activation;
+                    var index = rowFirstCell + i;
+                    var childActivation = (double)childActivationRecord.Activation;
+                    net += adjacencyMatrix[index] * childActivation;
+
+                    if (parallelWeightsMap.ContainsKey(index))
+                    {
+                        net += parallelWeightsMap[index].Select(parallelWeight => parallelWeight * childActivation).Sum();
+                    }
                 }
 
                 if (skipWhileLoop)
@@ -173,6 +181,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         private double[] BuildAdjacencyMatrix()
         {
+            parallelWeightsMap = new Dictionary<int, List<double>>();
+
+            var indexSet = new HashSet<int>();
             var result = new double[neuronToIndexDict.Count * neuronToIndexDict.Count];
 
             foreach (var record in neuronToIndexDict)
@@ -181,7 +192,22 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
                 foreach(var synapse in synapsis) 
                 {
-                    result[GetMatrixIndex(synapse.Neuron, record.Key)] = synapse.Weight;
+                    var index = GetMatrixIndex(synapse.Neuron, record.Key);
+
+                    if (indexSet.Contains(index))
+                    {
+                        if (!parallelWeightsMap.ContainsKey(index))
+                        {
+                            parallelWeightsMap.Add(index, new List<double>());
+                        }
+
+                        parallelWeightsMap[index].Add(synapse.Weight);
+                    }
+                    else
+                    {
+                        indexSet.Add(index);
+                        result[index] = synapse.Weight;
+                    }
                 }
             }
 

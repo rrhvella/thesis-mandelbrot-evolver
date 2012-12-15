@@ -83,6 +83,26 @@ namespace NEATSpacesTests.CPPNNEAT
         [TestCase(1.0, 0.0)]
         [TestCase(0.0, -1.0)]
         [TestCase(-1.0, 1.0)]
+        public void TestParallelActivation(double input1, double input2)
+        {
+            testCollection.ParentGA.ClearLinkCache();
+            testCollection.TryCreateLinkGene(CPPNNEATConstants.FIRST_INPUT_NEURON_INDEX, 
+                                        CPPNNEATConstants.OUTPUT_NEURON_INDEX);
+            testCollection.UpdateLinkGeneWeight(CPPNNEATConstants.FIRST_INPUT_TO_OUTPUT_INDEX_PARALLEL, 
+                                            CPPNNEATConstants.WEIGHT_4);
+            testCollection.Update();
+
+            var network = testCollection.Phenome;
+
+            Assert.AreEqual(CPPNNEATConstants.ParallelActivation(input1, input2), 
+                        network.GetActivation(new double[] { input1, input2 }));
+            Assert.AreEqual(CPPNNEATConstants.ParallelActivation(input1, input2), 
+                        network.GetActivation(new double[] { input1, input2 }));
+        }
+
+        [TestCase(1.0, 0.0)]
+        [TestCase(0.0, -1.0)]
+        [TestCase(-1.0, 1.0)]
         public void TestActivationRecursive(double input1, double input2)
         {
             UpdateHiddenNeuronNetwork(this.testCollection);
@@ -148,16 +168,6 @@ namespace NEATSpacesTests.CPPNNEAT
                     testCollection.TryCreateLinkGene(CPPNNEATConstants.OUTPUT_NEURON_INDEX, 
                                                         CPPNNEATConstants.HIDDEN_NEURON_INDEX); 
             });
-        }
-
-
-        [TestCase]
-        public void TestCannotCreateParallel()
-        {
-            var numberOfLinks = testCollection.LinkGenes.Count;
-
-            Assert.AreEqual(false, testCollection.TryCreateLinkGene(CPPNNEATConstants.BIAS_NEURON_INDEX, CPPNNEATConstants.OUTPUT_NEURON_INDEX));
-            Assert.AreEqual(numberOfLinks, testCollection.LinkGenes.Count);
         }
 
         [TestCase]
