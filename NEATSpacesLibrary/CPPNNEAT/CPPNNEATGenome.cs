@@ -255,16 +255,13 @@ namespace NEATSpacesLibrary.CPPNNEAT
                 case WEIGHT_MUTATION_INDEX:
                     foreach (var link in GeneCollection.LinkGenes)
                     {
-                        if (parent.Random.NextDouble() <= parent.WeightMutationRate)
+                        if (Parent.Random.NextDouble() <= parent.WeightPertubationRate)
                         {
-                            if (Parent.Random.NextDouble() <= parent.WeightPertubationRate)
-                            {
-                                link.Weight += (MathExtensions.RandomNumber() * 2 - 1) * parent.MaxPerturbation; 
-                            }
-                            else
-                            {
-                                link.Weight = parent.GetRandomWeight();
-                            }
+                            link.Weight += (MathExtensions.RandomNumber() * 2 - 1) * parent.MaxPerturbation; 
+                        }
+                        else
+                        {
+                            link.Weight = parent.GetRandomWeight();
                         }
                     }
                     break;
