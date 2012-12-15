@@ -18,6 +18,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         private Complex[] adjacencyMatrix;
 
         private List<ActivationRecord> activations;
+        private Dictionary<int, List<Complex>> parallelWeightsMap;
 
         private class ActivationRecord
         {
@@ -136,7 +137,19 @@ namespace NEATSpacesLibrary.CPPNNEAT
                         }
                     }
 
-                    net += adjacencyMatrix[rowFirstCell + i] * (Complex)childActivationRecord.Activation;
+                    var childActivation = (Complex)childActivationRecord.Activation;
+
+                    var index = rowFirstCell + i;
+                    net += adjacencyMatrix[index] * childActivation;
+
+                    if (parallelWeightsMap.ContainsKey(index))
+                    {
+                        foreach(var parallelSignal in parallelWeightsMap[index]
+                                                    .Select(parallelWeight => parallelWeight * childActivation)) 
+                        {
+                            net += parallelSignal;
+                        }
+                    }
                 }
 
                 if (skipWhileLoop)
@@ -166,6 +179,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         private Complex[] BuildAdjacencyMatrix()
         {
+            parallelWeightsMap = new Dictionary<int, List<Complex>>();
+
+            var indexSet = new HashSet<int>();
             var result = new Complex[neuronToIndexDict.Count * neuronToIndexDict.Count];
 
             foreach (var record in neuronToIndexDict)
@@ -174,7 +190,22 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
                 foreach(var synapse in synapsis) 
                 {
-                    result[GetMatrixIndex(synapse.Neuron, record.Key)] = synapse.Weight;
+                    var index = GetMatrixIndex(synapse.Neuron, record.Key);
+
+                    if (indexSet.Contains(index))
+                    {
+                        if (!parallelWeightsMap.ContainsKey(index))
+                        {
+                            parallelWeightsMap.Add(index, new List<Complex>());
+                        }
+
+                        parallelWeightsMap[index].Add(synapse.Weight);
+                    }
+                    else
+                    {
+                        indexSet.Add(index);
+                        result[index] = synapse.Weight;
+                    }
                 }
             }
 
