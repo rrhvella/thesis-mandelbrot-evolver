@@ -48,13 +48,14 @@ def main(path, to_screen = False):
     for filename, number in sorted(parse_filenames(path), 
                                     lambda x, y : cmp(x[1], y[1])):
 
+
         print("Drawing graph {0}".format(number))
 
         with open('{0}/{1}'.format(path, filename), 'r') as filebuf:
             graph = nx.DiGraph()
             
             edge_labels = {}
-            node_labels = dict(INPUT_LABELS)
+            node_labels = {}
 
             for line in filebuf:
                 frm, to, weight = parse_edge(line)
@@ -64,10 +65,16 @@ def main(path, to_screen = False):
                 edge_labels[(frm, to)] = weight
                 node_labels[to] = output_node_label(to)
 
+            for k, v in INPUT_LABELS.items():
+                if k in graph.nodes():
+                    node_labels[k] = v
+
+            filtered_positions = {k: v for k, v in PRE_POSITIONS.items()
+                                    if k in graph.nodes()}
 
             pos = nx.layout.spring_layout(graph, 
-                                        pos=PRE_POSITIONS,
-                                        fixed = PRE_POSITIONS.keys(),
+                                        pos = filtered_positions,
+                                        fixed = filtered_positions.keys(),
                                         iterations = NUMBER_OF_ITERATIONS
                                         )
 
