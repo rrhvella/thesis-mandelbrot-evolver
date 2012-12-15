@@ -252,5 +252,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
             return hiddenNeuronMap[innovationNumber];
         }
+
+        public void ClearLinkCache()
+        {
+            edgeInnovationNumberMap.Clear();
+        }
     }
 }
