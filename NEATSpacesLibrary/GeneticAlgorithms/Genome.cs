@@ -31,14 +31,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
         }
 
-        public virtual double AdjustedScore
-        {
-            get
-            {
-                return Score;
-            }
-        }
-
         public bool PhenomeExpired
         {
             get;

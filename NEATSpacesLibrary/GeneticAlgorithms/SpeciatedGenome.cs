@@ -7,7 +7,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 {
     public abstract class SpeciatedGenome<GType, PType> : Genome<GType, PType> 
     {
-        public override double AdjustedScore
+        public double AdjustedScore
         {
             get
             {
