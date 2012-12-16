@@ -82,8 +82,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public event EventHandler<IterationEventArgs> IterationBegin;
         public event EventHandler<IterationEventArgs> IterationComplete;
 
-        private int iterationNumber;
-
         private int populationSize;
         private List<GenomeType> population;
         public IList<GenomeType> Population
@@ -204,7 +202,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             if (IterationBegin != null)
             {
-                IterationBegin(this, new IterationEventArgs(iterationNumber));
+                IterationBegin(this, new IterationEventArgs(NumberOfGenerations));
             }
 
             var generationalSelect = PerformGenerationalSelection();
@@ -239,7 +237,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             if (IterationComplete != null)
             {
-                IterationComplete(this, new IterationEventArgs(++iterationNumber));
+                IterationComplete(this, new IterationEventArgs(NumberOfGenerations));
             }
 
             NumberOfGenerations++;
