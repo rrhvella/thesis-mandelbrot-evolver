@@ -88,7 +88,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         private HashSet<CPPNNEATNeuronGene> orphanedNeurons;
 
         /// <summary>
-        /// The link genes in this sequence sorted by innovation number.
+        /// The link genes in this sequence, sorted by innovation number.
         /// </summary>
         public IList<CPPNNEATLinkGene> LinkGenes
         {
@@ -149,6 +149,11 @@ namespace NEATSpacesLibrary.CPPNNEAT
         /// </summary>
         public void Initialise()
         {
+            linkGeneMap.Clear();
+            neuronGeneSet.Clear();
+            possibleConnections.Clear();
+            orphanedNeurons.Clear();
+
             sortedLinkGenesCacheExpired = true;
 
             foreach (var linkGene in ParentGA.DefaultLinkGenes)
