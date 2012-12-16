@@ -63,12 +63,12 @@ namespace ComplexCPPNNEATSelection
         private static double DISABLE_GENE_RATE = 0.75;
 
         /// <summary>
-        /// The maximum magnitude of the value by which a weight is reduced during perturbation.
+        /// The maximum magnitude of the value by which a weight is modified during perturbation.
         /// </summary>
         private static double MAX_PERTURBATION = 0.01;
         
         /// <summary>
-        /// The maximum magnitude of weight when it is initialised.
+        /// The maximum magnitude each weight is initialised to.
         /// </summary>
         private static double MAX_WEIGHT = 1.5;
 
@@ -93,28 +93,28 @@ namespace ComplexCPPNNEATSelection
         private const double FUNCTION_DIFFERENCE_WEIGHT = 1.0;
 
         /// <summary>
-        /// The percentage of a species population which is used for breeding.
+        /// The proportion  of a species population which is used for breeding.
         /// </summary>
         private const double SURVIVAL_TRESHOLD = 0.3;
 
         /// <summary>
-        /// The percentage of a species population which is used for breeding.
+        /// The rate at which individuals mate with individuals outside of their species.
         /// </summary>
         private const double INTERSPECIES_MATING_RATE = 0.001;
         
         /// <summary>
-        /// The percentage of children which are generated using crossover and mutation, instead of just mutation.
+        /// The rate at which children are generated using crossover and mutation, instead of just mutation.
         /// </summary>
         private const double CROSSOVER_RATE = 0.5;
 
         /// <summary>
-        /// The resolution width, in pixels, of the fractal views. Resolution here refers to the number of complex numbers sampled 
+        /// The resolution width of the fractal views. Resolution here refers to the number of complex numbers sampled 
         /// within a view.
         /// </summary>
         private const int VIEW_WIDTH = 50;
 
         /// <summary>
-        /// The resolution height, in pixels, of the fractal views. Resolution here refers to the number of complex numbers sampled 
+        /// The resolution height of the fractal views. Resolution here refers to the number of complex numbers sampled 
         /// within a view.
         /// </summary>
         private const int VIEW_HEIGHT = 50;
@@ -138,6 +138,11 @@ namespace ComplexCPPNNEATSelection
         /// The distance, in the complex plane, between the two corners of each side of the view.
         /// </summary>
         private const double VIEW_SCALE = 3;
+
+        /// <summary>
+        /// The rate at which parent weights are averaged, as opposed to selecting one or the other.
+        /// </summary>
+        private const double MATE_BY_AVERAGING_RATE = 0.4;
 
         /// <summary>
         /// The fractal views displayed in this control.
@@ -216,6 +221,8 @@ namespace ComplexCPPNNEATSelection
             ga.DisjointGenesWeight = DISJOINT_GENES_WEIGHT;
             ga.MatchingGenesWeight = MATCHING_GENES_WEIGHT;
             ga.FunctionDifferenceWeight = FUNCTION_DIFFERENCE_WEIGHT;
+
+            ga.MateByAveragingRate = MATE_BY_AVERAGING_RATE;
 
             ga.ViewPosition = VIEW_POSITION;
             ga.ViewScale = VIEW_SCALE;

@@ -9,7 +9,7 @@ using System.Numerics;
 namespace NEATSpacesLibrary.CPPNNEAT
 {
     /// <summary>
-    /// CPPN-NEAT genome <refer></refer>.
+    /// CPPN-NEAT genome.
     /// </summary>
     /// <typeparam name="GType">The type of the genome genetic sequence. </typeparam>
     /// <typeparam name="PType">The type of the phenome. </typeparam>
@@ -220,8 +220,6 @@ namespace NEATSpacesLibrary.CPPNNEAT
         /// <returns></returns>
         public override double CompatibilityDistance(SpeciatedGenome<GType, PType> genome)
         {
-            //Please see the relevent section in the Methods for more information on how the compatibility distance is 
-            //calculated <refer>.
             var differences = new DifferenceAnalysis(this.GeneCollection, genome.GeneCollection);
 
             var totalExcess = differences.FirstCollection.Excess.Count + differences.SecondCollection.Excess.Count;

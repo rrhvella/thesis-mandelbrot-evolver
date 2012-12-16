@@ -15,7 +15,7 @@ namespace MandelbrotCPPNNEAT
 {
 
     /// <summary>
-    /// Evolves new Mandelbrot sets based on the CPPN-NEAT algorithm <refer>.
+    /// Evolves new Mandelbrot sets based on the CPPN-NEAT algorithm.
     /// </summary>
     public class MandelbrotCPPNNEATGA : BaseCPPNNEATGA<MandelbrotCPPNNEATGenome, CPPNNEATGeneCollection,
                                                         MandelbrotCPPNNEATPhenome>, ICPPNNEATGA

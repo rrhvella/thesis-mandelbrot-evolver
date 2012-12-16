@@ -9,7 +9,7 @@ using System.Numerics;
 namespace NEATSpacesLibrary.CPPNNEAT
 {
     /// <summary>
-    /// CPPN-NEAT genetic algorithm <refer></refer>.
+    /// CPPN-NEAT genetic algorithm.
     /// </summary>
     /// <typeparam name="GenomeType">The genome type. </typeparam>
     /// <typeparam name="GType">The type of the genome genetic sequence. </typeparam>
@@ -180,16 +180,16 @@ namespace NEATSpacesLibrary.CPPNNEAT
         }
 
         /// <summary>
-        /// The maximum magnitude of the value by which a weight is reduced during perturbation.
+        /// The maximum magnitude of the value by which a weight is modified during perturbation.
         /// </summary>
         public double MaxPerturbation
         {
             get;
             set;
         }
-
+        
         /// <summary>
-        /// The maximum magnitude of weight when it is initialised.
+        /// The maximum magnitude each weight is initialised to.
         /// </summary>
         public double MaxWeight
         {
