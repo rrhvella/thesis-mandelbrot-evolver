@@ -31,7 +31,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             : base(populationSize, scoreFunction)
         {
             GenomeAdded += new EventHandler<GenomeEventArgs<GenomeType>>(BaseSpeciatedGA_GenomeAddedEventHandler);
-            GenomeRemoved += new EventHandler<GenomeEventArgs<GenomeType>>(BaseSpeciatedGA_GenomeRemovedEventHandler);
             SelectionComplete += new EventHandler<EventArgs>(BaseSpeciatedGA_SelectionComplete);
             IterationComplete += new EventHandler<IterationEventArgs>(BaseSpeciatedGA_IterationComplete);
 
@@ -96,34 +95,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             e.Genome.Species = newSpecies;
         }
-
-        protected override GASteadyStateSelectionResult<GenomeType, GType, PType> PerformSteadyStateSelection()
-        {
-            var individualsToReplace = Population.OrderBy(member => member.AdjustedScore).Take(2).ToArray();
-            var totalFitness = populationSpecies.Select(species => species.AverageFitness).Sum();
-
-            var speciesBreeders = SelectBreeders(populationSpecies
-                                                .Where(species => species.CanBreed)
-                                                .RouletteWheelSingle(species => species.AverageFitness / totalFitness)
-                                                .Members
-                                                .Cast<GenomeType>());
-
-            var parent = speciesBreeders.RandomSingle();
-            GenomeType partner = null;
-
-            if (Random.NextDouble() <= InterSpeciesMatingRate)
-            {
-                partner = Population.RandomSingle();
-            }
-            else
-            {
-                partner = speciesBreeders.RandomSingle();
-            }
-
-            return new GASteadyStateSelectionResult<GenomeType, GType, PType>(parent, partner,
-                                                                individualsToReplace[0], individualsToReplace[1]);
-        }
-      
 
         private IList<GenomeType> SelectBreeders(IEnumerable<GenomeType> candidates)
         {

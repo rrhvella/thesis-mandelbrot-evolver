@@ -36,35 +36,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         }
     }
 
-    public class GASteadyStateSelectionResult<GenomeType, GType, PType> where GenomeType: Genome<GType, PType>
-    {
-        public GenomeType Parent
-        {
-            get;
-            private set;
-        }
-
-        public GenomeType Partner
-        {
-            get;
-            private set;
-        }
-
-        public GenomeType[] IndividualsToReplace
-        {
-            get;
-            private set;
-        }
-
-        public GASteadyStateSelectionResult(GenomeType parent, GenomeType partner, 
-                        GenomeType individualToReplace1, GenomeType individualToReplace2)
-        {
-            this.Parent = parent;
-            this.Partner = partner;
-
-            this.IndividualsToReplace = new[] { individualToReplace1, individualToReplace2 };
-        }
-    }
 
     public class GAGenerationalSelectionResult<GenomeType, GType, PType> where GenomeType : Genome<GType, PType>
     {
@@ -108,7 +79,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public const int DEFAULT_TOURNAMENT_SIZE = 7;
 
         public event EventHandler<GenomeEventArgs<GenomeType>> GenomeAdded;
-        public event EventHandler<GenomeEventArgs<GenomeType>> GenomeRemoved;
 
         public event EventHandler<EventArgs> SelectionComplete;
         public event EventHandler<IterationEventArgs> IterationBegin;
@@ -279,44 +249,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         protected abstract GAGenerationalSelectionResult<GenomeType, GType, PType> PerformGenerationalSelection();
 
-        public void SteadyStateIterate()
-        {
-            if (Failed)
-            {
-                return;
-            }
-
-            if (IterationBegin != null)
-            {
-                IterationBegin(this, new IterationEventArgs(iterationNumber));
-            }
-
-            var selection = PerformSteadyStateSelection();
-            var child = selection.Parent.Crossover(selection.Partner);
-
-            foreach (var i in Enumerable.Range(0, selection.IndividualsToReplace.Length))
-            {
-                population.Remove(selection.IndividualsToReplace[i]);
-
-                if (GenomeRemoved != null)
-                {
-                    GenomeRemoved(this, new GenomeEventArgs<GenomeType>(selection.IndividualsToReplace[i]));
-                }
-
-                child.Parent = this;
-                child.Mutate();
-
-                AddGenome((GenomeType)child);
-            }
-
-            Update();
-
-            if (IterationComplete != null)
-            {
-                IterationComplete(this, new IterationEventArgs(++iterationNumber));
-            }
-        }
-
         public void ForceUpdateGenomes()
         {
             foreach (var genome in population)
@@ -333,8 +265,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             bestCacheInvalidated = true;
             averageCacheInvalidated = true;
         }
-
-        protected abstract GASteadyStateSelectionResult<GenomeType, GType, PType> PerformSteadyStateSelection();
 
         public void UpdateGenomes()
         {
