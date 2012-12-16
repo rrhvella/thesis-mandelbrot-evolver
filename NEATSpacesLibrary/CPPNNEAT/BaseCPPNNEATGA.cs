@@ -9,7 +9,7 @@ using System.Numerics;
 namespace NEATSpacesLibrary.CPPNNEAT
 {
     /// <summary>
-    /// CPPN-NEAT genetic algorithm.
+    /// Base class for genetic algorithms based on CPPN-NEAT.
     /// </summary>
     /// <typeparam name="GenomeType">The genome type. </typeparam>
     /// <typeparam name="GType">The type of the genome genetic sequence. </typeparam>

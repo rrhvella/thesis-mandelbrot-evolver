@@ -213,11 +213,6 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
-        /// <summary>
-        /// Returns the compatibility distance between this genome and the given genome.
-        /// </summary>
-        /// <param name="genome"></param>
-        /// <returns></returns>
         public override double CompatibilityDistance(SpeciatedGenome<GType, PType> genome)
         {
             var differences = new DifferenceAnalysis(this.GeneCollection, genome.GeneCollection);

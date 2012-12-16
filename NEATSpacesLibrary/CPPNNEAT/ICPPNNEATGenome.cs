@@ -7,13 +7,14 @@ using NEATSpacesLibrary.GeneticAlgorithms;
 namespace NEATSpacesLibrary.CPPNNEAT
 {
     /// <summary>
-    /// This interface allows variables to have a CPPNNEATGenome type without having to fill
+    /// This interface allows variables to have a CPPNNEATGenome type without having to specify
     /// the type parameters.
     /// </summary>
     public interface ICPPNNEATGenome
     {
         /// <summary>
-        /// Marks the genome for update.
+        /// Updates the phenome of the genome and informs its containers that it has been
+        /// updated.
         /// </summary>
         void Update();
 

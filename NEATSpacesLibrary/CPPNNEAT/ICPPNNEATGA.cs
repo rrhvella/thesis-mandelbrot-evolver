@@ -8,7 +8,7 @@ using NEATSpacesLibrary.GeneticAlgorithms;
 namespace NEATSpacesLibrary.CPPNNEAT
 {
     /// <summary>
-    /// This interface allows variables to have a CPPNNEATGA type without having to fill
+    /// This interface allows variables to have a CPPNNEATGA type without having to specify
     /// the type parameters.
     /// </summary>
     public interface ICPPNNEATGA : ISpeciatedGA
