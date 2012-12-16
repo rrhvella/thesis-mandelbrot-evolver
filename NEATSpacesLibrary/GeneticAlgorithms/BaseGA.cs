@@ -76,8 +76,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
     public abstract class BaseGA<GenomeType, GType, PType> : IGA
         where GenomeType : Genome<GType, PType>, new()
     {
-        public const int DEFAULT_TOURNAMENT_SIZE = 7;
-
         public event EventHandler<GenomeEventArgs<GenomeType>> GenomeAdded;
 
         public event EventHandler<EventArgs> SelectionComplete;
