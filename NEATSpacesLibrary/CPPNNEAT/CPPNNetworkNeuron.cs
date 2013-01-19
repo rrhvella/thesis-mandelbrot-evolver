@@ -8,87 +8,16 @@ using NEATSpacesLibrary.Extensions;
 namespace NEATSpacesLibrary.CPPNNEAT
 {
     /// <summary>
-    /// Represents a connection to another neuron.
-    /// </summary>
-    public class Synapse
-    {
-        /// <summary>
-        /// The other neuron this synapse is connected to.
-        /// </summary>
-        public CPPNNetworkNeuron Neuron
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// The weight of this synapse.
-        /// </summary>
-        public Complex Weight
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="neuron">The other neuron this synapse is connected to.</param>
-        /// <param name="weight">The weight of this synapse.</param>
-        public Synapse(CPPNNetworkNeuron neuron, Complex weight)
-        {
-            this.Neuron = neuron;
-            this.Weight = weight;
-        }
-    }
-
-    /// <summary>
     /// Represents a neuron in a CPPN network.
     /// </summary>
     public abstract class CPPNNetworkNeuron
     {
         /// <summary>
-        /// The function which determines the strength of the neuron's activation.
+        /// The activation of the neuron.
         /// </summary>
-        public Func<Complex, Complex> ActivationFunction
+        public abstract Complex Activation
         {
             get;
-            protected set;
-        }
-
-        /// <summary>
-        /// The function of the neuron within the network.
-        /// </summary>
-        public CPPNNeuronType NeuronType
-        {
-            get;
-            protected set;
-        }
-
-        /// <summary>
-        /// The synapsis connecting this neuron to the other neurons.
-        /// </summary>
-        protected List<Synapse> synapsis;
-        public IEnumerable<Synapse> Synapsis
-        {
-            get
-            {
-                return synapsis.AsReadOnly();
-            }
-        }
-
-        public CPPNNetworkNeuron()
-        {
-            synapsis = new List<Synapse>();
-        }
-
-        /// <summary>
-        /// Creates a connection from the given neuron to this neuron with the given weight.
-        /// </summary>
-        /// <param name="neuron"></param>
-        /// <param name="weight"></param>
-        public void AddChild(CPPNNetworkNeuron neuron, Complex weight)
-        {
-            synapsis.Add(new Synapse(neuron, weight));
         }
     }
 
@@ -97,9 +26,12 @@ namespace NEATSpacesLibrary.CPPNNEAT
     /// </summary>
     public class CPPNBiasNeuron: CPPNNetworkNeuron
     {
-        public CPPNBiasNeuron()
+        public override Complex Activation
         {
-            NeuronType = CPPNNeuronType.Bias;
+            get 
+            {
+                return 1.0;
+            }
         }
     }
 
@@ -108,9 +40,22 @@ namespace NEATSpacesLibrary.CPPNNEAT
     /// </summary>
     public class CPPNInputNeuron: CPPNNetworkNeuron
     {
-        public CPPNInputNeuron()
+        private Complex activation;
+        public override Complex Activation
         {
-            NeuronType = CPPNNeuronType.Input;
+            get 
+            {
+                return activation;
+            }
+        }
+
+        /// <summary>
+        /// Sets the activation of this input neuron.
+        /// </summary>
+        /// <param name="input"></param>
+        public void SetInput(Complex activationValue)
+        {
+            activation = activationValue;
         }
     }
 
@@ -119,10 +64,122 @@ namespace NEATSpacesLibrary.CPPNNEAT
     /// </summary>
     public class CPPNOutputNeuron: CPPNNetworkNeuron
     {
+        /// <summary>
+        /// Represents a link from another neuron into this neuron.
+        /// </summary>
+        private class Synapse
+        {
+            /// <summary>
+            /// The neuron which is feeding into this neuron.
+            /// </summary>
+            public CPPNNetworkNeuron Neuron
+            {
+                get;
+                private set;
+            }
+
+            /// <summary>
+            /// The weight of the link.
+            /// </summary>
+            public Complex Weight
+            {
+                get;
+                private set;
+            }
+
+            /// <summary>
+            /// </summary>
+            /// <param name="neuron">The neuron which is feeding into this neuron.</param>
+            /// <param name="weight">The weight of the connection.</param>
+            public Synapse(CPPNNetworkNeuron neuron, Complex weight)
+            {
+                this.Neuron = neuron;
+                this.Weight = weight;
+            }
+        }
+
+        /// <summary>
+        /// The links going into this neuron.
+        /// </summary>
+        private List<Synapse> synapsis;
+
+        /// <summary>
+        /// The activation function of this neuron.
+        /// </summary>
+        private Func<Complex, Complex> activationFunction;
+
+        /// <summary>
+        /// Is true if this neuron is currently calculating its activation.
+        /// </summary>
+        private bool isCalculating;
+
+        /// <summary>
+        /// The activation of this neuron the last time it was excited.
+        /// </summary>
+        private Complex previousActivation;
+
+        public override Complex Activation
+        {
+            get 
+            {
+                //If this neuron is already calculating its activation, break 
+                //the cycle and returns its activation the last time it was 
+                //excited.
+                if (isCalculating)
+                {
+                    return previousActivation;
+                }
+
+                isCalculating = true;
+
+                Complex net = 0;
+                
+                //Recursively retrieve the activations of the neurons feeding into this
+                //neuron.
+                foreach(var synapse in synapsis) 
+                {
+                    net += synapse.Neuron.Activation * synapse.Weight;
+                }
+
+                var activation = activationFunction(net);
+
+                isCalculating = false;
+
+                previousActivation = activation;
+
+                return activation;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="activationFunction">The activation function of the output neuron.</param>
         public CPPNOutputNeuron(Func<Complex, Complex> activationFunction)
         {
-            this.ActivationFunction = activationFunction;
-            this.NeuronType = CPPNNeuronType.Output;
+            this.activationFunction = activationFunction;
+            this.synapsis = new List<Synapse>();
+            this.isCalculating = false;
+        }
+
+        /// <summary>
+        /// Adds a new connection from the given neuron to this neuron, with the given weight.
+        /// </summary>
+        /// <param name="neuron"></param>
+        /// <param name="weight"></param>
+        public void AddChild(CPPNNetworkNeuron neuron, Complex weight)
+        {
+            synapsis.Add(new Synapse(neuron, weight));
+        }
+
+        /// <summary>
+        /// Resets the activation of this neuron to 0.
+        /// </summary>
+        /// <remarks>
+        /// This would be used if the neuron were recurrent.
+        /// </remarks>
+        public void Reset()
+        {
+            previousActivation = 0;
         }
     }
 
@@ -131,9 +188,11 @@ namespace NEATSpacesLibrary.CPPNNEAT
     /// </summary>
     public class CPPNHiddenNeuron: CPPNOutputNeuron
     {
+        /// <summary>
+        /// </summary>
+        /// <param name="activationFunction">The activation function of the hidden neuron.</param>
         public CPPNHiddenNeuron(Func<Complex, Complex> activationFunction): base(activationFunction)
         {
-            this.NeuronType = CPPNNeuronType.Hidden;
         }
     }
 }
