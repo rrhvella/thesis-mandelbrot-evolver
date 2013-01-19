@@ -256,8 +256,7 @@ namespace NEATSpacesTests.CPPNNEAT
         {
             Assert.AreEqual(expected, collection.ValidLinks.Neurons().Where(neuron => neuron.Type == CPPNNeuronType.Hidden).Count());
             collection.Update();
-            Assert.AreEqual(expected, collection.Phenome.Neurons
-                            .Where(neuron => neuron.NeuronType == CPPNNeuronType.Hidden).Count());
+            Assert.AreEqual(expected, collection.Phenome.HiddenNeurons.Count);
 
 
             HashSet<string> hiddenNeuronStrings = new HashSet<string>();
