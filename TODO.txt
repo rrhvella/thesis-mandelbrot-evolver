@@ -36,3 +36,5 @@ GAs should always use a single random object.
 
 Combine with Complex Version using a numeric wrapper class.
 
+Rename Genome to Organism.
+
