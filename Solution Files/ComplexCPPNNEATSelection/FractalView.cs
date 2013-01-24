@@ -15,7 +15,8 @@ using MandelbrotCPPNNEAT;
 namespace ComplexCPPNNEATSelection
 {
     /// <summary>
-    /// Draws the view of a Mandelbrot fractal in the complex plane, with the membership based on a CPPN-NEAT genome.
+    /// Draws the view of a Mandelbrot fractal in the complex plane, with the membership 
+    /// based on a CPPN-NEAT genome.
     /// </summary>
     public class FractalView: Panel
     {
@@ -26,19 +27,19 @@ namespace ComplexCPPNNEATSelection
 
 
         /// <summary>
-        /// The resolution width, in pixels, of the fractal views. Resolution here refers to the number of complex numbers sampled 
-        /// within a view.
+        /// The resolution width, in pixels, of the fractal views. Resolution here refers to 
+        /// the number of complex numbers sampled within a view.
         /// </summary>
-        private int viewWidth;
-        public int ViewWidth
+        private int viewResolutionWidth;
+        public int ViewResolutionWidth
         {
             get 
             { 
-                return viewWidth; 
+                return viewResolutionWidth; 
             }
             set
             {
-                viewWidth = value;
+                viewResolutionWidth = value;
                 fractalImageCacheInvalidated = true;
             }
         }
@@ -47,16 +48,16 @@ namespace ComplexCPPNNEATSelection
         /// The resolution height, in pixels, of the fractal views. Resolution here refers to the number of complex numbers sampled 
         /// within a view.
         /// </summary>
-        private int viewHeight;
-        public int ViewHeight
+        private int viewResolutionHeight;
+        public int ViewResolutionHeight
         {
             get
             {
-                return viewHeight;
+                return viewResolutionHeight;
             }
             set
             {
-                viewHeight = value;
+                viewResolutionHeight = value;
                 fractalImageCacheInvalidated = true;
             }
         }
@@ -102,7 +103,7 @@ namespace ComplexCPPNNEATSelection
             {
                 if (fractalImageCacheInvalidated)
                 {
-                    fractalImage = Genome.Phenome.GetImage(ViewWidth, ViewHeight, ESCAPE);
+                    fractalImage = Genome.Phenome.GetImage(ViewResolutionWidth, ViewResolutionHeight, ESCAPE);
                     fractalImageCacheInvalidated = false;
                 }
 

@@ -53,8 +53,8 @@
             this.finalView.Score = 0;
             this.finalView.Size = new System.Drawing.Size(400, 400);
             this.finalView.TabIndex = 6;
-            this.finalView.ViewHeight = 400;
-            this.finalView.ViewWidth = 400;
+            this.finalView.ViewResolutionHeight = 400;
+            this.finalView.ViewResolutionWidth = 400;
             // 
             // fractalSelectionInstance
             // 

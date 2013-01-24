@@ -170,8 +170,8 @@ namespace ComplexCPPNNEATSelection
             {
                 var fractalView = new FractalView();
 
-                fractalView.ViewWidth = VIEW_WIDTH;
-                fractalView.ViewHeight = VIEW_HEIGHT;
+                fractalView.ViewResolutionWidth = VIEW_WIDTH;
+                fractalView.ViewResolutionHeight = VIEW_HEIGHT;
 
                 views.Add(fractalView);
                 
