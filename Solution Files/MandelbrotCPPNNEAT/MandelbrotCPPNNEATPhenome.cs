@@ -193,15 +193,15 @@ namespace MandelbrotCPPNNEAT
         /// <returns></returns>
         private int ToColour(int iterationNumber, int iterationNumberLimit, Complex z)
         {
-            var shadingAdjustment = Math.Log(Math.Log(z.Magnitude), 2);
-            var normalisedIterationNumber = iterationNumber / (double)iterationNumberLimit;
+            var adjustedIterationNumber = iterationNumber + Math.Log(Math.Log(z.Magnitude)) / Math.Log(2);
 
-            var brightness = 1 - normalisedIterationNumber - shadingAdjustment / iterationNumberLimit;
-            var baseColor = BASE_COLOURS[(int)Math.Round(normalisedIterationNumber * (BASE_COLOURS.Length - 1))];
+            var brightness = 1 - adjustedIterationNumber / iterationNumberLimit;
+            var baseColour = BASE_COLOURS[(int)Math.Round(iterationNumber / (double)iterationNumberLimit * 
+                                            (BASE_COLOURS.Length - 1))];
 
-            var r = (int)(baseColor.R * brightness);
-            var g = (int)(baseColor.G * brightness);
-            var b = (int)(baseColor.B * brightness);
+            var r = (int)(baseColour.R * brightness);
+            var g = (int)(baseColour.G * brightness);
+            var b = (int)(baseColour.B * brightness);
 
             return 255 << ALPHA_OFFSET | r << RED_OFFSET | 
                     g << GREEN_OFFSET | b << BLUE_OFFSET;
