@@ -4,12 +4,12 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NEATSpacesLibrary.GeneticAlgorithms;
+using CPPNNEAT.GeneticAlgorithms;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
-using NEATSpacesLibrary.CPPNNEAT;
+using CPPNNEAT.CPPNNEAT;
 using System.Numerics;
 using MandelbrotCPPNNEAT;
 

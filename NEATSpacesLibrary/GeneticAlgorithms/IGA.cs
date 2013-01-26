@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NEATSpacesLibrary.GeneticAlgorithms
+namespace CPPNNEAT.GeneticAlgorithms
 {
     /// <summary>
     /// This interface allows variables to have a BaseGA type without having to specify

@@ -83,9 +83,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NEATSpacesLibrary\NEATSpacesLibrary.csproj">
+    <ProjectReference Include="..\..\NEATSpacesLibrary\CPPNNEAT.csproj">
       <Project>{9A081F3C-3C49-4195-9132-B6F5E97B8935}</Project>
-      <Name>NEATSpacesLibrary</Name>
+      <Name>CPPNNEAT</Name>
     </ProjectReference>
     <ProjectReference Include="..\MandelbrotCPPNNEAT\MandelbrotCPPNNEAT.csproj">
       <Project>{19EA8365-7B90-4BF2-9C05-D90B684318C4}</Project>

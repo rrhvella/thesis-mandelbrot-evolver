@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NEATSpacesLibrary.CPPNNEAT;
+using CPPNNEAT.CPPNNEAT;
 using System.Numerics;
-using NEATSpacesLibrary.GeneticAlgorithms;
-using NEATSpacesLibrary.Extensions;
+using CPPNNEAT.GeneticAlgorithms;
+using CPPNNEAT.Extensions;
 using MandelbrotCPPNNEAT;
 
 namespace MandelbrotCPPNNEAT

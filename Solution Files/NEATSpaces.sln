@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NEATSpacesLibrary", "..\NEATSpacesLibrary\NEATSpacesLibrary.csproj", "{9A081F3C-3C49-4195-9132-B6F5E97B8935}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CPPNNEAT", "..\NEATSpacesLibrary\CPPNNEAT.csproj", "{9A081F3C-3C49-4195-9132-B6F5E97B8935}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComplexCPPNNEATSelection", "ComplexCPPNNEATSelection\ComplexCPPNNEATSelection.csproj", "{0677BC40-68CA-4195-83F5-3D0D1BB267C0}"
 EndProject

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NEATSpacesLibrary.GeneticAlgorithms;
+using CPPNNEAT.GeneticAlgorithms;
 
-namespace NEATSpacesLibrary.CPPNNEAT
+namespace CPPNNEAT.CPPNNEAT
 {
     /// <summary>
     /// This interface allows variables to have a CPPNNEATGenome type without having to specify

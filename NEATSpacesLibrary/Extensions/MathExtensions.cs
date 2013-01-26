@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Numerics;
 
-namespace NEATSpacesLibrary.Extensions
+namespace CPPNNEAT.Extensions
 {
     /// <summary>
     /// A few useful math functions which are not present in the default math class.

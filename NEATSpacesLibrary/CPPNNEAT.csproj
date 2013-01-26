@@ -8,7 +8,7 @@
     <ProjectGuid>{9A081F3C-3C49-4195-9132-B6F5E97B8935}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NEATSpacesLibrary</RootNamespace>
+    <RootNamespace>CPPNNEAT</RootNamespace>
     <AssemblyName>NEATSpacesLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

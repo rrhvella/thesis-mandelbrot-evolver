@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using NEATSpacesLibrary.CPPNNEAT;
+using CPPNNEAT.CPPNNEAT;
 using System.Numerics;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;

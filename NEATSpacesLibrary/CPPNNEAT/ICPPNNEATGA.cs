@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Numerics;
-using NEATSpacesLibrary.GeneticAlgorithms;
+using CPPNNEAT.GeneticAlgorithms;
 
-namespace NEATSpacesLibrary.CPPNNEAT
+namespace CPPNNEAT.CPPNNEAT
 {
     /// <summary>
     /// This interface allows variables to have a CPPNNEATGA type without having to specify

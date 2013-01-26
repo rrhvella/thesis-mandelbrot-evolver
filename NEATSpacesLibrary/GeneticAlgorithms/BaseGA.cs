@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NEATSpacesLibrary.Extensions;
+using CPPNNEAT.Extensions;
 using System.Threading.Tasks;
 using System.Collections;
 
-namespace NEATSpacesLibrary.GeneticAlgorithms
+namespace CPPNNEAT.GeneticAlgorithms
 {
     /// <summary>
     /// Represents an event fired by a genetic algorithm.

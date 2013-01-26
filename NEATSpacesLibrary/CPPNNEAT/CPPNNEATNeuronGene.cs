@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NEATSpacesLibrary.GeneticAlgorithms;
+using CPPNNEAT.GeneticAlgorithms;
 using System.Numerics;
 
-namespace NEATSpacesLibrary.CPPNNEAT
+namespace CPPNNEAT.CPPNNEAT
 {
     /// <summary>
     /// Classifies neurons by their function with a network.

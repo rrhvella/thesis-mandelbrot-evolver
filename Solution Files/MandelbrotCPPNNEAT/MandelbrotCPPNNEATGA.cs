@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NEATSpacesLibrary.CPPNNEAT;
-using NEATSpacesLibrary.GeneticAlgorithms;
+using CPPNNEAT.CPPNNEAT;
+using CPPNNEAT.GeneticAlgorithms;
 using System.Numerics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using NEATSpacesLibrary.Extensions;
+using CPPNNEAT.Extensions;
 using MandelbrotCPPNNEAT;
 
 namespace MandelbrotCPPNNEAT

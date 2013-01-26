@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NEATSpacesLibrary.Extensions;
+using CPPNNEAT.Extensions;
 
-namespace NEATSpacesLibrary.GeneticAlgorithms
+namespace CPPNNEAT.GeneticAlgorithms
 {
     /// <summary>
     /// Base class for genetic algorithms which use speciation.

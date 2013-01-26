@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Numerics;
-using NEATSpacesLibrary.Extensions;
+using CPPNNEAT.Extensions;
 
-namespace NEATSpacesLibrary.CPPNNEAT
+namespace CPPNNEAT.CPPNNEAT
 {
     /// <summary>
     /// Stores a set of activation function factories as static methods.

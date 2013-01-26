@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Numerics;
 
-namespace NEATSpacesLibrary.CPPNNEAT
+namespace CPPNNEAT.CPPNNEAT
 {
     /// <summary>
     /// Represents a CPPN network.

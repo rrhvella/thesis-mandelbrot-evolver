@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 
-namespace NEATSpacesLibrary.GeneticAlgorithms
+namespace CPPNNEAT.GeneticAlgorithms
 {
     /// <summary>
     /// Base class for genomes in a genetic algorithm.

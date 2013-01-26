@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NEATSpacesLibrary.Extensions
+namespace CPPNNEAT.Extensions
 {
     /// <summary>
     /// Extends the functionality of objects implementing the IList interface.

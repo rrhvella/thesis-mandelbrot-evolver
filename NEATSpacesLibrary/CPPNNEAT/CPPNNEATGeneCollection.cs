@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NEATSpacesLibrary.Extensions;
-using NEATSpacesLibrary.GeneticAlgorithms;
+using CPPNNEAT.Extensions;
+using CPPNNEAT.GeneticAlgorithms;
 using System.Numerics;
 
-namespace NEATSpacesLibrary.CPPNNEAT
+namespace CPPNNEAT.CPPNNEAT
 {
     /// <summary>
     /// Extends the number of methods present in IEnumerable<CPPNNEATLinkGene>.
