@@ -179,6 +179,7 @@ namespace ComplexCPPNNEATSelection
                 fractalView.Show();
             }
 
+            
             //Build the GA.
             this.ga = new MandelbrotCPPNNEATGA(POPULATION_SIZE,
                                     delegate(MandelbrotCPPNNEATGenome genome)
