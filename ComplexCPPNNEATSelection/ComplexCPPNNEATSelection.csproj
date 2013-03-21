@@ -83,10 +83,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="draw-graphs.py" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\CPPNNEAT\CPPNNEAT.csproj">
+    <ProjectReference Include="..\CPPNNEAT\CPPNNEAT.csproj">
       <Project>{9A081F3C-3C49-4195-9132-B6F5E97B8935}</Project>
       <Name>CPPNNEAT</Name>
     </ProjectReference>
