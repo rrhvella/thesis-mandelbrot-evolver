@@ -99,6 +99,11 @@ namespace ComplexCPPNNEATSelection
                 MessageBox.Show(MESSAGE_ON_WRITE_ERROR);
                 return;
             }
+            catch (IOException ie)
+            {
+                MessageBox.Show(MESSAGE_ON_WRITE_ERROR);
+                return;
+            }
 
             Application.Run(form); 
         }
@@ -160,6 +165,10 @@ namespace ComplexCPPNNEATSelection
                 MessageBox.Show(MESSAGE_ON_WRITE_ERROR);
             }
             catch (UnauthorizedAccessException uae)
+            {
+                MessageBox.Show(MESSAGE_ON_WRITE_ERROR);
+            }
+            catch (IOException ie)
             {
                 MessageBox.Show(MESSAGE_ON_WRITE_ERROR);
             }
