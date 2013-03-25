@@ -101,7 +101,7 @@ namespace ComplexCPPNNEATSelection
         {
             get
             {
-                if (fractalImageCacheInvalidated)
+                if (fractalImageCacheInvalidated && Genome != null)
                 {
                     fractalImage = Genome.Phenome.GetImage(ViewResolutionWidth, ViewResolutionHeight, ESCAPE);
                     fractalImageCacheInvalidated = false;
