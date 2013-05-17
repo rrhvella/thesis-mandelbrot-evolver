@@ -71,7 +71,6 @@
     <Compile Include="CPPNNEAT\CPPNNEATGATests.cs" />
     <Compile Include="CPPNNEAT\CPPNNEATGeneCollectionTests.cs" />
     <Compile Include="Extensions\ListExtensionsTest.cs" />
-    <Compile Include="NEATSpaces\MapTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
