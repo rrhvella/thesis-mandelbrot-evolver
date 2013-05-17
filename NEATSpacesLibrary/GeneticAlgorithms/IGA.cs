@@ -19,7 +19,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         void Initialise();
 
-        void SteadyStateIterate();
         void Update();
 
         void UpdateGenomes();

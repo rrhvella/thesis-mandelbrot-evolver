@@ -72,7 +72,6 @@
     <Compile Include="GeneticAlgorithms\ISpeciatedGA.cs" />
     <Compile Include="GeneticAlgorithms\SpeciatedGenome.cs" />
     <Compile Include="GeneticAlgorithms\Species.cs" />
-    <Compile Include="GeneticAlgorithms\SteadyStateGA.cs" />
     <Compile Include="GeneticAlgorithms\Genome.cs" />
     <Compile Include="CPPNNEAT\CPPNNetwork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

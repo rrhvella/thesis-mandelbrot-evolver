@@ -41,55 +41,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         }
     }
 
-    public class GASteadyStateSelectionResult<GenomeType, GType, PType> : IDebugabble where GenomeType: Genome<GType, PType>
-    {
-        public GenomeType Parent
-        {
-            get;
-            private set;
-        }
-
-        public GenomeType Partner
-        {
-            get;
-            private set;
-        }
-
-        public GenomeType[] IndividualsToReplace
-        {
-            get;
-            private set;
-        }
-
-        public GASteadyStateSelectionResult(GenomeType parent, GenomeType partner, 
-                        GenomeType individualToReplace1, GenomeType individualToReplace2)
-        {
-            this.Parent = parent;
-            this.Partner = partner;
-
-            this.IndividualsToReplace = new[] { individualToReplace1, individualToReplace2 };
-        }
-
-        public string DebugInformation()
-        {
-            var result = new StringBuilder();
-
-            result.AppendLine("Parent: ");
-            result.AppendLine(Parent.DebugInformation());
-
-            result.AppendLine("Partner: ");
-            result.AppendLine(Partner.DebugInformation());
-
-            result.AppendLine("Individual to replace 1: ");
-            result.AppendLine(IndividualsToReplace[0].DebugInformation());
-
-            result.AppendLine("Individual to replace 2: ");
-            result.AppendLine(IndividualsToReplace[1].DebugInformation());
-
-            return result.ToString();
-        }
-    }
-
     public class GAGenerationalSelectionResult<GenomeType, GType, PType> : IDebugabble where GenomeType : Genome<GType, PType>
     {
         public IList<GenomeType> ToRetain 
@@ -329,46 +280,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         protected abstract GAGenerationalSelectionResult<GenomeType, GType, PType> PerformGenerationalSelection();
 
-        public void SteadyStateIterate()
-        {
-            if (Failed)
-            {
-                return;
-            }
-
-            if (IterationBegin != null)
-            {
-                IterationBegin(this, new IterationEventArgs(iterationNumber));
-            }
-
-            var selection = PerformSteadyStateSelection();
-            previousChildren = selection.Parent.Crossover(selection.Partner);
-
-            foreach (var i in Enumerable.Range(0, selection.IndividualsToReplace.Length))
-            {
-                population.Remove(selection.IndividualsToReplace[i]);
-
-                if (GenomeRemoved != null)
-                {
-                    GenomeRemoved(this, new GenomeEventArgs<GenomeType>(selection.IndividualsToReplace[i]));
-                }
-
-                previousChildren[i].Parent = this;
-                previousChildren[i].Mutate();
-
-                AddGenome((GenomeType)previousChildren[i]);
-            }
-
-            Update();
-
-            if (IterationComplete != null)
-            {
-                IterationComplete(this, new IterationEventArgs(++iterationNumber));
-            }
-
-            previousSelection = selection;
-        }
-
         public void ForceUpdateGenomes()
         {
             foreach (var genome in population)
@@ -385,8 +296,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             bestCacheInvalidated = true;
             averageCacheInvalidated = true;
         }
-
-        protected abstract GASteadyStateSelectionResult<GenomeType, GType, PType> PerformSteadyStateSelection();
 
         protected virtual string InnerDebugInformation()
         {

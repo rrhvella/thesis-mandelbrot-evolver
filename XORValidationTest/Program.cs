@@ -1,5 +1,4 @@
 ﻿//#define DEBUG_GA
-//#define GENERATIONAL_GA
 
 using System;
 using System.Collections.Generic;
@@ -16,11 +15,7 @@ namespace XORValidationTest
 #if DEBUG_GA
         private const int NUMBER_OF_RUNS = 1;
         private static int POPULATION_SIZE = 10;
-#if GENERATIONAL_GA
         private static int MATING_LIMIT = 100;
-#else 
-        private static int MATING_LIMIT = 5000;
-#endif
 
 #else 
         private const int NUMBER_OF_RUNS = 100;
@@ -29,21 +24,12 @@ namespace XORValidationTest
 #endif
 
         
-#if GENERATIONAL_GA
         private const int MATING_EVENTS_PER_GENERATION = 1;
         private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
         private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
         private static double MAX_PERTURBATION = 2.5;
         private const double MATCHING_GENES_WEIGHT = 0.4;
         private static double ELITISM_RATE = 0.2;
-#else
-        private const int MATING_EVENTS_PER_GENERATION = 75;
-        private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
-        private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
-        private static double MAX_PERTURBATION = 2.5;
-        private const double MATCHING_GENES_WEIGHT = 0.4;
-        private static double ELITISM_RATE = 0.2;
-#endif
 
         private const int ITERATIONS_TO_CLEAR_LINK_CACHE = MATING_EVENTS_PER_GENERATION;
         private static readonly double[] CORRECT_RESULT = new double[] {0, 1, 1, 0};
@@ -135,9 +121,7 @@ namespace XORValidationTest
                 testGA.DisjointGenesWeight = DISJOINT_GENES_WEIGHT;
                 testGA.MatchingGenesWeight = MATCHING_GENES_WEIGHT;
 
-#if GENERATIONAL_GA
                 testGA.CrossoverRate = CROSSOVER_RATE;
-#endif
                 testGA.ElitismRate = ELITISM_RATE;
                 testGA.InterSpeciesMatingRate = INTERSPECIES_MATING_RATE;
 
@@ -147,11 +131,8 @@ namespace XORValidationTest
 
                 while (!testGA.Failed && !OptimalNetworkFound(testGA.Best))
                 {
-#if GENERATIONAL_GA
                     testGA.GenerationalIterate();
-#else 
-                    testGA.SteadyStateIterate();
-#endif
+
                     if (++matingEvents == MATING_LIMIT)
                     {
                         break;
@@ -220,11 +201,7 @@ namespace XORValidationTest
         private static void PrintInfo(int generationIndex, int matingEventsCompleted, CPPNNEATGA ga)
         {
             Console.Clear();
-#if GENERATIONAL_GA
             Console.WriteLine("Generational");
-#else
-                        Console.WriteLine("Steady-State");
-#endif
             Console.WriteLine();
             Console.WriteLine(String.Format("{0} out of {1} runs completed.", generationIndex, NUMBER_OF_RUNS));
 
