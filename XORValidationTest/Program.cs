@@ -52,6 +52,8 @@ namespace XORValidationTest
         private const double CROSSOVER_RATE = 0.75;
         private const double MATE_BY_AVERAGING_RATE = 0.4;
 
+        private const int NUMBER_OF_INPUTS = 2;
+
         private static List<int> Generations;
         private static double AverageGenerations;
         private static double STDDEVGenerations;
@@ -92,7 +94,7 @@ namespace XORValidationTest
             foreach(var i in Enumerable.Range(0, NUMBER_OF_RUNS)) 
             {
                 //Initialise the GA.
-                var testGA = new CPPNNEATGA(2, POPULATION_SIZE, FitnessFunction, 
+                var testGA = new CPPNNEATGA(NUMBER_OF_INPUTS, POPULATION_SIZE, FitnessFunction, 
                     new List<Func<double,double>>() {
                         CPPNActivationFunctions.SteepenedSigmoidActivationFunction,
                         CPPNActivationFunctions.GaussActivationFunction,
