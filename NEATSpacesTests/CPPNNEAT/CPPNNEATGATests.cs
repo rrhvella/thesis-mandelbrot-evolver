@@ -11,7 +11,6 @@ namespace NEATSpacesTests.CPPNNEAT
     {
         [TestCase(1)]
         [TestCase(2)]
-        [TestCase(3)]
         public void TestConstructor(int numberOfInputs)
         {
             var newGA = new CPPNNEATGA(numberOfInputs, 0, null, 
