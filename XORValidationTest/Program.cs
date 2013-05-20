@@ -14,39 +14,39 @@ namespace XORValidationTest
     {
 #if DEBUG_GA
         private const int NUMBER_OF_RUNS = 1;
-        private static int POPULATION_SIZE = 10;
-        private static int MATING_LIMIT = 100;
+        private const int POPULATION_SIZE = 10;
+        private const int MATING_LIMIT = 100;
 
 #else 
         private const int NUMBER_OF_RUNS = 100;
-        private static int POPULATION_SIZE = 150;
-        private static int MATING_LIMIT = -1;
+        private const int POPULATION_SIZE = 150;
+        private const int MATING_LIMIT = -1;
 #endif
 
         
         private const int MATING_EVENTS_PER_GENERATION = 1;
-        private static int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
-        private static double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
-        private static double MAX_PERTURBATION = 2.5;
+        private const int NO_INNOVATION_THRESHOLD = MATING_EVENTS_PER_GENERATION * 15;
+        private const double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
+        private const double MAX_PERTURBATION = 2.5;
         private const double MATCHING_GENES_WEIGHT = 0.4;
-        private static double ELITISM_RATE = 0.2;
+        private const double ELITISM_RATE = 0.2;
 
         private const int ITERATIONS_TO_CLEAR_LINK_CACHE = MATING_EVENTS_PER_GENERATION;
         private static readonly double[] CORRECT_RESULT = new double[] {0, 1, 1, 0};
 
-        private static double WEIGHT_MUTATION_RATE = 0.8;
-        private static double NEW_NEURON_RATE = 0.03;
-        private static double NEW_LINK_RATE = 0.05;
+        private const double WEIGHT_MUTATION_RATE = 0.8;
+        private const double NEW_NEURON_RATE = 0.03;
+        private const double NEW_LINK_RATE = 0.05;
 
-        private static double WEIGHT_PERTUBATION_RATE = 0.9;
+        private const double WEIGHT_PERTUBATION_RATE = 0.9;
 
-        private static double DISABLE_GENE_RATE = 0.75;
-        private static double MAX_WEIGHT = MAX_PERTURBATION;
+        private const double DISABLE_GENE_RATE = 0.75;
+        private const double MAX_WEIGHT = MAX_PERTURBATION;
 
         private const double EXCESS_GENES_WEIGHT = 1.0;
         private const double DISJOINT_GENES_WEIGHT = 1.0;
 
-        private static double INTERSPECIES_MATING_RATE = 0.001;
+        private const double INTERSPECIES_MATING_RATE = 0.001;
 
         private const string DEBUG_FILE = "debug.txt";
         private const double CROSSOVER_RATE = 0.75;
