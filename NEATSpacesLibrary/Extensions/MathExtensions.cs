@@ -42,22 +42,5 @@ namespace NEATSpacesLibrary.Extensions
         {
             return RandomInteger(0, max);
         }
-        
-        public static double EuclideanDistance(double x, double y)
-        {
-            return Math.Sqrt(x*x + y*y);
-        }
-
-        public static int AbsMod(int n, int b)
-        {
-            n %= b;
-
-            if(n < 0) 
-            {
-                n += b;     
-            }
-
-            return n;
-        }
     }
 }
