@@ -15,7 +15,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public double InterSpeciesMatingRate { get; set; }
         public double CompatibilityDistanceThreshold { get; set; }
         public int NoInnovationThreshold { get; set; }
-        public double ElitismRate { get; set; }
+        public double SurvivalThreshold { get; set; }
 
         private List<Species<GType, PType>> populationSpecies;
         private int SPECIES_CHAMPION_THRESHOLD = 5;
@@ -101,7 +101,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
         private IList<GenomeType> SelectBreeders(IEnumerable<GenomeType> candidates)
         {
-            return candidates.Take((int)Math.Ceiling(candidates.Count() * ElitismRate)).ToList();
+            return candidates.Take((int)Math.Ceiling(candidates.Count() * SurvivalThreshold)).ToList();
         }
 
         protected override string InnerDebugInformation()

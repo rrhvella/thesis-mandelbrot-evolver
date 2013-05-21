@@ -29,7 +29,7 @@ namespace XORValidationTest
         private const double COMPATIBILITY_DISTANCE_THRESHOLD = 3.0;
         private const double MAX_PERTURBATION = 2.5;
         private const double MATCHING_GENES_WEIGHT = 0.4;
-        private const double ELITISM_RATE = 0.2;
+        private const double SURVIVAL_THRESHOLD = 0.2;
 
         private const int ITERATIONS_TO_CLEAR_LINK_CACHE = MATING_EVENTS_PER_GENERATION;
         private static readonly double[] CORRECT_RESULT = new double[] {0, 1, 1, 0};
@@ -124,7 +124,7 @@ namespace XORValidationTest
                 testGA.MatchingGenesWeight = MATCHING_GENES_WEIGHT;
 
                 testGA.CrossoverRate = CROSSOVER_RATE;
-                testGA.ElitismRate = ELITISM_RATE;
+                testGA.SurvivalThreshold = SURVIVAL_THRESHOLD;
                 testGA.InterSpeciesMatingRate = INTERSPECIES_MATING_RATE;
 
                 testGA.Initialise();
