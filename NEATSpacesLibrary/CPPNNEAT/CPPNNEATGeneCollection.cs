@@ -23,7 +23,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         public CPPNNEATGenome Parent
         {
             get;
-            internal set;
+            private set;
         }
 
         public CPPNNEATGA ParentGA 
@@ -89,8 +89,9 @@ namespace NEATSpacesLibrary.CPPNNEAT
             private set;
         }
 
-        public CPPNNEATGeneCollection()
+        public CPPNNEATGeneCollection(CPPNNEATGenome parent)
         {
+            this.Parent = parent;
             this.linkGeneMap = new Dictionary<int, CPPNNEATLinkGene>();
             this.NeuronGenes = new List<CPPNNEATNeuronGene>();
             this.neuronGeneSet = new HashSet<CPPNNEATNeuronGene>();

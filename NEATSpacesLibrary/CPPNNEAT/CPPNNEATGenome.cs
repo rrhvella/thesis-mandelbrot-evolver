@@ -91,8 +91,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
 
         public CPPNNEATGenome(CPPNNEATGA parent): base(parent)
         {
-            this.GeneCollection = new CPPNNEATGeneCollection();
-            this.GeneCollection.Parent = this;
+            this.GeneCollection = new CPPNNEATGeneCollection(this);
         }
 
         public CPPNNEATGenome(CPPNNEATGA parentGA, CPPNNEATGenome parent, CPPNNEATGenome partner): this(parentGA)
@@ -284,8 +283,7 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             var result = (CPPNNEATGenome)this.MemberwiseClone();
 
-            result.GeneCollection = new CPPNNEATGeneCollection();
-            result.GeneCollection.Parent = result;
+            result.GeneCollection = new CPPNNEATGeneCollection(result);
 
             foreach (var linkGene in GeneCollection.LinkGenes)
             {
