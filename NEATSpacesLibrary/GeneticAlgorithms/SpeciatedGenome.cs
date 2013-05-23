@@ -15,6 +15,12 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             }
         }
         public Species<GType, PType> Species;
+        private CPPNNEAT.CPPNNEATGA parent;
+
+        public SpeciatedGenome(IGA parent): base(parent)
+        {
+        }
+
         public abstract double CompatibilityDistance(SpeciatedGenome<GType, PType> genome);
 
         public override void Update()

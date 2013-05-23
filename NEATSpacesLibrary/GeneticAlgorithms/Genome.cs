@@ -33,11 +33,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         {
             get
             {
-                if (Parent == null)
-                {
-                    throw new ApplicationException("Attempted to retrieve score from an orphan genome. Please use a genetic algortihm");
-                }
-
                 if (PhenomeExpired)
                 {
                     throw new ApplicationException("Attempted to retrieve score from a stale genome. Please force the genetic algorithm to update its genomes");
@@ -68,7 +63,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         public IGA Parent
         {
             get;
-            internal set;
+            private set;
         }
 
         private PType phenome;
@@ -76,11 +71,6 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
         {
             get
             {
-                if (Parent == null)
-                {
-                    throw new ApplicationException("Attempted to retrieve phenome from an orphan genome. Please use a genetic algortihm");
-                }
-
                 if (PhenomeExpired)
                 {
                     throw new ApplicationException("Attempted to retrieve phenome from a stale genome. Please force the genetic algorithm to update its genomes");
@@ -100,11 +90,17 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             protected set;
         }
 
+        public Genome(IGA parent)
+        {
+            this.Parent = parent;
+        }
+
         protected abstract PType GetPhenome();
         
         public abstract void Initialise();
         protected abstract Genome<GType, PType>[] InnerCrossover(Genome<GType, PType> partner);
         protected abstract void InnerMutate();
+
 
         public void UpdatePhenome()
         {

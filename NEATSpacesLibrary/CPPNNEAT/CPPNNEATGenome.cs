@@ -89,17 +89,14 @@ namespace NEATSpacesLibrary.CPPNNEAT
             }
         }
 
-        public CPPNNEATGenome() 
+        public CPPNNEATGenome(CPPNNEATGA parent): base(parent)
         {
             this.GeneCollection = new CPPNNEATGeneCollection();
             this.GeneCollection.Parent = this;
         }
 
-        public CPPNNEATGenome(CPPNNEATGenome parent, CPPNNEATGenome partner): this()
+        public CPPNNEATGenome(CPPNNEATGA parentGA, CPPNNEATGenome parent, CPPNNEATGenome partner): this(parentGA)
         {
-            this.Parent = parent.Parent;
-
-            var parentGA = Parent as CPPNNEATGA;
             var differences = new DifferenceAnalysis(parent.GeneCollection, partner.GeneCollection);
 
             var disjointAndExcessSource = differences.FirstCollection;
@@ -220,8 +217,8 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             return new Genome<CPPNNEATGeneCollection, CPPNNetwork>[] 
             {
-                new CPPNNEATGenome(this, (CPPNNEATGenome)partner),
-                new CPPNNEATGenome(this, (CPPNNEATGenome)partner)
+                new CPPNNEATGenome((CPPNNEATGA)Parent, this, (CPPNNEATGenome)partner),
+                new CPPNNEATGenome((CPPNNEATGA)Parent, this, (CPPNNEATGenome)partner)
             };
         }
 

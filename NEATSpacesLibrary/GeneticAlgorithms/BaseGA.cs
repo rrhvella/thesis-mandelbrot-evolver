@@ -100,7 +100,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
     }
 
     public abstract class BaseGA<GenomeType, GType, PType> : IGA
-        where GenomeType : Genome<GType, PType>, new()
+        where GenomeType : Genome<GType, PType>
     {
         public const int DEFAULT_TOURNAMENT_SIZE = 7;
 
@@ -204,13 +204,13 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
 
             foreach(var i in Enumerable.Range(0, populationSize)) 
             {
-                var newGenome = new GenomeType();
-                newGenome.Parent = this;
-
+                var newGenome = CreateGenome();
                 newGenome.Initialise();
                 AddGenome(newGenome);
             }
         }
+
+        public abstract GenomeType CreateGenome();
 
         private void AddGenome(GenomeType genome) 
         {

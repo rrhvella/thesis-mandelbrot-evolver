@@ -10,7 +10,7 @@ namespace NEATSpacesLibrary.GeneticAlgorithms
             BaseGA<GenomeType, GType, PType>,
             ISpeciatedGA, 
             IDebugabble
-            where GenomeType : SpeciatedGenome<GType, PType>, new()
+            where GenomeType : SpeciatedGenome<GType, PType>
     {
         public double InterSpeciesMatingRate { get; set; }
         public double CompatibilityDistanceThreshold { get; set; }

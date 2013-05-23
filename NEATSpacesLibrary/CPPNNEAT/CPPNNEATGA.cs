@@ -257,5 +257,10 @@ namespace NEATSpacesLibrary.CPPNNEAT
         {
             edgeInnovationNumberMap.Clear();
         }
+
+        public override CPPNNEATGenome CreateGenome()
+        {
+            return new CPPNNEATGenome(this);
+        }
     }
 }
