@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CPPNNEAT.GeneticAlgorithms
+namespace GeneticAlgorithms
 {
     public class Species<GType, PType>
     {

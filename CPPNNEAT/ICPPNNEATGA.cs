@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
-using CPPNNEAT.GeneticAlgorithms;
+using GeneticAlgorithms;
 
 namespace CPPNNEAT.CPPNNEAT
 {

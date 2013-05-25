@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CPPNNEAT.Extensions;
+using DotNetExtensions;
 
-namespace CPPNNEAT.GeneticAlgorithms
+namespace GeneticAlgorithms
 {
     public abstract class BaseSpeciatedGA<GenomeType, GType, PType> :
 BaseGA<GenomeType, GType, PType>,

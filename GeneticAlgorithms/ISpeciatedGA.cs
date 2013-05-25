@@ -1,4 +1,4 @@
-﻿namespace CPPNNEAT.GeneticAlgorithms
+﻿namespace GeneticAlgorithms
 {
     public interface ISpeciatedGA : IGA
     {

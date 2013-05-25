@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace CPPNNEAT.Extensions
+namespace DotNetExtensions
 {
     public static class MathExtensions
     {

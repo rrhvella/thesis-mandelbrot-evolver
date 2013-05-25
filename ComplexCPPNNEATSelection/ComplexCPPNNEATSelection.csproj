@@ -84,9 +84,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CPPNNEAT\CPPNNEAT.csproj">
+    <ProjectReference Include="..\CPPNNEAT\ComplexCPPNNEAT.csproj">
       <Project>{9A081F3C-3C49-4195-9132-B6F5E97B8935}</Project>
-      <Name>CPPNNEAT</Name>
+      <Name>ComplexCPPNNEAT</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DotNetExtensions\DotNetExtensions.csproj">
+      <Project>{94F9D698-F142-4082-9602-B34D5768F97D}</Project>
+      <Name>DotNetExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GeneticAlgorithms\GeneticAlgorithms.csproj">
+      <Project>{E17AEF26-00B9-4F5E-AA11-7C5EFAC4AEB2}</Project>
+      <Name>GeneticAlgorithms</Name>
     </ProjectReference>
     <ProjectReference Include="..\MandelbrotCPPNNEAT\MandelbrotCPPNNEAT.csproj">
       <Project>{19EA8365-7B90-4BF2-9C05-D90B684318C4}</Project>

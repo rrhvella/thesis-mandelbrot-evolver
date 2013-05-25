@@ -1,5 +1,5 @@
 ﻿using CPPNNEAT.CPPNNEAT;
-using CPPNNEAT.GeneticAlgorithms;
+using GeneticAlgorithms;
 
 namespace MandelbrotCPPNNEAT
 {

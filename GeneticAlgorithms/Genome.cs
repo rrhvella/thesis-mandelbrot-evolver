@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CPPNNEAT.GeneticAlgorithms
+namespace GeneticAlgorithms
 {
     public abstract class Genome<GType, PType>
     {
@@ -39,7 +39,7 @@ namespace CPPNNEAT.GeneticAlgorithms
         public IGA Parent
         {
             get;
-            internal set;
+            set;
         }
 
         private PType phenome;

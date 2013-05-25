@@ -1,4 +1,4 @@
-﻿namespace CPPNNEAT.GeneticAlgorithms
+﻿namespace GeneticAlgorithms
 {
     public abstract class SpeciatedGenome<GType, PType> : Genome<GType, PType>
     {

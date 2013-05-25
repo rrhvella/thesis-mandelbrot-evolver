@@ -4,7 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CPPNNEAT.GeneticAlgorithms;
+using GeneticAlgorithms;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Threading;

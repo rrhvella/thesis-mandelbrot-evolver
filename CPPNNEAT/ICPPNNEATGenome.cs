@@ -1,4 +1,4 @@
-﻿using CPPNNEAT.GeneticAlgorithms;
+﻿using GeneticAlgorithms;
 
 namespace CPPNNEAT.CPPNNEAT
 {

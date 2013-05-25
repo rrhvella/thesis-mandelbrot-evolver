@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{19EA8365-7B90-4BF2-9C05-D90B684318C4}</ProjectGuid>
+    <ProjectGuid>{E17AEF26-00B9-4F5E-AA11-7C5EFAC4AEB2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MandelbrotCPPNNEAT</RootNamespace>
-    <AssemblyName>MandelbrotCPPNNEAT</AssemblyName>
+    <RootNamespace>GeneticAlgorithms</RootNamespace>
+    <AssemblyName>GeneticAlgorithms</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,8 +33,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,19 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MandelbrotCPPNNEATGA.cs" />
-    <Compile Include="MandelbrotCPPNNEATGenome.cs" />
-    <Compile Include="MandelbrotCPPNNEATPhenome.cs" />
+    <Compile Include="BaseGA.cs" />
+    <Compile Include="BaseSpeciatedGA.cs" />
+    <Compile Include="Genome.cs" />
+    <Compile Include="IGA.cs" />
+    <Compile Include="ISpeciatedGA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpeciatedGenome.cs" />
+    <Compile Include="Species.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CPPNNEAT\ComplexCPPNNEAT.csproj">
-      <Project>{9A081F3C-3C49-4195-9132-B6F5E97B8935}</Project>
-      <Name>ComplexCPPNNEAT</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GeneticAlgorithms\GeneticAlgorithms.csproj">
-      <Project>{E17AEF26-00B9-4F5E-AA11-7C5EFAC4AEB2}</Project>
-      <Name>GeneticAlgorithms</Name>
+    <ProjectReference Include="..\DotNetExtensions\DotNetExtensions.csproj">
+      <Project>{94F9D698-F142-4082-9602-B34D5768F97D}</Project>
+      <Name>DotNetExtensions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

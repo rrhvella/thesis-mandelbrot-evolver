@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CPPNNEAT.Extensions
+namespace DotNetExtensions
 {
     public static class ListExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CPPNNEAT.GeneticAlgorithms
+namespace GeneticAlgorithms
 {
     public interface IGA
     {

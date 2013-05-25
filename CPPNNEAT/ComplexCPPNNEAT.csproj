@@ -59,28 +59,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CPPNNEAT\CPPNNEATActivationFunction.cs" />
-    <Compile Include="CPPNNEAT\BaseCPPNNEATGA.cs" />
-    <Compile Include="CPPNNEAT\CPPNNEATLinkGene.cs" />
-    <Compile Include="CPPNNEAT\CPPNNEATNeuronGene.cs" />
-    <Compile Include="CPPNNEAT\CPPNNetworkNeuron.cs" />
-    <Compile Include="CPPNNEAT\ICPPNNEATGA.cs" />
-    <Compile Include="CPPNNEAT\ICPPNNEATGenome.cs" />
-    <Compile Include="Extensions\ListExtensions.cs" />
-    <Compile Include="Extensions\MathExtensions.cs" />
-    <Compile Include="GeneticAlgorithms\BaseGA.cs" />
-    <Compile Include="CPPNNEAT\CPPNNEATGeneCollection.cs" />
-    <Compile Include="CPPNNEAT\CPPNNEATGenome.cs" />
-    <Compile Include="GeneticAlgorithms\IGA.cs" />
-    <Compile Include="GeneticAlgorithms\ISpeciatedGA.cs" />
-    <Compile Include="GeneticAlgorithms\SpeciatedGenome.cs" />
-    <Compile Include="GeneticAlgorithms\Species.cs" />
-    <Compile Include="GeneticAlgorithms\Genome.cs" />
-    <Compile Include="CPPNNEAT\CPPNNetwork.cs" />
+    <Compile Include="CPPNNEATActivationFunction.cs" />
+    <Compile Include="BaseCPPNNEATGA.cs" />
+    <Compile Include="CPPNNEATLinkGene.cs" />
+    <Compile Include="CPPNNEATNeuronGene.cs" />
+    <Compile Include="CPPNNetworkNeuron.cs" />
+    <Compile Include="ICPPNNEATGA.cs" />
+    <Compile Include="ICPPNNEATGenome.cs" />
+    <Compile Include="CPPNNEATGeneCollection.cs" />
+    <Compile Include="CPPNNEATGenome.cs" />
+    <Compile Include="CPPNNetwork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GeneticAlgorithms\BaseSpeciatedGA.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DotNetExtensions\DotNetExtensions.csproj">
+      <Project>{94F9D698-F142-4082-9602-B34D5768F97D}</Project>
+      <Name>DotNetExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GeneticAlgorithms\GeneticAlgorithms.csproj">
+      <Project>{E17AEF26-00B9-4F5E-AA11-7C5EFAC4AEB2}</Project>
+      <Name>GeneticAlgorithms</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
