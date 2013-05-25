@@ -197,6 +197,11 @@ where GenomeType : Genome<GType, PType>
 
         public void GenerationalIterate()
         {
+            if (Population == null)
+            {
+                throw new InvalidOperationException("Cannot perform iteration until genetic algorithm is initialised.");
+            }
+
             if (Failed)
             {
                 return;
