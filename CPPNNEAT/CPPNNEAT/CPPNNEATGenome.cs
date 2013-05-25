@@ -1,44 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Numerics;
 using CPPNNEAT.Extensions;
 using CPPNNEAT.GeneticAlgorithms;
-using System.Numerics;
 
 namespace CPPNNEAT.CPPNNEAT
 {
-    /// <summary>
-    /// CPPN-NEAT genome.
-    /// </summary>
-    /// <typeparam name="GType">The type of the genome genetic sequence. </typeparam>
-    /// <typeparam name="PType">The type of the phenome. </typeparam>
     public abstract class CPPNNEATGenome<GType, PType> : SpeciatedGenome<GType, PType>, ICPPNNEATGenome
-        where GType: CPPNNEATGeneCollection, new()
+where GType : CPPNNEATGeneCollection, new()
     {
-        /// <summary>
-        /// The number of links below which a genome is considered small.
-        /// </summary>
         private static int SMALL_GENOME_THRESHOLD = 20;
 
-        /// <summary>
-        /// Represents an analysis of the differences between two genomes.
-        /// </summary>
         public class DifferenceAnalysis
         {
-            /// <summary>
-            /// Represents a collection of results for a single genome.
-            /// </summary>
             public class DifferenceAnalysisCollection
             {
-                /// <summary>
-                /// The genes present in this genome which come after the last gene in the other 
-                /// genome.
-                /// </summary>
                 public List<CPPNNEATLinkGene> Excess { get; private set; }
-                /// <summary>
-                /// The genes present in this genome which are disjoint from the other genome.
-                /// </summary>
+
                 public List<CPPNNEATLinkGene> Disjoint { get; private set; }
 
                 public DifferenceAnalysisCollection()
@@ -48,25 +27,12 @@ namespace CPPNNEAT.CPPNNEAT
                 }
             }
 
-            /// <summary>
-            /// Represents a link gene which is present in both genomes.
-            /// </summary>
             public class Match
             {
-                /// <summary>
-                /// The instance in the first genome.
-                /// </summary>
-                public CPPNNEATLinkGene FirstCollection {get; private set;}
+                public CPPNNEATLinkGene FirstCollection { get; private set; }
 
-                /// <summary>
-                /// The instance in the second genome.
-                /// </summary>
-                public CPPNNEATLinkGene SecondCollection {get; private set;}
+                public CPPNNEATLinkGene SecondCollection { get; private set; }
 
-                /// <summary>
-                /// </summary>
-                /// <param name="firstCollection">The instance in the first genome.</param>
-                /// <param name="secondCollection">The instance in the second genome.</param>
                 public Match(CPPNNEATLinkGene firstCollection, CPPNNEATLinkGene secondCollection)
                 {
                     this.FirstCollection = firstCollection;
@@ -74,32 +40,18 @@ namespace CPPNNEAT.CPPNNEAT
                 }
             }
 
-            /// <summary>
-            /// The disjoint and excess genes in the first genome.
-            /// </summary>
             public DifferenceAnalysisCollection FirstCollection { get; private set; }
-            /// <summary>
-            /// The disjoint and excess genes in the second genome.
-            /// </summary>
+
             public DifferenceAnalysisCollection SecondCollection { get; private set; }
 
-            /// <summary>
-            /// The common genes between the two genomes.
-            /// </summary>
             public List<Match> Matches { get; private set; }
 
-            /// <summary>
-            /// </summary>
-            /// <param name="geneCollection1">The sequence of the first genome.</param>
-            /// <param name="geneCollection2">The sequence of the second genome. </param>
-            public DifferenceAnalysis(CPPNNEATGeneCollection geneCollection1, 
-                                    CPPNNEATGeneCollection geneCollection2)
+            public DifferenceAnalysis(CPPNNEATGeneCollection geneCollection1,
+CPPNNEATGeneCollection geneCollection2)
             {
                 this.FirstCollection = new DifferenceAnalysisCollection();
                 this.SecondCollection = new DifferenceAnalysisCollection();
 
-                //Place the genes of the two sequences side by side, iterate through them, and
-                //seperate the matched, disjoint and excess genes.
                 var link1 = geneCollection1.LinkGenes.GetEnumerator();
                 var link2 = geneCollection2.LinkGenes.GetEnumerator();
 
@@ -110,7 +62,7 @@ namespace CPPNNEAT.CPPNNEAT
 
                 while (link1.Current != null || link2.Current != null)
                 {
-                    if (link1.Current == null) 
+                    if (link1.Current == null)
                     {
                         SecondCollection.Excess.Add(link2.Current);
                         link2.MoveNext();
@@ -126,7 +78,7 @@ namespace CPPNNEAT.CPPNNEAT
 
                         link1.MoveNext();
                         link2.MoveNext();
-                    } 
+                    }
                     else if (link2.Current.InnovationNumber > link1.Current.InnovationNumber)
                     {
                         FirstCollection.Disjoint.Add(link1.Current);
@@ -141,25 +93,20 @@ namespace CPPNNEAT.CPPNNEAT
             }
         }
 
-        public CPPNNEATGenome() 
+        public CPPNNEATGenome()
         {
             this.GeneCollection = new GType();
             this.GeneCollection.Parent = this;
         }
 
-        /// <summary>
-        /// Initialises an individual based on the genomes of its parents.
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="partner"></param>
-        public CPPNNEATGenome(CPPNNEATGenome<GType, PType> parent, CPPNNEATGenome<GType, PType>  partner): this()
+        public CPPNNEATGenome(CPPNNEATGenome<GType, PType> parent, CPPNNEATGenome<GType, PType> partner)
+            : this()
         {
             this.Parent = parent.Parent;
 
             var parentGA = Parent as ICPPNNEATGA;
             var differences = new DifferenceAnalysis(parent.GeneCollection, partner.GeneCollection);
 
-            //Pick the source of the excess and disjoint genes based on the fitness.
             var disjointAndExcessSource = differences.FirstCollection;
 
             if (partner.Score > parent.Score)
@@ -168,11 +115,10 @@ namespace CPPNNEAT.CPPNNEAT
             }
             else if (partner.Score == parent.Score)
             {
-                disjointAndExcessSource = (parentGA.Random.NextDouble() <= 0.5) ? differences.FirstCollection : 
+                disjointAndExcessSource = (parentGA.Random.NextDouble() <= 0.5) ? differences.FirstCollection :
                                                                     differences.SecondCollection;
             }
 
-            //Determine the method to combine the weights.
             Func<CPPNNEATLinkGene, CPPNNEATLinkGene, Complex> weightSelector = null;
 
             if (parentGA.Random.NextDouble() <= parentGA.MateByAveragingRate)
@@ -181,13 +127,9 @@ namespace CPPNNEAT.CPPNNEAT
             }
             else
             {
-                weightSelector = (first, second) => (parentGA.Random.NextDouble() <= 0.5)? first.Weight : second.Weight;
+                weightSelector = (first, second) => (parentGA.Random.NextDouble() <= 0.5) ? first.Weight : second.Weight;
             }
 
-            //For each matched genes:
-            //- Copy the matched gene into the child.
-            //- Combine the weights.
-            //- Disable the gene, if it is disabled in either parent.
             foreach (var match in differences.Matches)
             {
                 var geneToCopy = match.FirstCollection;
@@ -205,9 +147,8 @@ namespace CPPNNEAT.CPPNNEAT
                 }
             }
 
-            //Copy the disjoint and excess genes from the selected source.
             foreach (var linkGene in disjointAndExcessSource
-                                    .Disjoint.Union(disjointAndExcessSource.Excess))
+                        .Disjoint.Union(disjointAndExcessSource.Excess))
             {
                 GeneCollection.TryAddLinkGene(linkGene.Copy());
             }
@@ -221,11 +162,10 @@ namespace CPPNNEAT.CPPNNEAT
             var totalDisjoint = differences.FirstCollection.Disjoint.Count + differences.SecondCollection.Disjoint.Count;
 
             var averageWeightDifference = differences.Matches
-                                                    .Select(match => 
+                                                    .Select(match =>
                                                             (match.FirstCollection.Weight - match.SecondCollection.Weight)
                                                             .Magnitude)
                                                     .Average();
-
 
             var n = (double)Math.Max(this.GeneCollection.LinkGenes.Count(),
                             genome.GeneCollection.LinkGenes.Count());
@@ -244,37 +184,27 @@ namespace CPPNNEAT.CPPNNEAT
                  parent.FunctionDifferenceWeight * averageFunctionDifference;
         }
 
-        /// <summary>
-        /// Returns the average difference between the function counts of genome1 and genome2.
-        /// </summary>
-        /// <param name="genome1"></param>
-        /// <param name="genome2"></param>
-        /// <returns></returns>
-        private static double GetAverageFunctionDifference(CPPNNEATGenome<GType, PType> genome1, 
-                                                        CPPNNEATGenome<GType, PType> genome2)
+        private static double GetAverageFunctionDifference(CPPNNEATGenome<GType, PType> genome1,
+        CPPNNEATGenome<GType, PType> genome2)
         {
             var functionDifferenceMap = genome1.GeneCollection.ActivationFunctions.GroupBy(func => func.Label)
                                                 .ToDictionary(group => group.Key, group => group.Count());
 
             foreach (var activationFunctionGroup in genome2.GeneCollection.ActivationFunctions.GroupBy(func => func.Label))
             {
-                if(!functionDifferenceMap.ContainsKey(activationFunctionGroup.Key)) 
+                if (!functionDifferenceMap.ContainsKey(activationFunctionGroup.Key))
                 {
                     functionDifferenceMap[activationFunctionGroup.Key] = 0;
                 }
 
-                functionDifferenceMap[activationFunctionGroup.Key] = 
-                                    Math.Abs(functionDifferenceMap[activationFunctionGroup.Key] - 
+                functionDifferenceMap[activationFunctionGroup.Key] =
+                                    Math.Abs(functionDifferenceMap[activationFunctionGroup.Key] -
                                         activationFunctionGroup.Count());
             }
-            
+
             return functionDifferenceMap.Average(pair => pair.Value);
         }
 
-        /// <summary>
-        /// Returns the network derived from this genome.
-        /// </summary>
-        /// <returns></returns>
         protected CPPNNetwork GetNetwork()
         {
             GeneCollection.Update();
@@ -293,7 +223,7 @@ namespace CPPNNEAT.CPPNNEAT
             var mutationProbabilities = new double[TOTAL_MUTATIONS];
 
             mutationProbabilities[LINK_MUTATION_INDEX] = parent.NewLinkRate;
-            mutationProbabilities[NEURON_MUTATION_INDEX]  = parent.NewNeuronRate;
+            mutationProbabilities[NEURON_MUTATION_INDEX] = parent.NewNeuronRate;
             mutationProbabilities[WEIGHT_MUTATION_INDEX] = parent.WeightMutationRate;
 
             var selected = Enumerable.Range(0, TOTAL_MUTATIONS).RouletteWheelSingle(i => mutationProbabilities[i]);
@@ -315,7 +245,7 @@ namespace CPPNNEAT.CPPNNEAT
                         {
                             if (Parent.Random.NextDouble() <= parent.WeightPertubationRate)
                             {
-                                link.Weight += MathExtensions.ComplexRandom(-parent.MaxPerturbation, 
+                                link.Weight += MathExtensions.ComplexRandom(-parent.MaxPerturbation,
                                                                             parent.MaxPerturbation);
                             }
                             else
@@ -333,7 +263,7 @@ namespace CPPNNEAT.CPPNNEAT
             GeneCollection.Initialise();
         }
 
-        public override string ToString() 
+        public override string ToString()
         {
             return String.Join("\r\n", GeneCollection.ValidLinks.Select(link => link.ToString()));
         }

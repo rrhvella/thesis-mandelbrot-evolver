@@ -1,101 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using CPPNNEAT.Extensions;
-using System.Threading.Tasks;
-using System.Collections;
 
 namespace CPPNNEAT.GeneticAlgorithms
 {
-    /// <summary>
-    /// Represents an event fired by a genetic algorithm.
-    /// </summary>
-    /// <typeparam name="GenomeType">The type of the genomes in the genetic algorithm.</typeparam>
     public class GenomeEventArgs<GenomeType> : EventArgs
     {
-        /// <summary>
-        /// The genome on which the event transpired.
-        /// </summary>
-        public GenomeType Genome 
+        public GenomeType Genome
         {
             get;
             private set;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="genome">The genome on which the event transpired.</param>
-        public GenomeEventArgs(GenomeType genome) 
+        public GenomeEventArgs(GenomeType genome)
         {
             this.Genome = genome;
         }
     }
 
-    /// <summary>
-    /// Represents an iteration related event fired by a genetic algorithm.
-    /// </summary>
     public class IterationEventArgs : EventArgs
     {
-        /// <summary>
-        /// The iteration number when the event transpired.
-        /// </summary>
-        public int IterationNumber 
+        public int IterationNumber
         {
             get;
             private set;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="iterationNumber">The iteration number when the event transpired.</param>
-        public IterationEventArgs(int iterationNumber) 
+        public IterationEventArgs(int iterationNumber)
         {
             this.IterationNumber = iterationNumber;
         }
     }
 
-
-    /// <summary>
-    /// Represents the results of a generational selection.
-    /// </summary>
-    /// <typeparam name="GenomeType">The genome type. </typeparam>
-    /// <typeparam name="GType">The type of the genome genetic sequence. </typeparam>
-    /// <typeparam name="PType">The type of the phenome. </typeparam>
-    public class GAGenerationalSelectionResult<GenomeType, GType, PType> 
-            where GenomeType : Genome<GType, PType>
+    public class GAGenerationalSelectionResult<GenomeType, GType, PType>
+where GenomeType : Genome<GType, PType>
     {
-        /// <summary>
-        /// The individuals which will be retained without modification.
-        /// </summary>
-        public IList<GenomeType> ToRetain 
-        { 
-            get; 
-            private set; 
+        public IList<GenomeType> ToRetain
+        {
+            get;
+            private set;
         }
 
-        /// <summary>
-        /// The individuals which will be mutated.
-        /// </summary>
-        public IList<GenomeType> ToMutate 
-        { 
-            get; 
-            private set; 
+        public IList<GenomeType> ToMutate
+        {
+            get;
+            private set;
         }
 
-        /// <summary>
-        /// The pairs of individuals which will be mated.
-        /// </summary>
-        public IList<Tuple<GenomeType, GenomeType>> ParentPairs 
-        { 
-            get; 
-            private set; 
+        public IList<Tuple<GenomeType, GenomeType>> ParentPairs
+        {
+            get;
+            private set;
         }
 
-        /// <summary>
-        /// The total number of individuals in the next population if all the requests in this selection 
-        /// are processed.
-        /// </summary>
         public int Count
         {
             get
@@ -112,44 +70,21 @@ namespace CPPNNEAT.GeneticAlgorithms
         }
     }
 
-    /// <summary>
-    /// Base class for all genetic algorithms.
-    /// </summary>
-    /// <typeparam name="GenomeType">The genome type. </typeparam>
-    /// <typeparam name="GType">The type of the genome genetic sequence. </typeparam>
-    /// <typeparam name="PType">The type of the phenome. </typeparam>
     public abstract class BaseGA<GenomeType, GType, PType> : IGA
-        where GenomeType : Genome<GType, PType>, new()
+where GenomeType : Genome<GType, PType>, new()
     {
-        /// <summary>
-        /// Fired when a new genome is added. 
-        /// </summary>
         public event EventHandler<GenomeEventArgs<GenomeType>> GenomeAdded;
 
-        /// <summary>
-        /// Fired when a selection has been performed. 
-        /// </summary>
         public event EventHandler<EventArgs> SelectionComplete;
 
-        /// <summary>
-        /// Fired before an iteration begins. 
-        /// </summary>
         public event EventHandler<IterationEventArgs> IterationBegin;
 
-        /// <summary>
-        /// Fired after an iteration has been completed. 
-        /// </summary>
         public event EventHandler<IterationEventArgs> IterationComplete;
 
-        /// <summary>
-        /// The total number of individuals in the population.
-        /// </summary>
         private int populationSize;
 
-        /// <summary>
-        /// The current population.
-        /// </summary>
         private List<GenomeType> population;
+
         public IList<GenomeType> Population
         {
             get
@@ -162,43 +97,32 @@ namespace CPPNNEAT.GeneticAlgorithms
             }
         }
 
-        /// <summary>
-        /// Is true if the GA can not perform anymore generations.
-        /// </summary>
         public virtual bool Failed
         {
-            get 
-            { 
-                return false;  
+            get
+            {
+                return false;
             }
         }
 
-        /// <summary>
-        /// The random number generator for the GA.
-        /// </summary>
         public Random Random
         {
             get;
             private set;
         }
 
-        /// <summary>
-        /// The function used to determine the fitness of an individual. 
-        /// </summary>
         private Func<GenomeType, double> scoreFunction;
 
-        /// <summary>
-        /// The genome which currently has the highest fitness.
-        /// </summary>
         private GenomeType best;
         private bool bestCacheInvalidated;
+
         public GenomeType Best
         {
             get
             {
                 if (bestCacheInvalidated)
                 {
-                	UpdateGenomes();
+                    UpdateGenomes();
                     best = Population.MaxBy(genome => genome.Score);
 
                     bestCacheInvalidated = false;
@@ -208,16 +132,11 @@ namespace CPPNNEAT.GeneticAlgorithms
             }
         }
 
-        /// <summary>
-        /// The seed of the random number generator.
-        /// </summary>
         private int RandomSeed;
 
-        /// <summary>
-        /// The average fitness of the population.
-        /// </summary>
         private double average;
         private bool averageCacheInvalidated;
+
         public double AverageScore
         {
             get
@@ -229,26 +148,18 @@ namespace CPPNNEAT.GeneticAlgorithms
 
                 if (averageCacheInvalidated)
                 {
-                	UpdateGenomes();
-                    average =  Population.Select(genome => genome.Score).Average();
+                    UpdateGenomes();
+                    average = Population.Select(genome => genome.Score).Average();
 
                     averageCacheInvalidated = false;
                 }
 
-                return average; 
+                return average;
             }
         }
 
-        /// <summary>
-        /// The total number of generations performed by this GA.
-        /// </summary>
         public int NumberOfGenerations { get; set; }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="populationSize">The number of individuals in the population.</param>
-        /// <param name="scoreFunction">The function used to determine the fitness of an individual.
-        /// </param>
         public BaseGA(int populationSize, Func<GenomeType, double> scoreFunction)
         {
             this.populationSize = populationSize;
@@ -258,14 +169,11 @@ namespace CPPNNEAT.GeneticAlgorithms
             this.Random = new Random(RandomSeed);
         }
 
-        /// <summary>
-        /// Initialises the GA's population.
-        /// </summary>
         public void Initialise()
         {
             this.Population = new List<GenomeType>(populationSize);
 
-            foreach(var i in Enumerable.Range(0, populationSize)) 
+            foreach (var i in Enumerable.Range(0, populationSize))
             {
                 var newGenome = new GenomeType();
                 newGenome.Parent = this;
@@ -277,11 +185,7 @@ namespace CPPNNEAT.GeneticAlgorithms
             this.NumberOfGenerations = 0;
         }
 
-        /// <summary>
-        /// Adds the given genome to the population.
-        /// </summary>
-        /// <param name="genome"></param>
-        private void AddGenome(GenomeType genome) 
+        private void AddGenome(GenomeType genome)
         {
             population.Add(genome);
             UpdateGenome(genome);
@@ -292,27 +196,20 @@ namespace CPPNNEAT.GeneticAlgorithms
             }
         }
 
-        /// <summary>
-        /// Performs a generational iteration of the GA.
-        /// </summary>
         public void GenerationalIterate()
         {
-            //If this GA has failed, not perform any more iterations.
             if (Failed)
             {
                 return;
             }
 
-            //Fire the iteration begin event.
             if (IterationBegin != null)
             {
                 IterationBegin(this, new IterationEventArgs(NumberOfGenerations));
             }
 
-            //Perform the selection.
             var generationalSelect = PerformGenerationalSelection();
 
-            //Rebuild the population from the requests made by the selection.
             population.Clear();
 
             if (SelectionComplete != null)
@@ -339,30 +236,19 @@ namespace CPPNNEAT.GeneticAlgorithms
                 AddGenome((GenomeType)child);
             }
 
-            //Mark all caches as stale.
             Update();
 
-            //Fire the iteration end event.
             if (IterationComplete != null)
             {
                 IterationComplete(this, new IterationEventArgs(NumberOfGenerations));
             }
 
-            //Increment the number of generations.
             NumberOfGenerations++;
         }
 
-        /// <summary>
-        /// Returns the results of a generational selection.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract GAGenerationalSelectionResult<GenomeType, GType, PType> 
-                PerformGenerationalSelection();
+        protected abstract GAGenerationalSelectionResult<GenomeType, GType, PType>
+PerformGenerationalSelection();
 
-        /// <summary>
-        /// Forcibly updates all the genomes, even if their scores and phenomes are not 
-        /// stale.
-        /// </summary>
         public void ForceUpdateGenomes()
         {
             foreach (var genome in population)
@@ -374,18 +260,12 @@ namespace CPPNNEAT.GeneticAlgorithms
             Update();
         }
 
-        /// <summary>
-        /// Marks the GA's caches as stale.
-        /// </summary>
         public void Update()
         {
             bestCacheInvalidated = true;
             averageCacheInvalidated = true;
         }
 
-        /// <summary>
-        /// Goes through all the genomes and updates their phenomes and scores if they are stale.
-        /// </summary>
         public void UpdateGenomes()
         {
             foreach (var genome in population.Where(elem => elem.PhenomeExpired))
@@ -394,9 +274,6 @@ namespace CPPNNEAT.GeneticAlgorithms
             }
         }
 
-        /// <summary>
-        /// Updates the phenome and score of the given genome, if it is stale.
-        /// </summary>
         private void UpdateGenome(GenomeType genome)
         {
             if (genome.PhenomeExpired)
