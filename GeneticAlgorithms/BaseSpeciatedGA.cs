@@ -8,7 +8,7 @@ namespace GeneticAlgorithms
     public abstract class BaseSpeciatedGA<GenomeType, GType, PType> :
 BaseGA<GenomeType, GType, PType>,
 ISpeciatedGA
-where GenomeType : SpeciatedGenome<GType, PType>, new()
+where GenomeType : SpeciatedGenome<GType, PType>
     {
         public double InterSpeciesMatingRate { get; set; }
 

@@ -71,7 +71,7 @@ where GenomeType : Genome<GType, PType>
     }
 
     public abstract class BaseGA<GenomeType, GType, PType> : IGA
-where GenomeType : Genome<GType, PType>, new()
+where GenomeType : Genome<GType, PType>
     {
         public event EventHandler<GenomeEventArgs<GenomeType>> GenomeAdded;
 
@@ -175,8 +175,7 @@ where GenomeType : Genome<GType, PType>, new()
 
             foreach (var i in Enumerable.Range(0, populationSize))
             {
-                var newGenome = new GenomeType();
-                newGenome.Parent = this;
+                var newGenome = CreateGenome();
 
                 newGenome.Initialise();
                 AddGenome(newGenome);
@@ -245,6 +244,8 @@ where GenomeType : Genome<GType, PType>, new()
 
             NumberOfGenerations++;
         }
+
+        protected abstract GenomeType CreateGenome();
 
         protected abstract GAGenerationalSelectionResult<GenomeType, GType, PType>
 PerformGenerationalSelection();

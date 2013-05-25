@@ -5,8 +5,7 @@ using CPPNNEAT.CPPNNEAT;
 
 namespace MandelbrotCPPNNEAT
 {
-    public class MandelbrotCPPNNEATGA : BaseCPPNNEATGA<MandelbrotCPPNNEATGenome, CPPNNEATGeneCollection,
-                                            MandelbrotCPPNNEATPhenome>, ICPPNNEATGA
+    public class MandelbrotCPPNNEATGA : BaseCPPNNEATGA<MandelbrotCPPNNEATGenome, MandelbrotCPPNNEATPhenome>, ICPPNNEATGA
     {
         private const int NUMBER_OF_INPUTS = 2;
 
@@ -28,6 +27,11 @@ List<Func<CPPNNEATActivationFunction>> canonicalFunctionList,
 Func<CPPNNEATActivationFunction> outputActivationFunction)
             : base(NUMBER_OF_INPUTS, populationSize, scoreFunction, canonicalFunctionList, outputActivationFunction, true)
         {
+        }
+
+        protected override MandelbrotCPPNNEATGenome CreateGenome()
+        {
+            return new MandelbrotCPPNNEATGenome(this);
         }
     }
 }

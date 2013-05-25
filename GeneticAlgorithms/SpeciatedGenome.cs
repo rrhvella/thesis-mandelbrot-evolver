@@ -12,6 +12,10 @@
 
         public Species<GType, PType> Species;
 
+        public SpeciatedGenome(IGA parent): base(parent)
+        {
+        }
+
         public abstract double CompatibilityDistance(SpeciatedGenome<GType, PType> genome);
 
         public override void Update()

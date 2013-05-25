@@ -18,10 +18,10 @@ namespace CPPNNEAT.CPPNNEAT
     {
         private Dictionary<int, CPPNNEATLinkGene> linkGeneMap;
 
-        internal ICPPNNEATGenome Parent
+        public ICPPNNEATGenome Parent
         {
             get;
-            set;
+            private set;
         }
 
         public IEnumerable<CPPNNEATActivationFunction> ActivationFunctions
@@ -87,8 +87,9 @@ namespace CPPNNEAT.CPPNNEAT
             private set;
         }
 
-        public CPPNNEATGeneCollection()
+        public CPPNNEATGeneCollection(ICPPNNEATGenome parent)
         {
+            this.Parent = parent;
             this.linkGeneMap = new Dictionary<int, CPPNNEATLinkGene>();
             this.neuronGeneSet = new HashSet<CPPNNEATNeuronGene>();
             this.possibleConnections = new HashSet<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>>();

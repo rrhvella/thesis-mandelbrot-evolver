@@ -7,10 +7,9 @@ using GeneticAlgorithms;
 
 namespace CPPNNEAT.CPPNNEAT
 {
-    public class BaseCPPNNEATGA<GenomeType, GType, PType> :
-BaseSpeciatedGA<GenomeType, GType, PType>
-        where GenomeType : CPPNNEATGenome<GType, PType>, new()
-        where GType : CPPNNEATGeneCollection, new()
+    public abstract class BaseCPPNNEATGA<GenomeType, PType> :
+BaseSpeciatedGA<GenomeType, CPPNNEATGeneCollection, PType>
+        where GenomeType : CPPNNEATGenome<PType>
     {
         private Dictionary<Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>, int> edgeInnovationNumberMap;
         private Dictionary<int, Tuple<CPPNNEATNeuronGene, CPPNNEATNeuronGene>> edgeMap;

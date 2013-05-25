@@ -39,7 +39,7 @@ namespace GeneticAlgorithms
         public IGA Parent
         {
             get;
-            set;
+            private set;
         }
 
         private PType phenome;
@@ -72,6 +72,11 @@ namespace GeneticAlgorithms
         {
             get;
             protected set;
+        }
+
+        public Genome(IGA parent)
+        {
+            this.Parent = parent;
         }
 
         protected abstract PType GetPhenome();

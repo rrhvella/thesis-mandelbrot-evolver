@@ -7,8 +7,7 @@ using GeneticAlgorithms;
 
 namespace CPPNNEAT.CPPNNEAT
 {
-    public abstract class CPPNNEATGenome<GType, PType> : SpeciatedGenome<GType, PType>, ICPPNNEATGenome
-where GType : CPPNNEATGeneCollection, new()
+    public abstract class CPPNNEATGenome<PType> : SpeciatedGenome<CPPNNEATGeneCollection, PType>, ICPPNNEATGenome
     {
         private static int SMALL_GENOME_THRESHOLD = 20;
 
@@ -93,18 +92,14 @@ CPPNNEATGeneCollection geneCollection2)
             }
         }
 
-        public CPPNNEATGenome()
+        public CPPNNEATGenome(ICPPNNEATGA parent): base(parent)
         {
-            this.GeneCollection = new GType();
-            this.GeneCollection.Parent = this;
+            this.GeneCollection = new CPPNNEATGeneCollection(this);
         }
 
-        public CPPNNEATGenome(CPPNNEATGenome<GType, PType> parent, CPPNNEATGenome<GType, PType> partner)
-            : this()
+        public CPPNNEATGenome(ICPPNNEATGA parentGA, CPPNNEATGenome<PType> parent, CPPNNEATGenome<PType> partner)
+            : this(parentGA)
         {
-            this.Parent = parent.Parent;
-
-            var parentGA = Parent as ICPPNNEATGA;
             var differences = new DifferenceAnalysis(parent.GeneCollection, partner.GeneCollection);
 
             var disjointAndExcessSource = differences.FirstCollection;
@@ -154,7 +149,7 @@ CPPNNEATGeneCollection geneCollection2)
             }
         }
 
-        public override double CompatibilityDistance(SpeciatedGenome<GType, PType> genome)
+        public override double CompatibilityDistance(SpeciatedGenome<CPPNNEATGeneCollection, PType> genome)
         {
             var differences = new DifferenceAnalysis(this.GeneCollection, genome.GeneCollection);
 
@@ -176,7 +171,7 @@ CPPNNEATGeneCollection geneCollection2)
             }
 
             var parent = Parent as ICPPNNEATGA;
-            var averageFunctionDifference = GetAverageFunctionDifference(this, (CPPNNEATGenome<GType, PType>)genome);
+            var averageFunctionDifference = GetAverageFunctionDifference(this, (CPPNNEATGenome<PType>)genome);
 
             return parent.ExcessGenesWeight * (totalExcess / n) +
                  parent.DisjointGenesWeight * (totalDisjoint / n) +
@@ -184,8 +179,8 @@ CPPNNEATGeneCollection geneCollection2)
                  parent.FunctionDifferenceWeight * averageFunctionDifference;
         }
 
-        private static double GetAverageFunctionDifference(CPPNNEATGenome<GType, PType> genome1,
-        CPPNNEATGenome<GType, PType> genome2)
+        private static double GetAverageFunctionDifference(CPPNNEATGenome<PType> genome1,
+        CPPNNEATGenome<PType> genome2)
         {
             var functionDifferenceMap = genome1.GeneCollection.ActivationFunctions.GroupBy(func => func.Label)
                                                 .ToDictionary(group => group.Key, group => group.Count());
@@ -268,12 +263,11 @@ CPPNNEATGeneCollection geneCollection2)
             return String.Join("\r\n", GeneCollection.ValidLinks.Select(link => link.ToString()));
         }
 
-        public override Genome<GType, PType> InnerCopy()
+        public override Genome<CPPNNEATGeneCollection, PType> InnerCopy()
         {
-            var result = (CPPNNEATGenome<GType, PType>)this.MemberwiseClone();
+            var result = (CPPNNEATGenome<PType>)this.MemberwiseClone();
 
-            result.GeneCollection = new GType();
-            result.GeneCollection.Parent = result;
+            result.GeneCollection = new CPPNNEATGeneCollection(result);
 
             foreach (var linkGene in GeneCollection.LinkGenes)
             {

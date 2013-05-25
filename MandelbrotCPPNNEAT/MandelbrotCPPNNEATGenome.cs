@@ -3,16 +3,15 @@ using GeneticAlgorithms;
 
 namespace MandelbrotCPPNNEAT
 {
-    public class MandelbrotCPPNNEATGenome : CPPNNEATGenome<CPPNNEATGeneCollection,
-                                                MandelbrotCPPNNEATPhenome>
+    public class MandelbrotCPPNNEATGenome : CPPNNEATGenome<MandelbrotCPPNNEATPhenome>
     {
-        public MandelbrotCPPNNEATGenome()
-            : base()
+        public MandelbrotCPPNNEATGenome(MandelbrotCPPNNEATGA parent)
+            : base(parent)
         {
         }
 
-        public MandelbrotCPPNNEATGenome(MandelbrotCPPNNEATGenome parent, MandelbrotCPPNNEATGenome partner)
-            : base(parent, partner)
+        public MandelbrotCPPNNEATGenome(MandelbrotCPPNNEATGA parentGA, MandelbrotCPPNNEATGenome parent, MandelbrotCPPNNEATGenome partner)
+            : base(parentGA, parent, partner)
         {
         }
 
@@ -25,7 +24,7 @@ namespace MandelbrotCPPNNEAT
         protected override Genome<CPPNNEATGeneCollection, MandelbrotCPPNNEATPhenome>
                 InnerCrossover(Genome<CPPNNEATGeneCollection, MandelbrotCPPNNEATPhenome> partner)
         {
-            return new MandelbrotCPPNNEATGenome((MandelbrotCPPNNEATGenome)this, (MandelbrotCPPNNEATGenome)partner);
+            return new MandelbrotCPPNNEATGenome((MandelbrotCPPNNEATGA)Parent, (MandelbrotCPPNNEATGenome)this, (MandelbrotCPPNNEATGenome)partner);
         }
     }
 }
