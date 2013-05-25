@@ -105,12 +105,6 @@ where GenomeType : Genome<GType, PType>
             }
         }
 
-        public Random Random
-        {
-            get;
-            private set;
-        }
-
         private Func<GenomeType, double> scoreFunction;
 
         private GenomeType best;
@@ -164,9 +158,6 @@ where GenomeType : Genome<GType, PType>
         {
             this.populationSize = populationSize;
             this.scoreFunction = scoreFunction;
-
-            this.RandomSeed = DateTime.Now.Millisecond;
-            this.Random = new Random(RandomSeed);
         }
 
         public void Initialise()

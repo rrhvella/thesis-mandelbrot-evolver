@@ -2,7 +2,7 @@
 using System.Numerics;
 using DotNetExtensions;
 
-namespace CPPNNEAT.CPPNNEAT
+namespace ComplexCPPNNEAT
 {
     public static class CPPNActivationFunctionFactories
     {

@@ -1,4 +1,4 @@
-﻿using CPPNNEAT.CPPNNEAT;
+﻿using ComplexCPPNNEAT;
 using GeneticAlgorithms;
 
 namespace MandelbrotCPPNNEAT

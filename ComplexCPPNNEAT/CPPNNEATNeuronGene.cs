@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CPPNNEAT.CPPNNEAT
+namespace ComplexCPPNNEAT
 {
     public enum CPPNNeuronType
     {

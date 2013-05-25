@@ -2,7 +2,7 @@
 using System.Numerics;
 using GeneticAlgorithms;
 
-namespace CPPNNEAT.CPPNNEAT
+namespace ComplexCPPNNEAT
 {
     public interface ICPPNNEATGA : ISpeciatedGA
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace CPPNNEAT.CPPNNEAT
+namespace ComplexCPPNNEAT
 {
     public abstract class CPPNNetworkNeuron
     {

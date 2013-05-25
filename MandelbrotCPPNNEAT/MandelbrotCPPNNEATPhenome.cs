@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using CPPNNEAT.CPPNNEAT;
+using ComplexCPPNNEAT;
 
 namespace MandelbrotCPPNNEAT
 {

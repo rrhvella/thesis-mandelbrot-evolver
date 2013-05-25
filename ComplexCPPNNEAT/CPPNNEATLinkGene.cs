@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace CPPNNEAT.CPPNNEAT
+namespace ComplexCPPNNEAT
 {
     public class CPPNNEATLinkGene
     {

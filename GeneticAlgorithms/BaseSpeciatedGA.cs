@@ -168,7 +168,7 @@ where GenomeType : SpeciatedGenome<GType, PType>
                     var parent = speciesBreeders.RandomSingle();
                     GenomeType partner = null;
 
-                    if (Random.NextDouble() <= InterSpeciesMatingRate)
+                    if (MathExtensions.RandomNumber() <= InterSpeciesMatingRate)
                     {
                         partner = Population.RandomSingle();
                     }

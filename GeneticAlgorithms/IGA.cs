@@ -9,11 +9,6 @@ namespace GeneticAlgorithms
             get;
         }
 
-        Random Random
-        {
-            get;
-        }
-
         void Initialise();
 
         void Update();

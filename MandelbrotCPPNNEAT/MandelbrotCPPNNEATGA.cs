@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using CPPNNEAT.CPPNNEAT;
+using ComplexCPPNNEAT;
 
 namespace MandelbrotCPPNNEAT
 {

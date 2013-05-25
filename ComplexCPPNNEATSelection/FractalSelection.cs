@@ -9,7 +9,7 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
-using CPPNNEAT.CPPNNEAT;
+using ComplexCPPNNEAT;
 using System.Numerics;
 using MandelbrotCPPNNEAT;
 

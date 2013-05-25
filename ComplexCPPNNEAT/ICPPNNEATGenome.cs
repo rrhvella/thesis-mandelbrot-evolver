@@ -1,6 +1,6 @@
 ﻿using GeneticAlgorithms;
 
-namespace CPPNNEAT.CPPNNEAT
+namespace ComplexCPPNNEAT
 {
     public interface ICPPNNEATGenome
     {

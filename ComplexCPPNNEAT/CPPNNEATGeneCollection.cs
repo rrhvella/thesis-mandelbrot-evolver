@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DotNetExtensions;
 
-namespace CPPNNEAT.CPPNNEAT
+namespace ComplexCPPNNEAT
 {
     public static class LinkGenesListExtensions
     {

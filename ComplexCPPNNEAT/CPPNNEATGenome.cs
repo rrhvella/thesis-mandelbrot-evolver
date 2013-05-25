@@ -5,7 +5,7 @@ using System.Numerics;
 using DotNetExtensions;
 using GeneticAlgorithms;
 
-namespace CPPNNEAT.CPPNNEAT
+namespace ComplexCPPNNEAT
 {
     public abstract class CPPNNEATGenome<PType> : SpeciatedGenome<CPPNNEATGeneCollection, PType>, ICPPNNEATGenome
     {
@@ -110,19 +110,19 @@ CPPNNEATGeneCollection geneCollection2)
             }
             else if (partner.Score == parent.Score)
             {
-                disjointAndExcessSource = (parentGA.Random.NextDouble() <= 0.5) ? differences.FirstCollection :
+                disjointAndExcessSource = (MathExtensions.RandomNumber() <= 0.5) ? differences.FirstCollection :
                                                                     differences.SecondCollection;
             }
 
             Func<CPPNNEATLinkGene, CPPNNEATLinkGene, Complex> weightSelector = null;
 
-            if (parentGA.Random.NextDouble() <= parentGA.MateByAveragingRate)
+            if (MathExtensions.RandomNumber() <= parentGA.MateByAveragingRate)
             {
                 weightSelector = (first, second) => (first.Weight + second.Weight) / 2;
             }
             else
             {
-                weightSelector = (first, second) => (parentGA.Random.NextDouble() <= 0.5) ? first.Weight : second.Weight;
+                weightSelector = (first, second) => (MathExtensions.RandomNumber() <= 0.5) ? first.Weight : second.Weight;
             }
 
             foreach (var match in differences.Matches)
@@ -136,7 +136,7 @@ CPPNNEATGeneCollection geneCollection2)
                 GeneCollection.TryAddLinkGene(newGene);
 
                 if ((!match.FirstCollection.Enabled || !match.SecondCollection.Enabled) &&
-                    Parent.Random.NextDouble() <= parentGA.DisableGeneRate)
+                    MathExtensions.RandomNumber() <= parentGA.DisableGeneRate)
                 {
                     GeneCollection.DisableLinkGene(newGene.InnovationNumber);
                 }
@@ -236,9 +236,9 @@ CPPNNEATGeneCollection geneCollection2)
                 case WEIGHT_MUTATION_INDEX:
                     foreach (var link in GeneCollection.LinkGenes)
                     {
-                        if (parent.Random.NextDouble() <= parent.WeightMutationRate)
+                        if (MathExtensions.RandomNumber() <= parent.WeightMutationRate)
                         {
-                            if (Parent.Random.NextDouble() <= parent.WeightPertubationRate)
+                            if (MathExtensions.RandomNumber() <= parent.WeightPertubationRate)
                             {
                                 link.Weight += MathExtensions.ComplexRandom(-parent.MaxPerturbation,
                                                                             parent.MaxPerturbation);

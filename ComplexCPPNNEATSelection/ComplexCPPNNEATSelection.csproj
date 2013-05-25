@@ -84,7 +84,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CPPNNEAT\ComplexCPPNNEAT.csproj">
+    <ProjectReference Include="..\ComplexCPPNNEAT\ComplexCPPNNEAT.csproj">
       <Project>{9A081F3C-3C49-4195-9132-B6F5E97B8935}</Project>
       <Name>ComplexCPPNNEAT</Name>
     </ProjectReference>

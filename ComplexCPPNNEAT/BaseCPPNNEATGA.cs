@@ -5,7 +5,7 @@ using System.Numerics;
 using DotNetExtensions;
 using GeneticAlgorithms;
 
-namespace CPPNNEAT.CPPNNEAT
+namespace ComplexCPPNNEAT
 {
     public abstract class BaseCPPNNEATGA<GenomeType, PType> :
 BaseSpeciatedGA<GenomeType, CPPNNEATGeneCollection, PType>
