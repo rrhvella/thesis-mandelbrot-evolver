@@ -1,4 +1,4 @@
-/*
+
 Copyright (c) 2013, robert.r.h.vella@gmail.com
 All rights reserved.
 
@@ -25,20 +25,3 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies, 
 either expressed or implied, of the FreeBSD Project.
-*/
-
-﻿using System.Reflection;
-using System.Runtime.InteropServices;
-
-[assembly: AssemblyTitle("CPPNNEAT")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CPPNNEAT")]
-[assembly: AssemblyCopyright("Copyright ©  2012")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
-[assembly: ComVisible(false)]
-[assembly: Guid("a6134c90-cb3d-4432-9497-82726813bad0")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
