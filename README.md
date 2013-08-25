@@ -17,3 +17,16 @@ Pressing the ‘Enter’ key.	|	* Iterates the genetic algorithm and replaces the th
 Clicking the output button.	|	Saves the genome displayed in the ‘fractal image preview’ to disk. 
 
 As this project was developed based on ideas discussed in published works, a list of references can be found in the [REFERENCES file](https://github.com/rrhvella/thesis-mandelbrot-evolver/blob/master/REFERENCES).
+
+Below are some of the artefacts which were generated using this software.
+
+![Example 1](https://raw.github.com/rrhvella/thesis-mandelbrot-evolver/master/Examples/1.png)
+![Example 2](https://raw.github.com/rrhvella/thesis-mandelbrot-evolver/master/Examples/2.png)
+![Example 3](https://raw.github.com/rrhvella/thesis-mandelbrot-evolver/master/Examples/3.png)
+![Example 4](https://raw.github.com/rrhvella/thesis-mandelbrot-evolver/master/Examples/4.png)
+![Example 5](https://raw.github.com/rrhvella/thesis-mandelbrot-evolver/master/Examples/5.png)
+![Example 6](https://raw.github.com/rrhvella/thesis-mandelbrot-evolver/master/Examples/6.png)
+![Example 7](https://raw.github.com/rrhvella/thesis-mandelbrot-evolver/master/Examples/7.png)
+![Example 8](https://raw.github.com/rrhvella/thesis-mandelbrot-evolver/master/Examples/8.png)
+![Example 9](https://raw.github.com/rrhvella/thesis-mandelbrot-evolver/master/Examples/9.png)
+![Example 10](https://raw.github.com/rrhvella/thesis-mandelbrot-evolver/master/Examples/10.png)
