@@ -1,0 +1,41 @@
+[1] 	D. Ashlock and J. Brooke, "Evolutionary Exploration of Complex Fractals," in Design by Evolution: Advances in Evolutionary Design, Springer, 2008, pp. 121-143.
+[2] 	A. P. Engelbrecht, "Supervised Learning Neural Networks," in Computational Intelligence: An Introduction, Chichester, John Wiley & Sons Ltd, 2007, pp. 27-54.
+[3] 	J. Togelius, G. N. Yannakakis, K. O. Stanley and C. Browne, "Search-Based Procedural Content Generation: A Taxonomy and Survey," IEEE Transactions on Computational Intelligence and AI in Games, vol. 3, no. 3, pp. 172 - 186, 2011. 
+[4] 	G. N. Yannakakis and J. Togelius, "Experience-Driven Procedural Content Generation," IEEE Transactions on Affective Computing, vol. 2, no. 3, pp. 147 - 161, 2011. 
+[5] 	D. Ashlock and J. A. Brown, "Fitness Functions for Searching the Mandelbrot Set," in IEEE Congress on Evolutionary Computation (CEC), New Orleans, 2011. 
+[6] 	R. Vella, Preliminary Project Report: Generating fractal art through complex neuroevolution, 2012. 
+[7] 	A. P. Engelbrecht, "Introduction to Computational Intelligence," in Computational Intelligence, an Introduction, Chichester, John Wiley & Sons Ltd, 2007, pp. 3-14.
+[8] 	S. Colton, R. L. de Mantaras and O. Stock, "Computational Creativity: Coming of Age.," AI Magazine, vol. 30, no. 3, pp. 11-14, 2009. 
+[9] 	S. J. Russell and P. Norvig, "Introduction," in Artificial Intelligence, A Modern Approach, New Jersey, Pearson Education, Inc., 2003, pp. 1 - 31.
+[10] 	P. Prusinkiewicz, "Score generation with L-systems," in International Computer Music Conference, Den Haag, Netherlands, 1986. 
+[11] 	D. Conklin, "Music Generation from Statistical Models," in AISB Symposium on Artiﬁcial Intelligence and Creativity in the Arts and Sciences, Aberystwyth, Wales, 2003. 
+[12] 	X.-S. Yang, "Metaheuristic Optimization," Scholarpedia, 2011. [Online]. Available: http://www.scholarpedia.org/article/Metaheuristic_Optimization. [Accessed 24 November 2012].
+[13] 	S. Boyd and L. Vandenberghe, "Introduction," in Convex Optimization, New York, Cambridge University Press, 2004, pp. 1-18.
+[14] 	S. Luke, "Population Methods," in Essentials of Metaheuristics, Lulu, 2009, pp. 29-53.
+[15] 	R. Rojas, "The Backpropagation Algorithm," in Neural Networks: A Systematic Introduction, Berlin, Springer-Verlag, 1996, pp. 151-184.
+[16] 	K. O. Stanley and R. Miikkulainen, "Evolving Neural Networks through Augmenting Topologies," Evolutionary Computation, vol. 10, no. 2, pp. 99-127, 2002. 
+[17] 	K. O. Stanley, "Compositional Pattern Producing Networks: A Novel Abstraction of Development," Genetic Programming and Evolvable Machines, vol. 8, no. 2, pp. 131-162, 2007. 
+[18] 	E. J. Hastings, R. K. Guha and K. O. Stanley, "Interactive Evolution of Particle Systems for Computer Graphics and Animation," IEEE Transactions on Evolutionary Computation, vol. 13, no. 2, pp. 418-432, 2009. 
+[19] 	E. J. Hastings, R. K. Guha and K. O. Stanley, "Evolving Content in the Galactic Arms Race Video Game," in IEEE Symposium on Computational Intelligence and Games, Piscataway, New Jersey, USA, 2009. 
+[20] 	J. E. Auerbach and J. C. Bongard, "Evolving Complete Robots with CPPN-NEAT: The Utility of Recurrent Connections," in Genetic and Evolutionary Computation Conference, Dublin, Ireland, 2011. 
+[21] 	W. Beyer, "Mandel zoom 00 mandelbrot set," 4 December 2006. [Online]. Available: http://en.wikipedia.org/wiki/File:Mandel_zoom_00_mandelbrot_set.jpg. [Accessed 11 November 2012].
+[22] 	D. Ashlock, C. Lee and C. McGuinness, "Search-Based Procedural Generation of Maze-Like Levels," IEEE Transactions on Computational Intelligence and AI in Games, vol. 3, no. 3, pp. 260 - 273, 2011. 
+[23] 	S. W. Ambler, "Introduction to Test Driven Development (TDD)," Agile Data, [Online]. Available: http://www.agiledata.org/essays/tdd.html. [Accessed 13 January 2013].
+[24] 	"Unit Testing," Microsoft, [Online]. Available: http://msdn.microsoft.com/en-us/library/aa292197(v=vs.71).aspx. [Accessed 01 January 2013].
+[25] 	K. G. Calkins, "Estimation and Confidence Intervals," Andrews University , 26 July 2005. [Online]. Available: http://www.andrews.edu/~calkins/math/edrm611/edrm09.htm. [Accessed 13 January 2013].
+[26] 	B. Venners and B. Eckel, "Generics in C#, Java, and C++, A Conversation with Anders Hejlsberg, Part VII, Page 2," [Online]. Available: http://www.artima.com/intv/generics2.html. [Accessed 13 January 2013].
+[27] 	"dynamic (C# Reference)," Microsoft, [Online]. Available: http://msdn.microsoft.com/en-us/library/dd264741(v=vs.100).aspx. [Accessed 13 January 2013].
+[28] 	B. Venners and B. Eckel, "Generics in C#, Java, and C++, A Conversation with Anders Hejlsberg, Part VII, Page 3," Artima Developer, [Online]. Available: http://www.artima.com/intv/generics3.html. [Accessed 13 January 2013].
+[29] 	K. Stanley, "Chapter 3: NeuroEvolution of Augmenting Topologies (NEAT)," in Efficient Evolution of Neural Networks through Complexification, Austin, Texas, The University of Texas, 2004, pp. 34-41.
+[30] 	"2.2 Fields," in The Princeton Companion to Mathematics, Princeton, Princeton University Press, 2008, pp. 20-21.
+[31] 	K. O. Stanley, "NEAT C++," University of Texas Neural Networks Research Group, 20 August 2011. [Online]. Available: http://nn.cs.utexas.edu/?neat-c. [Accessed 1 December 2012].
+[32] 	"Comparison of Two Means," Department of Statistics, Yale University, 1998. [Online]. Available: http://www.stat.yale.edu/Courses/1997-98/101/meancomp.htm. [Accessed 1 December 2012].
+[33] 	S. Grais, "Color Schemes," DePaul University, [Online]. Available: http://facweb.cs.depaul.edu/sgrais/ColorSchemes.htm. [Accessed 23 January 2013].
+[34] 	F. Garcia, A. Fernandez, J. Barrallo and L. Martin, "Coloring Dynamical Systems in the Complex Plane," [Online]. Available: http://math.unipa.it/~grim/Jbarrallo.PDF. [Accessed 24 January 2013].
+[35] 	S. L. Sclove, "Notes on Likert Scales," University of Illinois at Chicago, 2001. [Online]. Available: http://www.uic.edu/classes/idsc/ids270sls/likert.htm. [Accessed 26 January 2013].
+[36] 	"The Complex Exponential Function," California State University, Fullerton, Department of Mathematics, 2003. [Online]. Available: http://math.fullerton.edu/mathews/c2003/complexfunexponentialmod.html. [Accessed 31 January 2013].
+[37] 	"Correlation," Department of Statistics, Yale University, 1998. [Online]. Available: http://www.stat.yale.edu/Courses/1997-98/101/correl.htm. [Accessed 30 January 2013].
+[38] 	Stanford University, "The Genotype/Phenotype Distinction," Stanford Encyclopedia of Philosophy, 26 April 2011. [Online]. Available: http://plato.stanford.edu/entries/genotype-phenotype/. [Accessed 08 February 2013].
+[39] 	S. Luke, "Single-State Methods," in Essentials of Metaheuristics, Lulu, 2009, pp. 29-53.
+[40] 	A. D. Vella and C. A. Vella, "Training Networks," in Neural networks, London, University of London Press, 2009, pp. 35-40.
+
