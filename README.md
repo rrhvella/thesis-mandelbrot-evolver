@@ -11,7 +11,7 @@ And the following list describes the outcomes of each action which can be perfor
 Action	|	Outcomes
 ---	|	---
 Left-clicking on a thumbnail in the 'fractal selection panel'.	|	The score of the genome represented by that thumbnail is increased by 1.
-Right-clicking on a thumbnail in the 'fractal selection panel'.	|	The source genome of 'fractal image preview' is replaced with the genome represented by that thumbnail. See text below for more info.
+Right-clicking on a thumbnail in the 'fractal selection panel'.	|	The source genome of 'fractal image preview' is replaced with the genome represented by that thumbnail.
 Hovering on a thumbnail in the 'fractal selection panel'.	|	Replaces the contents of 'genome info' with the textual representation of the genome represented by that thumbnail. 
 Pressing the 'Enter' key.	|	* Iterates the genetic algorithm and replaces the thumbnails in the  'fractal selection panel' with the ones for the new generation.<br>* Increases the number in the 'generations label' by 1.<br>* Resets the scores of all the genomes.
 Clicking the output button.	|	Saves the genome displayed in the 'fractal image preview' to disk. 
